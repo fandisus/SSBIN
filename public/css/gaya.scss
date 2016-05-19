@@ -1,0 +1,49 @@
+@font-face {
+  font-family: aileron;
+  src: url(/css/font/Aileron-BlackItalic.otf);
+}
+@font-face {
+  font-family: cornerstone;
+  src: url(/css/font/Cornerstone.ttf);
+}
+.flex {display:flex;}
+.flex-vcenter {align-items:center;}
+.flex-vtop {align-items:flex-start;}
+.flex-hcenter {justify-content:center;}
+.text-vmid { vertical-align: middle;}
+
+header {
+  background:#FD0;
+  border-bottom: 1px solid #C70;
+  #logo {font-family: aileron; font-size:2.1em;}
+  #search {text-align:left;}
+  #buttons {text-align:right;
+    .dropdown {display: inline-block;}
+  }
+}
+
+@media (min-width:768px) {
+  .navbar {min-height: 40px; height: 40px;}
+  .navbar-nav {
+    width: 100%; text-align: center;
+    > li { float: none; display: inline-block; > a {padding:9px 15px;}}
+  }
+}
+main { min-height: 375px;}
+
+footer {
+  background:#B80; border-top: 2px solid #C70; color: #FFF;
+  h3 {font-weight: bold; color:#FF5;}
+  #copyright {font-family: cornerstone}
+  ul { padding:0 0 0 15px; list-style: none; }
+  a {text-decoration: none; color:#FFF; &:hover{color:#FF0; text-decoration: none;} }
+}
+
+@media (max-width:767px) {
+  .flex {display:block;}
+  header {
+    #logo, #search, #buttons {text-align:center;}
+  }
+}
+
+#init {display:none;}

@@ -1,0 +1,13 @@
+#ErrorDocument 404 http://localhost/icodeformoney/notfound.php
+#ErrorDocument 403 http://localhost/icodeformoney/forbidden.php
+Options -indexes
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteCond %{HTTP_HOST} ^(^.*)\.ssbin.loc
+RewriteRule (.*)  index.php?subdo=%1&path=$1 [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule (.*) index.php?path=$1 [QSA,L]
