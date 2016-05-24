@@ -1,34 +1,36 @@
 <?php
+if (!count($_POST)) { handleGet(); die(); }
 if (count($_POST)) { handlePost(); die(); }
-
-$viewMode = '';
-if (isset($_GET['c'])) {
-  $p = \Solaris\Pengguna::findByKodeAktivasi($_GET['c']);
-  if ($p == null) $viewMode = 'kode_tak_ditemukan';
-  elseif ($p->login_info->kode_berlaku_sampai < time()) $viewMode = "kode_sudah_expired";
-  else {
-    $viewMode = 'aktivasi_berhasil';
-    $p->sudah_aktif = 't';
-    unset ($p->password);
-    $p->login();
-    $_SESSION['login'] = $p;
-    $login = $_SESSION['login'];
-  }
-}
-include DIR.'/php/view/common/aktivasi.php'; die();
 
 
 function handlePost() {
   foreach ($_POST as $k=>$v) $$k = $v;
-  if ($a != 'resend') Trust\JSONResponse::Error("Perintah tidak dikenal");
-  if (!isset($kode)) Trust\JSONResponse::Error ("Kode tidak terbaca");
-  $p = \Solaris\Pengguna::findByKodeAktivasi($kode);
-  if ($p == null) Trust\JSONResponse::Error ("Pengguna tidak ditemukan");
+  if ($a != 'resend') Trust\JSONResponse::Error("Invalid command");
+  if (!isset($kode)) Trust\JSONResponse::Error ("Code not sent");
+  $p = \SSBIN\User::findByActivationCode($kode);
+  if ($p == null) Trust\JSONResponse::Error ("User not found");
   
-  $p->login_info->kode_aktivasi = hash('haval192,5',time());
-  $p->login_info->kode_berlaku_sampai = (time()+$p::$lama_berlaku*84600);
+  $p->login_info->activation_code = hash('haval192,5',time());
+  $p->login_info->code_expiry = (time()+$p::$lama_berlaku*84600);
   unset($p->password, $p->data_info);
   $p->save();
   $p->sendActivationEmail();
-  Trust\JSONResponse::Success(["message"=>"Kode telah dikirim ulang. Harap cek kembali email Anda"]);
+  Trust\JSONResponse::Success(["message"=>"Code resent. Please check your email"]);
+}
+
+function handleGet() { global $viewMode, $login, $p;
+  $viewMode = '';
+  if (isset($_GET['c'])) {
+    $p = \SSBIN\User::findByActivationCode($_GET['c']);
+    if ($p == null) $viewMode = 'code_not_found';
+    elseif ($p->login_info->code_expiry < time()) $viewMode = "code_has_expired";
+    else {
+      $viewMode = 'successful_activation';
+      $p->active = 't';
+      unset ($p->password);
+      $p->login();
+      $login = $_SESSION['login'];
+    }
+  }
+  include DIR.'/php/view/common/activation.php'; die();
 }

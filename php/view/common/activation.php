@@ -20,45 +20,36 @@ function mainContent() { global $viewMode;
 </div><?php 
 }
 
-function kode_tak_ditemukan() { ?>
-<h2>Kode Tidak Ditemukan</h2>
-Mohon maaf, sepertinya link yang anda klik bermasalah.  
+function code_not_found() { ?>
+<h2>Code Not Found</h2>
+We're sorry, it looks like the link you followed is problematic.
 <?php }
 
 
-function kode_sudah_expired() { global $p; ?>
+function code_has_expired() { global $p; ?>
 <script>
   var resend = function() {
-    oPost = {kode:'<?= $p->login_info->kode_aktivasi ?>', a:'resend', token:'<?= \Trust\Server::csrf_token() ?>'};
-    tr.post("/aktivasi",oPost,function(r) {
+    oPost = {code:'<?= $p->login_info->activation_code ?>', a:'resend', token:'<?= \Trust\Server::csrf_token() ?>'};
+    tr.post("/activation",oPost,function(r) {
       $('#pesan').html(r.message);
     });
   };
 </script>
-<h2>Link aktivasi expired</h2>
-<div id="pesan">Maaf, link aktivasi akun yang Anda pakai telah expired.<br /><br />
-<button class="btn btn-primary btn-lg" onclick="resend()">Kirim ulang link aktivasi</button>
+<h2>Your activation link has expired</h2>
+<div id="pesan">We're sorry, the account activation link you followed has been expired.<br /><br />
+<button class="btn btn-primary btn-lg" onclick="resend()">Resend activation email</button>
 </div>
 <?php }
 
 
-function aktivasi_berhasil() {
+function successful_activation() {
   $p = $GLOBALS['p'];
 ?>
-    <h2>Akun telah diaktifkan</h2>
+    <h2>Account has been activated</h2>
     <div class="col-xs-12" style="margin-bottom: 15px;">
-      Selamat <b><?= $p->kontak->nama ?></b> akun Anda telah aktif.<br />
-      Untuk selanjutnya, Silahkan:
+      Congratulations <b><?= $p->biodata->name ?></b> Your account is now active.<br />
     </div>
-    <a class="img-link" href="/"><div class="col-xs-5">
-      <img src="/images/empty-shopping-cart-icon.png" alt="Belanja"/>
-      <h3>Berbelanja</h3>
-    </div></a>
-    <a class="img-link" href="/users/toko"><div class="col-xs-5 col-xs-offset-1">
-      <img src="/images/shop-icon s.png" alt="Buka Toko"/>
-      <h3>Buka Toko</h3>
-    </div></a>
 <?php }
 function get_is_empty() {
-  echo "Link aktivasi error. Silahkan kembali ke <a href=\"/\">home</a>";
+  echo "<h2>Your activation link is invalid.</h2>";
 }
