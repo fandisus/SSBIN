@@ -30,7 +30,7 @@ function htmlHead() { ?>
       clearTimeout(timeout2);
       if ($scope.email == "") return;
       timeout2 = setTimeout($scope.checkEmail,1000);
-    }
+    };
     $scope.userChanged = function() {
       clearTimeout(timeout);
       if ($scope.username == '') return;
@@ -67,6 +67,7 @@ function mainContent() { global $login; ?>
     <div class="form-group">
       <label for="email" class="control-label">E-mail</label>
       <input type="email" id="email" class="form-control" ng-model="user.email" ng-change="emailChanged()" placeholder="E-mail"/>
+      <span style="display: none;" class="forgot-link">Apakah Anda <a href="/forgot">lupa password?</a></span>
     </div>
     <div class="form-group">
       <label for="user" class="control-label">Username</label>
