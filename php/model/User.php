@@ -17,7 +17,7 @@ class User extends Model {
           "name"=>null, "phone"=>[],"email"=>null,
           "gender"=>null,"dob"=>null,'profile_pic'=>null
       ]);
-      $this->group=null;
+      $this->category=null;
       $this->organization=null;
       $now = date("Y-m-d H:i:s");
       $this->login_info = json_encode([

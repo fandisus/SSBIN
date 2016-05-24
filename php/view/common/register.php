@@ -6,22 +6,31 @@ function htmlHead() { ?>
 <script>token = '<?= \Trust\Server::csrf_token() ?>';</script>
 <script>
   app.controller('ctrlReg',function($scope) {
-    var timeout;
+    var timeout, timeout2;
     $scope.user = {email:'',username:'',name:'',pass:'',repass:'',gender:'',category:'',organization:''};
-    $scope.groups = init.categories;
-    $scope.organizations = init.organizations;
+    var init = JSON.parse($("#init").html()); $("#init").html("");
+    $scope.categories = init.categories;
+    $scope.organizations = [];
     $scope.tryRegister = function() {
-      alert('Not implemented yet');
-      return;
+      clearTimeout(timeout); clearTimeout(timeout2);
       oPost = {a:'register',user:$scope.user,token:token};
       tr.post("/register",oPost,function(rep) {
-        Example.show("Registrasi berhasil.<br />Anda akan otomatis diarahkan ke halaman login");
+        $.notify(rep.message);
         setTimeout(function() {window.location = "/login";}, 5000);
       }, function (rep) {
+        $.notify(rep.message,"error");
         if (rep.email_error) $(".forgot-link").show(1000);
         else $(".forgot-link").hide(1000);
       });
     };
+    $scope.updateOrganizationSelect = function() {
+      $scope.organizations = $scope.categories[$scope.user.category];
+    };
+    $scope.emailChanged = function() {
+      clearTimeout(timeout2);
+      if ($scope.email == "") return;
+      timeout2 = setTimeout($scope.checkEmail,1000);
+    }
     $scope.userChanged = function() {
       clearTimeout(timeout);
       if ($scope.username == '') return;
@@ -37,6 +46,17 @@ function htmlHead() { ?>
         $("#user").notify(rep.message,{position:"top left"});
       });
     };
+    $scope.checkEmail = function() {
+      clearTimeout(timeout2);
+      oPost = {a:"checkEmail",email:$scope.user.email,token:token};
+      tr.post("/register",oPost,function(rep){
+        $("#email").notify("Email OK",{position:"top left"});
+        $(".forgot-link").hide(1000);
+      }, function(rep) {
+        $("#email").notify(rep.message,{position:"top left"});
+        $(".forgot-link").show(1000);
+      });
+    };
   });
 </script>
 <?php }
@@ -46,7 +66,7 @@ function mainContent() { global $login; ?>
     <h2>User Registration</h2>
     <div class="form-group">
       <label for="email" class="control-label">E-mail</label>
-      <input type="email" id="email" class="form-control" ng-model="user.email" placeholder="E-mail"/>
+      <input type="email" id="email" class="form-control" ng-model="user.email" ng-change="emailChanged()" placeholder="E-mail"/>
     </div>
     <div class="form-group">
       <label for="user" class="control-label">Username</label>
@@ -72,23 +92,30 @@ function mainContent() { global $login; ?>
       </select>
     </div>
     <div class="form-group">
-      <label for="group" class="control-label">Category</label>
-      <select id="group" class="form-control" ng-model="user.category" ng-options="g for g in categories">
+      <label for="category" class="control-label">Category</label>
+      <select id="category" class="form-control" ng-model="user.category"
+              ng-options="key as key for (key,value) in categories" ng-change="updateOrganizationSelect()">
         <option value="">-- Group --</option>
       </select>
     </div>
     <div class="form-group">
       <label for="organization" class="control-label">Organization</label>
-      <select id="organization" class="form-control" ng-model="user.organization" ng-options="g for g in organizations">
+      <select id="organization" class="form-control" ng-model="user.organization"
+              ng-options="o.name as o.name for o in organizations">
         <option value="">-- Organization --</option>
       </select>
     </div>
     <button ng-click='tryRegister()' class='btn btn-success'>Register</button>
+    <div class="forgot-link" style="display:none">
+      Apakah Anda <a href="/forgot">lupa password?</a>
+    </div>
   </form>
 </div>
 
 
 <div id="init"><?php
-
+$init = new stdClass();
+$init->categories = \SSBIN\Organization::getNestedArray();
+echo json_encode($init);
 ?></div>
 <?php }
