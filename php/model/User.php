@@ -4,7 +4,7 @@ use Trust\Model;
 use Trust\DB;
 
 class User extends Model {
-  static protected $table_name = "user";
+  static protected $table_name = "users";
   static protected $json_columns = ['biodata','data_info','login_info'];
   static public $lama_berlaku = 3; //masa berlaku kode aktivasi 3 hari
   //if want to override, beware of new static at Model::find and Model::all
@@ -37,6 +37,9 @@ class User extends Model {
     if ($this->biodata->profile_pic != null) return "/images/userpic/pict".$this->biodata->profile_pic;
     if ($this->biodata->gender == "Male") return "/images/user-male.png";
     if ($this->biodata->gender == "Female") return "/images/user-female.png";
+  }
+  public static function getOrganizations() {
+    //TODO: Get organizations from database
   }
   public static function findByEmailOrUsername($input, $cols="*") {
     $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE biodata->>'email'=:input OR username=:input";

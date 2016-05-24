@@ -11,17 +11,17 @@ function register() {
   $user = json_decode(json_encode($_POST['user']));
   //email, nama, username, pass, repass, gender
   if (!Basic::validateEmail($user->email)) JSONResponse::Error("Email tidak valid");
-  $p = Pengguna::findByEmailOrUsername($user->email,"id");
+  $p = User::findByEmailOrUsername($user->email,"id");
   if ($p != null) JSONResponse::Error("Email tersebut sudah terpakai.",["email_error"=>true]);
   if (strlen($user->nama) < 3) JSONResponse::Error("Mohon isi nama lengkap Anda");
-  $err = Pengguna::validateUsername($user->username);
+  $err = User::validateUsername($user->username);
   if (count($err)) JSONResponse::Error(implode("<br />",$err));
   $err = Basic::validatePass($user->pass);
   if (count($err)) JSONResponse::Error(implode("<br />",$err));
   if ($user->pass != $user->repass) JSONResponse::Error("Konfirmasi password tidak sama");
   if (!in_array($user->gender, ['Pria','Wanita'])) JSONResponse::Error("Harap isi jenis kelamin Anda");
   
-  $p = new Pengguna([
+  $p = new User([
       "username"=>$user->username,
       "password"=>hash('sha256',$user->pass)
       ],true);
@@ -34,7 +34,7 @@ function register() {
   JSONResponse::Success();
 }
 function checkUsername() {global $login;
-  $err = Pengguna::validateUsername($_POST['user']);
+  $err = User::validateUsername($_POST['user']);
   if (count($err)) JSONResponse::Error(implode("\n",$err));
   JSONResponse::Success();
 }

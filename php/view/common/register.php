@@ -3,13 +3,13 @@ if (isset($login)) header("location:/");
 
 include DIR."/php/view/tulang.php";
 function htmlHead() { ?>
+<script>token = '<?= \Trust\Server::csrf_token() ?>';</script>
 <script>
   app.controller('ctrlReg',function($scope) {
-    token = '<?= \Trust\Server::csrf_token() ?>';
     var timeout;
-    $scope.user = {email:'',username:'',nama:'',pass:'',repass:'',gender:''};
-    $scope.groups = ['Government','Public','NGO'];
-    $scope.organizations = [];
+    $scope.user = {email:'',username:'',name:'',pass:'',repass:'',gender:'',category:'',organization:''};
+    $scope.groups = init.categories;
+    $scope.organizations = init.organizations;
     $scope.tryRegister = function() {
       alert('Not implemented yet');
       return;
@@ -72,18 +72,23 @@ function mainContent() { global $login; ?>
       </select>
     </div>
     <div class="form-group">
-      <label for="group" class="control-label">Group</label>
-      <select id="group" class="form-control" ng-model="user.group" ng-options="g for g in groups">
+      <label for="group" class="control-label">Category</label>
+      <select id="group" class="form-control" ng-model="user.category" ng-options="g for g in categories">
         <option value="">-- Group --</option>
       </select>
     </div>
     <div class="form-group">
       <label for="organization" class="control-label">Organization</label>
-      <select id="organization" class="form-control" ng-model="user.group" ng-options="g for g in organizations">
+      <select id="organization" class="form-control" ng-model="user.organization" ng-options="g for g in organizations">
         <option value="">-- Organization --</option>
       </select>
     </div>
     <button ng-click='tryRegister()' class='btn btn-success'>Register</button>
   </form>
 </div>
+
+
+<div id="init"><?php
+
+?></div>
 <?php }
