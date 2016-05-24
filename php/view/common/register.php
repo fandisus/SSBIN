@@ -43,7 +43,7 @@ function htmlHead() { ?>
         $("#user").notify("Username OK",{position:"top left"});
         $scope.$apply();
       }, function(rep) {
-        $("#user").notify(rep.message,{position:"top left"});
+        $("#user").notify(rep.message,{position:"top left",className:"error"});
       });
     };
     $scope.checkEmail = function() {
@@ -53,7 +53,7 @@ function htmlHead() { ?>
         $("#email").notify("Email OK",{position:"top left"});
         $(".forgot-link").hide(1000);
       }, function(rep) {
-        $("#email").notify(rep.message,{position:"top left"});
+        $("#email").notify(rep.message,{position:"top left",className:"error"});
         $(".forgot-link").show(1000);
       });
     };
