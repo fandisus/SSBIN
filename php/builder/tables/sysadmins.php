@@ -1,5 +1,5 @@
 <?php
-$t = new \Trust\TableComposer("sysadmin");
+$t = new \Trust\TableComposer("sysadmins");
 
 $t->increments("id")->notNull()->primary();
 $t->string("username",255)->notNull()->unique();

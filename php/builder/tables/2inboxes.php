@@ -1,5 +1,5 @@
 <?php
-$t = new \Trust\TableComposer("inbox");
+$t = new \Trust\TableComposer("inboxes");
 
 $t->bigInteger('sender')->notNull()->foreign("users", "id","CASCADE","CASCADE");
 $t->bigInteger("receiver")->notNull()->index()->foreign("users", "id","CASCADE","CASCADE");

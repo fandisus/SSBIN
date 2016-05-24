@@ -1,5 +1,5 @@
 <?php
-$t = new \Trust\TableComposer("access_log");
+$t = new \Trust\TableComposer("access_logs");
 
 $t->string("ip_address", 50)->notNull()->index();
 $t->timestamp('time')->index();
