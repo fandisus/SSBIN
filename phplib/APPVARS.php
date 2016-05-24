@@ -12,4 +12,4 @@ define("PHPMAILER_HOST", 'lax215.arandomserver.com');
 define("PHPMAILER_PORT", 26);
 
 define("APPNAME", "SSBIN");
-define("DOMAIN", "https://ssbin.loc");
+define("DOMAIN", "http://ssbin.loc");
