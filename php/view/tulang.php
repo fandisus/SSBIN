@@ -69,24 +69,16 @@
             <div class="dropdown"><!-- potongan kanan: logout -->
               <div class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">
                 <img class="img-circle" src="<?= $login->imageIcon(); ?>" style='width: 30px; height:30px;'/>
-                <?= $login->kontak->nama ?>
+                <?= $login->biodata->name ?>
               </div>
               <ul class="dropdown-menu dropdown-menu-right">
                 <li><a href="/users"><i class="fa fa-fw fa-home"></i> Home</a></li>
                 <li><a href="/users/profil"><i class="fa fa-fw fa-user"></i> Profil</a></li>
                 <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password/User</a></li>
                 <li><a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a></li>
-          <!--      <li><a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a></li>-->
-                <li role="separator" class="divider"></li>
-                <li><a href="/users/toko"><i class="fa fa-fw fa-building"></i> Manage toko</a></li>
-                <li><a href="/users/history"><i class="fa fa-fw fa-history"></i> History belanja</a></li>
-                <li><a href="/users/wishlist"><i class="fa fa-fw fa-list"></i> Wishlist</a></li>
-                <li><a href="/users/saldo"><i class="fa fa-fw fa-money"></i> Riwayat Saldo</a></li>
-                <li><a href="/users/payment"><i class="fa fa-fw fa-shopping-cart"></i> Top Up Saldo</a></li>
                 <li class="divider"></li>
                 <li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a></li>
               </ul>
-              
             </div>
             <?php } ?>
           </div>
