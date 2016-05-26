@@ -29,14 +29,14 @@ function newPassword() { ?>
   <div class="col-sm-4 col-sm-offset-4">
     <form>
       <div class="form-group">
-        <label for="pass">Password baru</label>
-        <input type="password" id="pass" class="form-control" placeholder="Password baru"/>
+        <label for="pass">New Password</label>
+        <input type="password" id="pass" class="form-control" placeholder="New Password"/>
       </div>
       <div class="form-group">
-        <label for="repass">Ulangi password</label>
-        <input type="password" id="repass" class="form-control" placeholder="Konfirmasi password baru"/>
+        <label for="repass">Repeat Password</label>
+        <input type="password" id="repass" class="form-control" placeholder="Confirm new password"/>
       </div>
-      <button id="btn" onclick="kirim()" class="btn btn-success">Kirim</button>
+      <button id="btn" onclick="kirim()" class="btn btn-success">Send</button>
     </form>
     <div id="pesan"></div>
   </div>
@@ -46,8 +46,8 @@ function newPassword() { ?>
 function showError() { ?>
 <div class="row">
   <div class="col-sm-4 col-sm-offset-4">
-    <p>Maaf, link yang Anda ikuti tidak valid, atau sudah kadarluarsa.</p>
-    <p>Anda dapat meminta reset password lagi pada <a href="/forgot">halaman ini.</a></p>
+    <p>Sorry, the link you followed is no longer valid.</p>
+    <p>You might want to request a new forget password email from <a href="/forgot">this page.</a></p>
   </div>
 </div>
 <?php }
@@ -66,10 +66,10 @@ function askEmail() { ?>
   <div class="col-sm-4 col-sm-offset-4">
     <form>
       <div class="form-group">
-        <label for="email">E-mail Anda</label>
-        <input type="email" id="email" class="form-control" placeholder="E-mail pada account Anda"/>
+        <label for="email">Please input E-mail</label>
+        <input type="email" id="email" class="form-control" placeholder="Your account's email"/>
       </div>
-      <button onclick="kirim()" class="btn btn-success">Kirim</button>
+      <button onclick="kirim()" class="btn btn-success">Send</button>
     </form>
     <div id="pesan"></div>
   </div>
@@ -79,7 +79,7 @@ function askEmail() { ?>
 function tellHimToLogout() { ?>
 <div class="row">
   <div class="col-sm-4 col-sm-offset-4">
-    Maaf, harap <a href="/logout">logout</a> terlebih dahulu sebelum menggunakan halaman ini.
+    Please, <a href="/logout">logout</a> first before using this feature.
   </div>
 </div>
 <?php }
