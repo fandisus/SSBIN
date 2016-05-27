@@ -1,7 +1,7 @@
 <?php
 if (!isset($login)) header("location:/");
 $ctrlDir = DIR."/php/controller";
-$template = DIR."/php/view/users/tulang.php";
+$template = DIR."/php/view/tulang.php";
 $services = ["password","profile"];
 
 if (!isset($paths[1]) || $paths[1]=="") include "$ctrlDir/users/home.php";
