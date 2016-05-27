@@ -1,7 +1,7 @@
 <?php
-if (!count($_POST)) { include DIR."/php/view/users/profil.php"; die(); }
+if (!count($_POST)) { include DIR."/php/view/users/profile.php"; die(); }
 
-$services = ['kontak','biodata','nullPP','PP'];
+$services = ['biodata','nullPP','PP'];
 if (isset($_POST['a']) && in_array($_POST['a'], $services)) $_POST['a']();
 //TODO: Menu untuk Link to facebook jika ndak "register with facebook"
 //TODO: Bikin profile settings. Untuk setting apa saja yang visible di public
@@ -25,16 +25,24 @@ function kontak() { global $login;
 }
 
 function biodata() { global $login;
-  if (!isset($_POST['biodata'])) JSONResponse::Error("Gagal mengirim data");
+  if (!isset($_POST['biodata'])) JSONResponse::Error("Error sending data");
   $bio = json_decode(json_encode($_POST['biodata']));
   
-  foreach ($bio as $k=>$v) if (trim($v) == "") $bio->$k = null;
   
-  if ($bio->gender == null) JSONResponse::Error("Harap isi jenis kelamin");
-  if ($bio->tanggal_lahir != null && !Date::isValidDate($bio->tanggal_lahir)) JSONResponse::Error("Tanggal lahir tidak valid");
-  
-  $login->biodata->gender = $bio->gender;
-  $login->biodata->tanggal_lahir = $bio->tanggal_lahir;
+  foreach ($bio as $k=>$v) if (!is_array($v) && trim($v) == '') $bio->$k = null;
+  if (!isset($bio->phone)) $bio->phone = [];
+  foreach ($bio->phone as $k=>$v) if (trim($v) == '') unset($bio->phone[$k]);
+
+  if ($bio->gender == null) JSONResponse::Error("Please input gender");
+  if ($bio->category == null) JSONResponse::Error ("Please input category");
+  if ($bio->organization == null) JSONResponse::Error("Please input organization");
+  if ($bio->dob != null && !Date::isJavaDate($bio->dob)) JSONResponse::Error("Invalid DOB");
+
+  $login->category = $bio->category;
+  $login->organization = $bio->organization;
+  $login->biodata = json_decode(json_encode($bio));
+  unset ($login->biodata->category, $login->biodata->organization);
+  $login->biodata->dob = ($bio->dob == null) ? null : Date::fromJavascriptToSQLDate($bio->dob);
   $login->save();
   
   JSONResponse::Success(["biodata"=>$bio]);
