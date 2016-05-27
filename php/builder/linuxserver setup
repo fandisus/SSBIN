@@ -1,5 +1,5 @@
-Configure Apache2
-- sudo nano /etc/apache2/sites-available/001-cloud9.conf  --> ubah webroot ke folder public
+Configure Apache2 (setting httpd.conf. Lokasi file bisa berbeda)
+- sudo nano /etc/apache2/sites-available/001-cloud9.conf  --> ubah webroot ke folder public: /home/ubuntu/workspace/public
 
 
 install postgresql 9.5
