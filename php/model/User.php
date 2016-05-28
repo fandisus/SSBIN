@@ -4,6 +4,9 @@ use Trust\Model;
 use Trust\DB;
 
 class User extends Model {
+  const USER_STANDARD = 'Standard';
+  const USER_EXPERT = "Expert";
+  const USER_ADMIN = "Admin";
   static protected $table_name = "users";
   static protected $json_columns = ['biodata','data_info','login_info'];
   static public $lama_berlaku = 3; //masa berlaku kode aktivasi 3 hari
@@ -25,6 +28,9 @@ class User extends Model {
           "activation_code"=>hash('haval192,5',time()), "code_expiry"=>(time()+self::$lama_berlaku*84600)
       ]);
       $this->active = 0;
+      $this->level = static::USER_STANDARD;
+      $this->expertise = [];
+      $this->validated = 0;
     }
     parent::__construct($arrProps);
   }
