@@ -11,6 +11,10 @@ $t->jsonb("data_info");
 $t->jsonb("login_info")->ginPropIndex(["activation_code","remember_token","forgot_token"]);
 $t->bool("active")->index();
 
+$t->string("level",20)->notNull()->index()->comment("Standard/Expert/Admin");
+$t->jsonb("expertise")->ginIndex();
+$t->bool('validated')->index();
+
 $t->comment("biodata","name, email, city, state, phone, gender, dob, profile_pic");
 $t->comment("login_info",
   "join_date,last_login,activation_code,code_expiry,remember_token,remember_expiry,forgot_token,forgot_expiry");
