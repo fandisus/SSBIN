@@ -8,7 +8,7 @@ class User extends Model {
   const USER_EXPERT = "Expert";
   const USER_ADMIN = "Admin";
   static protected $table_name = "users";
-  static protected $json_columns = ['biodata','data_info','login_info'];
+  static protected $json_columns = ['biodata','data_info','login_info','expertise'];
   static public $lama_berlaku = 3; //masa berlaku kode aktivasi 3 hari
   //if want to override, beware of new static at Model::find and Model::all
   public function __construct($arrProps, $new=false) {
@@ -29,7 +29,7 @@ class User extends Model {
       ]);
       $this->active = 0;
       $this->level = static::USER_STANDARD;
-      $this->expertise = [];
+      $this->expertise = json_encode([]);
       $this->validated = 0;
     }
     parent::__construct($arrProps);
