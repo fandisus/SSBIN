@@ -28,6 +28,11 @@ function handleGet() { global $viewMode, $login, $p;
       $viewMode = 'successful_activation';
       $p->active = 't';
       unset ($p->password);
+      if ($p->id == 1) {
+        $p->level = \SSBIN\User::USER_ADMIN;
+        $p->validated = 1;
+      }
+      
       $p->login();
       $login = $_SESSION['login'];
     }
