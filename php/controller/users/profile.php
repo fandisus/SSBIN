@@ -8,42 +8,24 @@ if (isset($_POST['a']) && in_array($_POST['a'], $services)) $_POST['a']();
 use Trust\JSONResponse;
 use Trust\Image;
 use Trust\Date;
-function kontak() { global $login;
-  $kontak = json_decode(json_encode($_POST['kontak']));
-  if ($login->kontak->fbid != null) $kontak->fbid = $login->kontak->fbid;
-  
-  foreach ($kontak as $k=>$v) if (!is_array($v) && trim($v) == '') $kontak->$k = null;
-  if (!isset($kontak->telepon)) $kontak->telepon = [];
-  foreach ($kontak->telepon as $k=>$v) if (trim($v) == '') unset($kontak->telepon[$k]);
-  
-  if ($kontak->nama == null) JSONResponse::Error("Nama harus diisi"); //note: di atas sudah dibikin null
-  $login->kontak = $kontak;
-  $_SESSION['login'] = $login;
-  $login->save();
-  
-  JSONResponse::Success(['kontak'=>$kontak]);
-}
 
 function biodata() { global $login;
+  //Note to self: Category dan Organization sengaja diset tidak bisa diubah oleh user.
   if (!isset($_POST['biodata'])) JSONResponse::Error("Error sending data");
   $bio = json_decode(json_encode($_POST['biodata']));
-  
   
   foreach ($bio as $k=>$v) if (!is_array($v) && trim($v) == '') $bio->$k = null;
   if (!isset($bio->phone)) $bio->phone = [];
   foreach ($bio->phone as $k=>$v) if (trim($v) == '') unset($bio->phone[$k]);
 
   if ($bio->gender == null) JSONResponse::Error("Please input gender");
-  if ($bio->category == null) JSONResponse::Error ("Please input category");
-  if ($bio->organization == null) JSONResponse::Error("Please input organization");
   if ($bio->dob != null && !Date::isJavaDate($bio->dob)) JSONResponse::Error("Invalid DOB");
 
-  $login->category = $bio->category;
-  $login->organization = $bio->organization;
   $login->biodata = json_decode(json_encode($bio));
-  unset ($login->biodata->category, $login->biodata->organization);
   $login->biodata->dob = ($bio->dob == null) ? null : Date::fromJavascriptToSQLDate($bio->dob);
   $login->save();
+  unset ($login->password);
+  //$_SESSION['login']=$login; --> //Caknyo dah otomatis karena $login adalah ref dari $_SESSION['login']
   
   JSONResponse::Success(["biodata"=>$bio]);
 }

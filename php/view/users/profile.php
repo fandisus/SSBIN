@@ -24,12 +24,8 @@ function htmlHead() {
       $scope.biodata = init.biodata;
       $scope.biodata.dob = (init.biodata.dob == null) ? null : new Date($scope.biodata.dob);
       $scope.img_profile = init.img_profile;
-      $scope.categories = init.categories;
-
-      $scope.updateOrganizationSelect = function() {
-        $scope.organizations = $scope.categories[$scope.biodata.category];
-      };
-      $scope.updateOrganizationSelect();
+      $scope.category = init.category;
+      $scope.organization = init.organization;
       $scope.addPhone = function () {
         $scope.biodata.phone.push('');
       };
@@ -67,7 +63,8 @@ function mainContent() {
     <div class="col-md-offset-3 col-sm-6">
       <div class="panel panel-default">
         <div class="panel-body mild-cyan">
-          <h2>Biodata</h2><!-- city, state, name, phone, email, gender, dob, profile_pic,,, category, organization -->
+          <h2>User Profile</h2>
+          <h4>Category: {{category}}<br />Organization: {{organization}}</h4>
           <!--Profile Picture-->
           <form id='form-PP' enctype="multipart/form-data" class="panel panel-default">
             <div class="panel-body bg-info">
@@ -98,20 +95,6 @@ function mainContent() {
                   <option value="">-- Gender --</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label for="category" class="control-label">Category</label>
-                <select id="category" class="form-control" ng-model="biodata.category"
-                        ng-options="key as key for (key,value) in categories" ng-change="updateOrganizationSelect()">
-                  <option value="">-- Group --</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="organization" class="control-label">Organization</label>
-                <select id="organization" class="form-control" ng-model="biodata.organization"
-                        ng-options="o.name as o.name for o in organizations">
-                  <option value="">-- Organization --</option>
-                </select>
-              </div>
               <hr />
               <div class="form-group">
                 <label for="dob" class="control-label">DOB</label>
@@ -140,10 +123,9 @@ function mainContent() {
     <div id='init' style='display:none'><?php
   $init = new stdClass();
   $init->biodata = json_decode(json_encode($login->biodata));
-  $init->biodata->category = $login->category;
-  $init->biodata->organization = $login->organization;
+  $init->category = $login->category;
+  $init->organization = $login->organization;
   $init->img_profile = $login->profilePic();
-  $init->categories = \SSBIN\Organization::getNestedArray();
   echo json_encode($init);
   ?></div>
   </div>
