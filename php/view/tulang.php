@@ -76,6 +76,10 @@
                 <li><a href="/users/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
                 <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password/User</a></li>
                 <li class="divider"></li>
+                <?php if ($login->level == \SSBIN\User::USER_ADMIN) { ?>
+                <li><a href="/admin"><i class="fa fa-fw fa-users"></i> Menu Admin</a></li>
+                <li class="divider"></li>
+                <?php } ?>
                 <li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a></li>
               </ul>
             </div>
