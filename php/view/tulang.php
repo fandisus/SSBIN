@@ -1,4 +1,4 @@
-<!doctype html>
+<?php use SSBIN\User; ?><!doctype html>
 <html lang="en" ng-app="ssbin">
   <head>
     <title><?= (isset($GLOBALS['pageTitle'])) ? APPNAME."-".$GLOBALS['pageTitle'] : APPNAME  ?></title>
@@ -76,7 +76,12 @@
                 <li><a href="/users/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
                 <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password/User</a></li>
                 <li class="divider"></li>
-                <?php if ($login->level == \SSBIN\User::USER_ADMIN) { ?>
+                <?php if (in_array($login->level,[User::USER_EXPERT,User::USER_ADMIN])) { ?>
+                <li><a href="/expert/input"><i class="fa fa-fw fa-users"></i> Data Validation</a></li>
+                <li><a href="/expert/users"><i class="fa fa-fw fa-users"></i> User Validation</a></li>
+                <li class="divider"></li>
+                <?php } ?>
+                <?php if ($login->level == User::USER_ADMIN) { ?>
                 <li><a href="/admin"><i class="fa fa-fw fa-users"></i> Menu Admin</a></li>
                 <li class="divider"></li>
                 <?php } ?>
