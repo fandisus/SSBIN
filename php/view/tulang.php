@@ -77,12 +77,12 @@
                 <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password/User</a></li>
                 <li class="divider"></li>
                 <?php if (in_array($login->level,[User::USER_EXPERT,User::USER_ADMIN])) { ?>
-                <li><a href="/expert/input"><i class="fa fa-fw fa-users"></i> Data Validation</a></li>
+                <li><a href="/expert/input"><i class="fa fa-fw fa-edit"></i> Data Validation</a></li>
                 <li><a href="/expert/users"><i class="fa fa-fw fa-users"></i> User Validation</a></li>
                 <li class="divider"></li>
                 <?php } ?>
                 <?php if ($login->level == User::USER_ADMIN) { ?>
-                <li><a href="/admin"><i class="fa fa-fw fa-users"></i> Menu Admin</a></li>
+                <li><a href="/admin"><i class="fa fa-fw fa-gears"></i> Menu Admin</a></li>
                 <li class="divider"></li>
                 <?php } ?>
                 <li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a></li>
