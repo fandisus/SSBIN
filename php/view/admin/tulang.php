@@ -24,11 +24,6 @@
     <script src="/jslib/metisMenu/metisMenu.min.js"></script>
     <link href="/jslib/metisMenu/metisMenu.min.css" rel="stylesheet">
 
-    <!-- Morris Charts JavaScript -->
-    <script src="/jslib/morris/raphael-min.js"></script>
-    <script src="/jslib/morris/morris.min.js"></script>
-    <link href="/jslib/morris/morris.css" rel="stylesheet">
-
     <!-- sbadmin -->
     <script src="/jslib/sb-admin-2.js"></script>
     <link href="/jslib/sb-admin-2.css" rel="stylesheet">
@@ -39,6 +34,10 @@
     <!-- Font Awesome -->
     <link href="/jslib/font-awesome-4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <!-- notify.js -->
+    <script src="/jslib/notify.min.js"></script>
+    <!-- myloading.js -->
+    <script src="/jslib/mine/myloading.js"></script>
     <script>var app = angular.module('<?= APPNAME ?>', []);</script>
     <?php if (function_exists("htmlHead")) htmlHead(); ?>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -63,12 +62,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html"><?= APPNAME ?></a>
+          <a class="navbar-brand" href="/"><?= APPNAME ?> Admin</a>
         </div>
         <!-- /.navbar-header -->
 
         <ul class="nav navbar-top-links navbar-right">
-          <?php dd_messages(); dd_tasks(); dd_alerts(); dd_menus(); ?>
+          <?php // dd_messages(); dd_tasks(); dd_alerts(); dd_menus(); ?>
         </ul>
         <!-- /.navbar-top-links -->
 
