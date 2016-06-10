@@ -37,6 +37,8 @@ abstract class Model implements iSaveable, iLoadable {
     $classVars = get_class_vars(get_class($this));
     foreach ($classVars as $k=>$v) unset($props[$k]); //Throw away protected properties
     if ($json) foreach (static::$json_columns as $v) { if (isset($props[$v])) $props[$v] = json_encode($props[$v]);}
+    foreach ($props as $k=>$v) if (gettype($v) == "boolean") $props[$k] = ($v) ? 'true' : '0';
+    //if (get_class($this) == "SSBIN\\User") JSONResponse::Debug ($props);
     return $props;
   }
   public function setTimestamps($forceNew = false) {
