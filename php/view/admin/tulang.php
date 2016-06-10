@@ -62,7 +62,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><?= APPNAME ?> Admin</a>
+          <a class="navbar-brand" href="/"><?= APPNAME ?></a>
         </div>
         <!-- /.navbar-header -->
 
