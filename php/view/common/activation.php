@@ -29,7 +29,7 @@ We're sorry, it looks like the link you followed is problematic.
 function code_has_expired() { global $p; ?>
 <script>
   var resend = function() {
-    oPost = {code:'<?= $p->login_info->activation_code ?>', a:'resend', token:'<?= \Trust\Server::csrf_token() ?>'};
+    oPost = {code:'<?= $p->login_sys->activation_code ?>', a:'resend', token:'<?= \Trust\Server::csrf_token() ?>'};
     tr.post("/activation",oPost,function(r) {
       $('#pesan').html(r.message);
     });

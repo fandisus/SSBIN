@@ -8,7 +8,7 @@ class User extends Model {
   const USER_EXPERT = "Expert";
   const USER_ADMIN = "Admin";
   static protected $table_name = "users";
-  static protected $json_columns = ['biodata','data_info','login_info','expertise'];
+  static protected $json_columns = ['biodata','data_info','login_info','login_sys','expertise'];
   static public $lama_berlaku = 3; //masa berlaku kode aktivasi 3 hari
   //if want to override, beware of new static at Model::find and Model::all
   public function __construct($arrProps, $new=false) {
@@ -23,9 +23,10 @@ class User extends Model {
       $this->category=null;
       $this->organization=null;
       $now = date("Y-m-d H:i:s");
-      $this->login_info = json_encode([
-          "join_date"=>$now,"last_login"=>$now,
-          "activation_code"=>hash('haval192,5',time()), "code_expiry"=>(time()+self::$lama_berlaku*84600)
+      $this->login_info = json_encode(["join_date"=>$now,"last_login"=>$now]);
+      $this->login_sys = json_encode([
+          "activation_code"=>hash('haval192,5',time()),
+          "code_expiry"=>(time()+self::$lama_berlaku*84600)
       ]);
       $this->active = 0;
       $this->level = static::USER_STANDARD;
@@ -54,20 +55,23 @@ class User extends Model {
     return null;
   }
   public static function findByActivationCode($kode, $cols="*") {
-    $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE login_info->>'activation_code'=:kode";
+    $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE login_sys->>'activation_code'=:kode";
     $read = DB::get($sql, ['kode'=>$kode]);
     if (count($read)) return new static($read[0]);
     return null;
   }
+  public static function activationExpired() {
+    return $this->login_sys->code_expiry < time();
+  }
   public static function findByCookies($cols = "*") {
     if (!isset($_COOKIE['login'])) return null;
-    $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE login_info->>'remember_token'=:token";
+    $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE login_sys->>'remember_token'=:token";
     $read = DB::get($sql, ['token'=>$_COOKIE['login']]);
     if (count($read)) {
       $p = new static($read[0]);
-      if ($p->login_info->remember_expiry < time()) {
-        //ini akan menyebabkan login_info tidak punya remember_token dan remember_expiry
-        unset($p->login_info->remember_token, $p->login_info->remember_expiry);
+      if ($p->login_sys->remember_expiry < time()) {
+        //ini akan menyebabkan login_sys tidak punya remember_token dan remember_expiry
+        unset($p->login_sys->remember_token, $p->login_sys->remember_expiry);
         $p->save();
         return null;
       }
@@ -76,12 +80,12 @@ class User extends Model {
     return null;
   }
   public static function findByForgotToken($token, $cols="*") {
-    $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE login_info->>'forgot_token'=:token";
+    $sql = "SELECT $cols FROM \"".static::$table_name."\" WHERE login_sys->>'forgot_token'=:token";
     $read = DB::get($sql, ['token'=>$token]);
     if (count($read)) {
       $p = new static($read[0]);
-      if ($p->login_info->forgot_expiry < time()) {
-        unset ($p->login_info->forgot_token, $p->login_info->forgot_expiry);
+      if ($p->login_sys->forgot_expiry < time()) {
+        unset ($p->login_sys->forgot_token, $p->login_sys->forgot_expiry);
         $p->save();
         return null;
       }
@@ -90,16 +94,16 @@ class User extends Model {
     return null;
   }
   public function login($expiry = 0) { //simpan remember token di db bila minta remember
-    $this->login_info->last_login = date('Y-m-d H:i:s');
-    unset ($this->login_info->forgot_token, $this->login_info->forgot_expiry);
+    $this->login_sys->last_login = date('Y-m-d H:i:s');
+    unset ($this->login_sys->forgot_token, $this->login_sys->forgot_expiry);
     if ($expiry > 0) {
       $rememberToken = hash('sha256',rand(0,PHP_INT_MAX));
       setcookie("login", $rememberToken, $expiry);
-      $this->login_info->remember_token = $rememberToken;
-      $this->login_info->remember_expiry = $expiry;
+      $this->login_sys->remember_token = $rememberToken;
+      $this->login_sys->remember_expiry = $expiry;
     } else {
-      //ini akan menyebabkan login_info tidak punya remember_token dan remember_expiry
-      unset ($this->login_info->remember_token, $this->login_info->remember_expiry);
+      //ini akan menyebabkan login_sys tidak punya remember_token dan remember_expiry
+      unset ($this->login_sys->remember_token, $this->login_sys->remember_expiry);
     }
     $_ENV['USER'] = $this->username;
     $this->save();
@@ -107,13 +111,17 @@ class User extends Model {
     $_SESSION['login'] = $this;
   }
   public function sendActivationEmail() {
+    $this->login_sys->activation_code = hash('haval192,5',time());
+    $this->login_sys->code_expiry = (time()+$this::$lama_berlaku*84600);
+    unset($p->password);
+    $this->save();
     $body = $this->buildActivationEmail();
     if (!\Trust\Mail::sendMail($this->biodata->email, "[".APPNAME."] Account Activation", $body)) return false;
     return true;
   }
   public function sendForgotEmail() {
-    $this->login_info->forgot_token = hash('sha256',rand(0,PHP_INT_MAX)."basing");
-    $this->login_info->forgot_expiry = time() + 84600;
+    $this->login_sys->forgot_token = hash('sha256',rand(0,PHP_INT_MAX)."basing");
+    $this->login_sys->forgot_expiry = time() + 84600;
     $this->save();
     $body = $this->buildForgotEmail();
     if (!\Trust\Mail::sendMail($this->biodata->email, "[".APPNAME."] Forgot Password", $body)) return false;
@@ -155,7 +163,7 @@ class User extends Model {
       Hi <?= $this->biodata->name ?>!<br />
       Welcome to <?= APPNAME ?>!<br />
     </div>
-    <div class="content"><?php $link = DOMAIN."/activation?c=".$this->login_info->activation_code; ?>
+    <div class="content"><?php $link = DOMAIN."/activation?c=".$this->login_sys->activation_code; ?>
       You still need to activate your account by clicking the link below:
 
       <div class="center-block">
@@ -170,7 +178,7 @@ class User extends Model {
   }
   
   private function buildForgotEmail() { ob_start();
-  $link = DOMAIN."/forgot?k=".$this->login_info->forgot_token;
+  $link = DOMAIN."/forgot?k=".$this->login_sys->forgot_token;
   ?><html><body>
       <p>Hi <?= $this->biodata->name ?>.</p>
       <p>Somebody had requested a password reset on your account at <?= APPNAME ?></p>
