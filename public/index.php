@@ -9,7 +9,7 @@ if (isset($_SESSION['login'])) {
   $login = $_SESSION['login'];
   $_ENV['USER'] = $login->username;
 } elseif (isset($_COOKIE['login'])) {
-  $p = \SSBIN\Pengguna::findByCookies();
+  $p = \SSBIN\User::findByCookies();
   if ($p == null) $_ENV['USER'] = null;
   else {
     $p->login(time()+84600*14);
