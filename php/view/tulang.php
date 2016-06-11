@@ -74,7 +74,7 @@
               <ul class="dropdown-menu dropdown-menu-right">
                 <li><a href="/users"><i class="fa fa-fw fa-home"></i> Home</a></li>
                 <li><a href="/users/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
-                <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password/User</a></li>
+                <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password</a></li>
                 <li class="divider"></li>
                 <?php if (in_array($login->level,[User::USER_EXPERT,User::USER_ADMIN])) { ?>
                 <li><a href="/expert/input"><i class="fa fa-fw fa-edit"></i> Data Validation</a></li>

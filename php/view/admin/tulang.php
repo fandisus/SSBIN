@@ -67,7 +67,7 @@
         <!-- /.navbar-header -->
 
         <ul class="nav navbar-top-links navbar-right">
-          <?php // dd_messages(); dd_tasks(); dd_alerts(); dd_menus(); ?>
+          <?php dd_menus();// dd_messages(); dd_tasks(); dd_alerts(); ?>
         </ul>
         <!-- /.navbar-top-links -->
 
@@ -302,12 +302,13 @@ function dd_menus() { ?>
       <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
     </a>
     <ul class="dropdown-menu dropdown-user">
-      <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-      </li>
-      <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-      </li>
+      <li><a href="/users/profile"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
+      <li><a href="/users/password"><i class="fa fa-gear fa-fw"></i> Change Password</a></li>
       <li class="divider"></li>
-      <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+      <li><a href="/expert/input"><i class="fa fa-fw fa-edit"></i> Data Validation</a></li>
+      <li><a href="/expert/users"><i class="fa fa-fw fa-users"></i> User Validation</a></li>
+      <li class="divider"></li>
+      <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
       </li>
     </ul>
     <!-- /.dropdown-user -->
