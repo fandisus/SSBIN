@@ -2,7 +2,7 @@
 namespace SSBIN;
 use \Trust\DB;
 class Logger extends \Trust\Model{
-  protected static $table_name = "access_log", $increment=false, $hasTimestamps = false;
+  protected static $table_name = "access_logs", $increment=false, $hasTimestamps = false;
   public function insert() {
     $props = $this->publicPropsToArr();
     $cols = array_keys($props);
