@@ -1,6 +1,6 @@
 <?php
-if (!isset($login) || $login->level != \SSBIN\User::USER_ADMIN) header("location:/");
 $ctrlDir = DIR."/php/controller";
+if (!isset($login) || $login->level != \SSBIN\User::USER_ADMIN) { include "$ctrlDir/403.php"; die(); }
 $template = DIR."/php/view/admin/tulang.php";
 $services = [
     "users", //admins, experts, standard, validate,

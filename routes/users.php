@@ -1,5 +1,5 @@
 <?php
-if (!isset($login)) header("location:/");
+if (!isset($login)) { include "$ctrlDir/403.php"; die(); }
 //if (!$login->active) {
 //  if (isset($paths[1])) header("location:/users");
 //}
