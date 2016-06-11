@@ -18,7 +18,7 @@
     <!-- Bootstrap Core -->
     <script src="/jslib/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <link href="/jslib/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/jslib/boostrap-3.3.4/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/jslib/bootstrap-3.3.4/css/bootstrap-theme.min.css"/>
 
     <!-- Metis Menu -->
     <script src="/jslib/metisMenu/metisMenu.min.js"></script>
