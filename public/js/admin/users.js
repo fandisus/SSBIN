@@ -46,7 +46,7 @@ app.controller("ctrlUsers",function($scope) {
       $scope.u.category = rep.o.category;
       $scope.u.organization = rep.o.organization;
       $scope.$apply();
-      //TODO: Edit level diri sendiri harus hati-hati, terutama ID 1
+      
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
     });
