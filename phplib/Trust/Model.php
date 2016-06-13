@@ -16,16 +16,15 @@ abstract class Model implements iSaveable, iLoadable {
   protected static $key_name="id", $increment=true, $hasTimestamps=true;
   
   //Constructor are meant to read from database, so json fields are expected to be in json format.
-  public function __construct($arrProps, $json_decode=true) {
+  public function __construct($arrProps) {
     foreach ($arrProps as $k=>$v) {
       $this->$k = $v;
       $this->old_vals[$k] = $v;
     }
-    if ($json_decode) { 
-      foreach (static::$json_columns as $col) {
-        if (!isset($this->$col)) continue;
-        $this->$col = json_decode($this->$col); 
-      }
+    foreach (static::$json_columns as $col) {
+      if (!isset($this->$col)) continue;
+      if (!is_object($col)) continue;
+      $this->$col = json_decode($this->$col); 
     }
   }
   public function save() {
