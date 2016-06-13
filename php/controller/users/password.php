@@ -12,7 +12,7 @@ function pass() { global $login;
   $p = User::find($login->id, "id,password,data_info");
   if ($p->password && hash('sha256',$pass->oldpass) != $p->password) JSONResponse::Error("Wrong old password ");
   if ($pass->newpass != $pass->repass) JSONResponse::Error ("Konfirmasi password tidak sama");
-  $err = Basic::validatePass($pass->newpass);
+  $err = Trust\Forms::validatePass($pass->newpass);
   if (count($err)) JSONResponse::Error(implode("\n", $err));
   
   $p->password = hash('sha256', $pass->newpass);

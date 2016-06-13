@@ -10,12 +10,12 @@ if (in_array($_POST['a'], $services)) $_POST['a']();
 function register() {
   $user = json_decode(json_encode($_POST['user']));
   //email, nama, username, pass, repass, gender
-  if (!isset($user->email) || !Basic::validateEmail($user->email)) JSONResponse::Error("Invalid email");
+  if (!isset($user->email) || !Trust\Forms::validateEmail($user->email)) JSONResponse::Error("Invalid email");
   $p = User::findByEmailOrUsername($user->email,"id");
   if ($p != null) JSONResponse::Error("$user->email has already registered in the system.",["email_error"=>true]);
   $err = User::validateUsername($user->username);
   if (count($err)) JSONResponse::Error(implode("<br />",$err));
-  $err = Basic::validatePass($user->pass);
+  $err = Trust\Forms::validatePass($user->pass);
   if (count($err)) JSONResponse::Error(implode("<br />",$err));
   if ($user->pass != $user->repass) JSONResponse::Error("Konfirmasi password tidak sama");
   if (strlen($user->name) < 3) JSONResponse::Error("Please fill in your name");
@@ -45,7 +45,7 @@ function checkUsername() {global $login;
   JSONResponse::Success();
 }
 function checkEmail() {
-  if (!isset($_POST['email']) || !Basic::validateEmail($_POST['email'])) JSONResponse::Error("Invalid email");
+  if (!isset($_POST['email']) || !Trust\Forms::validateEmail($_POST['email'])) JSONResponse::Error("Invalid email");
   $p = User::findByEmailOrUsername($_POST['email'],"id");
   if ($p != null) JSONResponse::Error("$_POST[email] has already registered in the system.");
   JSONResponse::Success();

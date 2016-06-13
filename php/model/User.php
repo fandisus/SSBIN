@@ -129,7 +129,7 @@ class User extends Model {
   }
   
   public static function validateUsername($user) {
-    $err = \Trust\Basic::validateUsername($user);
+    $err = \Trust\Forms::validateUsername($user);
     if (count($err)) return $err;
     $p = self::findByEmailOrUsername($user, "id");
     if ($p != null) return ["Username not available"];

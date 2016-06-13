@@ -23,7 +23,7 @@ if (isset($_GET['k'])) {
 
 function email() {
   $email = $_POST['email'];
-  if (!Basic::validateEmail($email)) JSONResponse::Error ("Invalid email");
+  if (!Trust\Forms::validateEmail($email)) JSONResponse::Error ("Invalid email");
   $p = User::findByEmailOrUsername($email);
   if ($p == null) JSONResponse::Error("Email not registered");
   
@@ -35,7 +35,7 @@ function password() { global $login;
   $pass = $_POST['pass'];
   $repass = $_POST['repass'];
   if ($pass != $repass) JSONResponse::Error("Password confirmation is incorrect");
-  $err = Basic::validatePass($pass);
+  $err = Trust\Forms::validatePass($pass);
   if (count($err)) JSONResponse::Error(implode("<br />", $err));
   
   $login->password = hash('sha256',$pass);
