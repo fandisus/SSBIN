@@ -23,7 +23,7 @@ abstract class Model implements iSaveable, iLoadable {
     }
     foreach (static::$json_columns as $col) {
       if (!isset($this->$col)) continue;
-      if (!is_object($col)) continue;
+      if (is_object($this->$col)) continue;
       $this->$col = json_decode($this->$col); 
     }
   }
