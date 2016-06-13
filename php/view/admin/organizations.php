@@ -73,7 +73,7 @@ function mainContent() { ?>
 
   <div id="init" style="display:none"><?php
     $init = new stdClass();
-    $init->organizations = \SSBIN\Organization::all();
+    $init->organizations = \SSBIN\Organization::allWhere(" ORDER BY category, name", []);
     $init->catList = [];
     $init->orgList = [];
     foreach ($init->organizations as $v) {
