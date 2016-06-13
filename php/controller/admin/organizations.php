@@ -22,8 +22,8 @@ function saveNew() { global $login;
 function saveOld() {
   $o = Forms::getPostObject('o');
   $target = Forms::getPostObject('target');
+  if (trim($o->category) == '') JSONResponse::Error("Category cannot be empty");
   
-  //if (is_object($o->data_info)) JSONResponse::Error ("ya"); else   JSONResponse::Error ("tidak");
   $o = new Organization($o);
   $o->setTimestamps();
 
