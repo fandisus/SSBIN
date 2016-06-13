@@ -101,6 +101,15 @@ abstract class Model implements iSaveable, iLoadable {
       throw $ex;
     }
   }
+  
+  public static function delWhere($strWhere, $colVals) {
+    $sql = "DELETE FROM \"".static::$table_name."\" $strWhere";
+    try {
+      return DB::exec($sql, $colVals);
+    } catch (\Exception $ex) {
+      throw $ex;
+    }
+  }
 
   public static function all($cols="*") {
     $sql = "SELECT $cols FROM \"".static::$table_name."\"";
