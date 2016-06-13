@@ -116,7 +116,7 @@ function mainContent() { ?>
   
   <div id="init" style="display:none;"><?php
     $init = new stdClass();
-    $init->users = \SSBIN\User::all();
+    $init->users = \SSBIN\User::allWhere(" ORDER BY category, organization",[]);
     foreach ($init->users as $k=>$u)
       unset(
             $init->users[$k]->login_sys,
