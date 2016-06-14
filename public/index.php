@@ -3,7 +3,7 @@ include "../phplib/autoload.php";
 session_start();
 if ($_SERVER['REQUEST_URI'] == '/index.php') header('location:/');
 //CSRF Token validation
-if (count($_POST) && !\Trust\Server::csrf_is_valid()) \Trust\JSONResponse::Error ("Invalid CSRF Token");
+if (count($_POST) && !\Trust\Server::csrf_is_valid()) \Trust\JSONResponse::Error ("Invalid CSRF Token"); else unset($_POST['token']);
 
 if (isset($_SESSION['login'])) {
   $login = $_SESSION['login'];
@@ -24,7 +24,8 @@ $log = new \SSBIN\Logger([
     "ip_address"=>$_SERVER['REMOTE_ADDR'],
     "time"=>date("Y-m-d H:i:s"),
     "requested_url"=>$_SERVER['REQUEST_URI'],
-    "userid"=>(isset($login)) ? $login->id : null
+    "userid"=>(isset($login)) ? $login->id : null,
+    "post"=>(count($_POST)) ? $_POST : null
   ]);
 $log->save();
 

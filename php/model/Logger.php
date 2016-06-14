@@ -3,11 +3,12 @@ namespace SSBIN;
 use \Trust\DB;
 class Logger extends \Trust\Model{
   protected static $table_name = "access_logs", $increment=false, $hasTimestamps = false;
+  protected static $json_columns = ['post'];
   public function insert() {
     $props = $this->publicPropsToArr();
     $cols = array_keys($props);
     $vals = array_values($props);
-    
+
     $sql = "INSERT INTO \"".static::$table_name."\" (\"".implode("\",\"", $cols)."\") VALUES (:".implode(",:",$cols).")";
     try {
       DB::insert($sql, $props);
