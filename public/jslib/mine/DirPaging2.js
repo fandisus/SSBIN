@@ -36,7 +36,7 @@ app.directive("trPaging", function () {
       scope.pageLinks = [];
 
       //setPages: based on params, automatically set totalPage(pagecount), pageLinks
-      scope.setPages = function (rep) {
+      scope.public.setPages = function (rep) {
         scope.currentPage = +rep.currentPage;
         scope.itemsPerPage = +rep.itemsPerPage;
         scope.public.totalItems = +rep.totalItems;
@@ -47,10 +47,10 @@ app.directive("trPaging", function () {
           if (i > 1 && i < scope.totalPage) scope.pageLinks.push(i);
         }
         scope.currentPageInput = scope.currentPage;
-        scope.itemsPerPageInput = scope.itemsPerPage;
+        scope.public.itemsPerPageInput = scope.itemsPerPage;
       };
       //Set initial loaded values.
-      scope.setPages({currentPage:1, itemsPerPage:50, totalItems:scope.public.totalItems});
+      scope.public.setPages({currentPage:1, itemsPerPage:50, totalItems:scope.public.totalItems});
       //computedProperty: The starting record index of current Page
       scope.startRecord = function () {
         if (scope.public.totalItems === 0) return 0;
@@ -87,10 +87,11 @@ app.directive("trPaging", function () {
         this.orderBy.splice(this.orderBy.indexOf(s), 1);
       };
       //Change page. By search button or paging button
-      scope.public.changePage = function (pageNum) { //set moreParams at parent for additional search parameter e.g dates
+      if (scope.public.changePage == undefined) //the changePage function is overrideable
+        scope.public.changePage = function (pageNum) { //set moreParams at parent for additional search parameter e.g dates
         var pager = {
           currentPage: pageNum,
-          itemsPerPage: scope.itemsPerPageInput,
+          itemsPerPage: scope.public.itemsPerPageInput,
           filterBy: scope.public.filterBy,
           orderBy: scope.public.orderBy
         };
@@ -99,7 +100,7 @@ app.directive("trPaging", function () {
           for (var i in scope.public.moreParams) oPost[i] = scope.public.moreParams[i];
         }
         tr.post(scope.public.uri, oPost, function (rep) {
-          scope.setPages(rep);
+          scope.public.setPages(rep);
           if (scope.public.pageChanged != undefined) scope.public.pageChanged(rep);
         });
       };
