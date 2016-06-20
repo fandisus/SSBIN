@@ -60,7 +60,7 @@ class User extends Model {
     if (count($read)) return new static($read[0]);
     return null;
   }
-  public static function activationExpired() {
+  public function activationExpired() {
     return $this->login_sys->code_expiry < time();
   }
   public static function findByCookies($cols = "*") {
