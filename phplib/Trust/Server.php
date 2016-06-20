@@ -35,13 +35,16 @@ class Server {
    * Generate CSRF Token and save token in session
    */
   static function csrf_token($salt='') {
-    $token = hash('sha256',session_id().$_SERVER['REMOTE_ADDR'].time().$salt);
-    $_SESSION['csrf_token'] = $token;
-    return $_SESSION['csrf_token'];
+    if (!isset($_SESSION['csrf_token'])) $_SESSION['csrf_token'] = [];
+    
+    $token = hash('sha256',session_id().$_SERVER['REMOTE_ADDR'].rand(0,PHP_INT_MAX).$salt);
+    $_SESSION['csrf_token'][] = $token;
+    if (count($_SESSION['csrf_token']) > 10) array_shift($_SESSION['csrf_token']);
+    return $token;
   }
   static function csrf_is_valid() {
     if (!isset($_POST['token'])) return false;
     if (!isset($_SESSION['csrf_token'])) return false;
-    return ($_POST['token'] == $_SESSION['csrf_token']);
+    return (in_array($_POST['token'], $_SESSION['csrf_token']));
   }
 }
