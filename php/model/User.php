@@ -113,7 +113,7 @@ class User extends Model {
   public function sendActivationEmail() {
     $this->login_sys->activation_code = hash('haval192,5',time());
     $this->login_sys->code_expiry = (time()+$this::$lama_berlaku*84600);
-    unset($p->password);
+    unset($this->password);
     $this->save();
     $body = $this->buildActivationEmail();
     if (!\Trust\Mail::sendMail($this->biodata->email, "[".APPNAME."] Account Activation", $body)) return false;
