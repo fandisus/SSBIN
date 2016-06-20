@@ -10,7 +10,7 @@ function toggleValidation() { global $login;
   if (!isset($_POST['id']) || !is_numeric($_POST['id'])) JSONResponse::Error("User id error");
   $id = $_POST['id'];
   if ($login->id == $id) JSONResponse::Error("Cannot validate self");
-  $user = User::find($id,"id,validated,data_info");
+  $user = User::find($id,"id,validated,data_info,active");
   if (!$user->active) JSONResponse::Error("User need to activate his/her account first");
   $user->validated = !$user->validated;
   $user->save();
