@@ -44,7 +44,7 @@ function get() {
     $colVals['a']="%$s->a%";
   }
   
-  $strWhere = 'WHERE '.implode(" AND ", $wheres);
+  $strWhere = 'WHERE '.implode(" AND ", $wheres). " ORDER BY time DESC";
   $logs = \SSBIN\Logger::allWhere($strWhere, $colVals);
   JSONResponse::Success(["logs"=>$logs]);
 }
