@@ -1,17 +1,20 @@
 <?php
-seedOrganizations();
-function seedOrganizations() {
-  $cats = [
-      "Government"=>["BLHD","Forestry"],
-      "Corporations"=>["PT REKI","PT Sinar Mas"],
-      "Academics"=>["UNSRI","UMP"],
-      "NGO"=>['WBH'],
-      "Individual"=>['']
-  ];
-  foreach ($cats as $cat=>$orgs) {
-    foreach ($orgs as $org) {
-      $obj = new \SSBIN\Organization(["name"=>$org, "category"=>$cat]);
-      $obj->save();
-    }
-  }
+$path = DIR."/php/builder/seeds";
+$dh = opendir($path);
+$paths = [];
+while ($filename = readdir($dh)) {
+  if (in_array($filename, [".","..","index.php"])) continue;
+  $paths[] = "$path/$filename";
 }
+asort($paths);
+foreach ($paths as $v) include $v;
+
+//seedOrganizations();
+//seedClasses();
+//seedFamilies();
+//seedGenus();
+//seedSpecies();
+//seedIUCNStatus();
+//seedIndoStatus();
+//seedLocation();
+//seedLandcover();
