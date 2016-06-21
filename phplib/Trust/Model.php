@@ -53,6 +53,13 @@ abstract class Model implements iSaveable, iLoadable {
       $this->data_info->updated_at=$now;
     }
   }
+  public static function newDataInfo() {
+    $now = date("Y-m-d H:i:s");
+    $info = new \stdClass();
+    $info->created_by = $info->updated_by = $_ENV['USER'];
+    $info->created_at = $info->updated_at = $now;
+    return $info;
+  }
   public function insert() {
     $this->setTimestamps();
     $props = $this->publicPropsToArr();
