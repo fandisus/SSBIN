@@ -7,6 +7,7 @@ function htmlHead() { ?>
   <script>var token = '<?= \Trust\Server::csrf_token(); ?>';</script>
   <script src="/jslib/moment.min.js"></script>
   <script src="/jslib/mine/commonjs.js"></script>
+  <script src="/js/common.js"></script>
   <script src="/js/admin/organizations.js"></script>
 <?php }
 
