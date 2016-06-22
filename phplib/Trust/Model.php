@@ -28,7 +28,8 @@ abstract class Model implements iSaveable, iLoadable {
     }
   }
   public function save() {
-    if (!isset($this->id) || !$this->id) $this->insert(); else $this->update();
+    $key = static::$key_name;
+    if (!isset($this->$key) || !$this->$key) $this->insert(); else $this->update();
   }
 
   public function publicPropsToArr($json=true) {
