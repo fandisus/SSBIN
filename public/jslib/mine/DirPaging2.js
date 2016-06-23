@@ -52,12 +52,12 @@ app.directive("trPaging", function () {
       //Set initial loaded values.
       scope.public.setPages({currentPage:1, itemsPerPage:50, totalItems:scope.public.totalItems});
       //computedProperty: The starting record index of current Page
-      scope.startRecord = function () {
+      scope.public.startRecord = function () {
         if (scope.public.totalItems === 0) return 0;
         return (scope.currentPage - 1) * scope.itemsPerPage + 1;
       };
       //computedProperty: The last record index of current Page
-      scope.endRecord = function () {
+      scope.public.endRecord = function () {
         if (scope.currentPage >= scope.totalPage) return scope.public.totalItems;
         return scope.currentPage * scope.itemsPerPage;
       };
