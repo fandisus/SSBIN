@@ -31,8 +31,8 @@ class Pager {
       $strOrder = "ORDER BY ".implode(",", $ords);
     }
 
-    $strLimit = "LIMIT ".(($currentPage - 1)*$itemsPerPage).", $itemsPerPage";
-    $res = new stdClass();
+    $strLimit = "LIMIT $itemsPerPage OFFSET ".(($currentPage - 1)*$itemsPerPage);
+    $res = new \stdClass();
     $res->currentPage = $currentPage;
     $res->itemsPerPage = $itemsPerPage;
     $res->strWhere = $strWhere;
