@@ -160,4 +160,20 @@ abstract class Model implements iSaveable, iLoadable {
     foreach ($read as $k=>$v) $read[$k] = new static($v);
     return $read;
   }
+  public static function count() {
+    $sql = 'SELECT COUNT(*) FROM "'.static::$table_name.'"';
+    try {
+      return DB::getOneVal($sql);
+    } catch (Exception $ex) {
+      throw $ex;
+    }
+  }
+  public static function countWhere($strWhere,$colVals) {
+    $sql = 'SELECT COUNT(*) FROM "'.static::$table_name."\" $strWhere";
+    try {
+      return DB::getOneVal($sql,$colVals);
+    } catch (Exception $ex) {
+      throw $ex;
+    }
+  }
 }
