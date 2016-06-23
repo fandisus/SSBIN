@@ -15,7 +15,7 @@ function saveNew() { global $login;
   if ($old != null) JSONResponse::Error("The class $o->class already exists");
 
   $o = new Classes($o);
-  $o->save();
+  $o->insert();
 
   JSONResponse::Success(['message'=>"Data successfully added", "new"=>$o]);
 }
