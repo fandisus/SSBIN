@@ -70,7 +70,7 @@ app.directive("trPaging", function () {
         scope.public.filterBy.push({key: f.key, text: f.text, query: ""});
       };
       scope.removeFilter = function (f) {
-        scope.public.filterBy.splice(scope.filterBy.indexOf(f), 1);
+        scope.public.filterBy.splice(scope.public.filterBy.indexOf(f), 1);
       };
       //Sort UI Functions
       scope.addSort = function (s) { //s:sort, e:unused
@@ -84,7 +84,7 @@ app.directive("trPaging", function () {
         else s.dir = "ASC";
       };
       scope.removeSort = function (s) {
-        this.orderBy.splice(this.orderBy.indexOf(s), 1);
+        this.public.orderBy.splice(this.public.orderBy.indexOf(s), 1);
       };
       //Change page. By search button or paging button
       if (scope.public.changePage == undefined) //the changePage function is overrideable
