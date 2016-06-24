@@ -344,6 +344,15 @@ function side_menus() { ?>
     </ul>
   </li>
   <li>
+    <a href="#"><i class="fa fa-table fa-fw"></i> Lookup Values <span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level">
+      <li><a href="/admin/lookup/iucn"><i class="fa fa-globe fa-fw"></i> IUCN Status</a></li>
+      <li><a href="/admin/lookup/indo"><i class="fa fa-flag-o fa-fw"></i> Indonesia Status</a></li>
+      <li><a href="/admin/lookup/landcover"><i class="fa fa-map-o fa-fw"></i> Landcover</a></li>
+      <li><a href="/admin/lookup/location"><i class="fa fa-map-marker fa-fw"></i> Location</a></li>
+    </ul>
+  </li>
+  <li>
     <a href="#"><i class="fa fa-database fa-fw"></i> Database <span class="fa arrow"></span></a>
     <ul class="nav nav-second-level">
       <li><a href="/admin/database/backup"><i class="fa fa-download fa-fw"></i> Backup</li></a>
