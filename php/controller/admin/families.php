@@ -59,5 +59,5 @@ function delete() {
   
   Families::delete($o->family);
   //TODO: setnull data findings
-  JSONResponse::Success(["message"=>'Category/Organization deleted successfully']);
+  JSONResponse::Success(["message"=>'Data deleted successfully']);
 }
