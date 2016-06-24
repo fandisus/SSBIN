@@ -5,7 +5,7 @@
 
     <li ng-class="{active: currentPage === totalPage}"><a href="#" ng-click="public.changePage(totalPage)" ng-show="totalPage > 1">{{totalPage}}</a></li>
     <li><a>{{public.startRecord()}}-{{public.endRecord()}} of {{public.totalItems}}</a></li>
-    <li><input type="text" ng-model="public.currentPageInput" size="1" style="text-align:center;"/></li>
+    <li><input type="text" ng-model="currentPageInput" size="1" style="text-align:center;"/></li>
     <li><select ng-options="a for a in itemsPerPageOptions" ng-model="public.itemsPerPageInput" style="height:26px;"></select></li>
     <li><button class="btn btn-xs btn-default" ng-click="public.changePage(currentPageInput)"><span class="glyphicon glyphicon-play"></span></button></li>
 
