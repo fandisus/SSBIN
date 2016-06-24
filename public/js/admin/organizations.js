@@ -7,7 +7,7 @@ app.controller('ctrlOrg', function($scope) {
   $scope.target = null;
   $('[data-toggle="popover"]').popover();
   
-  $scope.printDataInfo = printDataInfo();
+  $scope.printDataInfo = printDataInfo;
   $scope.momenter = function(d) {
     return moment(d).calendar();
   };
