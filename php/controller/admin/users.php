@@ -3,7 +3,8 @@ if (!count($_POST)) { include DIR."/php/view/admin/users.php"; die(); }
 
 use Trust\JSONResponse;
 use SSBIN\User;
-$services = ['toggleValidation','save'];
+use Trust\Forms;
+$services = ['toggleValidation','save','saveExpertise'];
 if (in_array($_POST['a'], $services)) $_POST['a']();
 
 function toggleValidation() { global $login;
@@ -29,5 +30,15 @@ function save() { global $login;
   $user->organization = $u->organization;
   $user->save();
   
-  JSONResponse::Success(['message'=>'Saved successfully','o'=>$u]);
+  JSONResponse::Success(['message'=>'Saved successfully','o'=>$user]);
+}
+
+function saveExpertise() {
+  $u = Forms::getPostObject('u');
+  $user = User::find($u->id);
+  if (!$user->active) JSONResponse::Error("User has not been activated yet");
+  $user->expertise = $u->expertise;
+  $user->save();
+  
+  JSONResponse::Success(['message'=>'Expertise updated successfully','o'=>$user]);
 }

@@ -5,6 +5,7 @@ app.controller("ctrlUsers",function($scope) {
   $scope.levels = init.levels;
   $scope.categories = init.categories;
   $scope.organizations = [];
+  $scope.classes = init.classes;
   $scope.u = {};
   $scope.editUser = {};
   $scope.updateOrganizationSelect = function() {
@@ -38,6 +39,30 @@ app.controller("ctrlUsers",function($scope) {
     $scope.updateOrganizationSelect();
     $("#modalEdit").modal("show");
   };
+  $scope.editExpertise = function(u) {
+    $scope.u = u;
+    $scope.editUser = angular.copy(u);
+    $("#modalExpertise").modal('show');
+  };
+  $scope.remExpertise = function(e) {
+    $scope.editUser.expertise.remove(e);
+  };
+  $scope.addClass = function(c) {
+    if (c == undefined) return;
+    if ($scope.editUser.expertise.indexOf(c) == -1) $scope.editUser.expertise.push(c);
+  };
+  $scope.saveExpertise = function(eu) {
+    var obj = {id:eu.id,expertise:eu.expertise};
+    var oPost = {a:'saveExpertise',u:obj, token:token};
+    tr.post("/admin/users",oPost,function(rep) {
+      $scope.u.expertise = rep.o.expertise;
+      $scope.u.data_info = rep.o.data_info;
+      $scope.$apply();
+      
+      $("#modalExpertise").modal('hide');
+      $.notify(rep.message,'success');
+    });
+  };
   $scope.saveChanges = function(eu) {
     var obj = {id:eu.id,level:eu.level,category:eu.category,organization:eu.organization};
     var oPost = {a:'save',u:obj,token:token};
@@ -45,6 +70,7 @@ app.controller("ctrlUsers",function($scope) {
       $scope.u.level = rep.o.level;
       $scope.u.category = rep.o.category;
       $scope.u.organization = rep.o.organization;
+      $scope.u.data_info = rep.o.data_info;
       $scope.$apply();
       
       $("#modalEdit").modal('hide');

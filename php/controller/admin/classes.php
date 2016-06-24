@@ -4,6 +4,7 @@ if (!count($_POST)) { include DIR."/php/view/admin/classes.php"; die(); }
 use Trust\JSONResponse;
 use SSBIN\Classes;
 use Trust\Forms;
+use Trust\DB;
 
 $services = ['saveNew','saveOld','delete'];
 if (in_array($_POST['a'], $services)) $_POST['a'](); else JSONResponse::Error("Service unavailable");
@@ -33,13 +34,17 @@ function saveOld() {
   $update->class = $o->class;
   $update->setTimestamps();
   //Note: Belum bisa $update->save() karena mau update PK juga.
-  \Trust\DB::exec('UPDATE classes SET class=:class, data_info=:info WHERE class=:target',
+  DB::exec('UPDATE classes SET class=:class, data_info=:info WHERE class=:target',
     [
       'class'=>$o->class,
       'target'=>$target->class,
       'info'=>json_encode($update->data_info)
     ]);
   //TODO: Update data findings
+  DB::exec('UPDATE users SET expertise=expertise - :target || :newval WHERE jsonb_exists(expertise,:target)', [
+      'target'=>$target->class,
+      'newval'=>"[\"$o->class\"]"
+  ]);
 
   JSONResponse::Success(['message'=>"Data successfully updated",'o'=>$update]);
 }

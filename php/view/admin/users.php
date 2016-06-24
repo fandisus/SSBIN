@@ -6,7 +6,13 @@ include $template;
 function htmlHead() { ?>
   <script>var token = '<?= \Trust\Server::csrf_token(); ?>';</script>
   <script src="/jslib/moment.min.js"></script>
+  <script src="/jslib/mine/commonjs.js"></script>
   <script src="/js/admin/users.js"></script>
+  <style>
+.rem-button {
+  color:#F00; cursor: pointer;
+}
+  </style>
 <?php }
 
 function mainContent() { ?>
@@ -19,6 +25,7 @@ function mainContent() { ?>
           <th>Category</th>
           <th>Organization</th>
           <th>Level</th>
+          <th>Expertise</th>
           <th>Validated</th>
         </tr>
       </thead>
@@ -29,6 +36,10 @@ function mainContent() { ?>
           <td><a ng-click="edit(u)">{{u.category}}</a></td>
           <td><a ng-click="edit(u)">{{u.organization}}</a></td>
           <td><a ng-click="edit(u)">{{u.level}}</a></td>
+          <td><a ng-click="editExpertise(u)">
+              <div ng-if="u.expertise.length == 0">-</div>
+              <div ng-repeat="e in u.expertise">{{e}}</div>
+          </a></td>
           <td>
             <button ng-click="toggleValidation(u)" ng-if="u.validated" class="btn btn-success btn-xs">{{u.validated}}</button>
             <button ng-click="toggleValidation(u)" ng-if="!u.validated" class="btn btn-danger btn-xs">{{u.validated}}</button>
@@ -68,14 +79,51 @@ function mainContent() { ?>
             <tr><td>DOB</td><td>{{u.biodata.dob}}</td></tr>
             <tr><td>City</td><td>{{u.biodata.city}}</td></tr>
             <tr><td>Phone(s)</td><td style="white-space: pre-line">{{phoneLists(u)}}</td></tr>
+            <tr>
+              <td>Expertise</td>
+              <td>
+                <div ng-if="u.expertise.length == 0">-</div>
+                <div ng-repeat="e in u.expertise">{{e}}</div>
+              </td>
+            </tr>
         </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+  </div>
+</div>
+
+
+<div id="modalExpertise" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Expertise for: {{editUser.username}} </h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-inline">
+          <div class="form-group">
+            <label>Class</label>
+            <select class="form-control" ng-model="class" ng-options="c.class as c.class for c in classes"></select>
+            <button ng-click="addClass(class)" class="btn btn-success"><i class="fa fa-plus"></i></button>
+          </div>
+        </div>
+        <table>
+          <tr ng-repeat="e in editUser.expertise">
+            <td>{{e}}</td><td><a ng-click="remExpertise(e)" class="rem-button"><i class="fa fa-remove fa-fw"></i></a></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button ng-click="saveExpertise(editUser)" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
@@ -109,9 +157,9 @@ function mainContent() { ?>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button ng-click="saveChanges(editUser)" type="button" class="btn btn-primary">Save changes</button>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+  </div>
+</div>
 
   
   <div id="init" style="display:none;"><?php
@@ -124,6 +172,7 @@ function mainContent() { ?>
             );
     $init->categories = \SSBIN\Organization::getNestedArray();
     $init->levels = [\SSBIN\User::USER_ADMIN,  \SSBIN\User::USER_EXPERT, \SSBIN\User::USER_STANDARD];
+    $init->classes = \SSBIN\Classes::allWhere("ORDER BY class ASC", []);
     echo json_encode($init);
   ?></div>
 <?php
