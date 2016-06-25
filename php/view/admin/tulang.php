@@ -350,6 +350,7 @@ function side_menus() { ?>
       <li><a href="/admin/lookup/indo"><i class="fa fa-flag-o fa-fw"></i> Indonesia Status</a></li>
       <li><a href="/admin/lookup/landcover"><i class="fa fa-map-o fa-fw"></i> Landcover</a></li>
       <li><a href="/admin/lookup/location"><i class="fa fa-map-marker fa-fw"></i> Location</a></li>
+      <li><a href="/admin/lookup/grid"><i class="fa fa-map-pin fa-fw"></i> Grids</a></li>
     </ul>
   </li>
   <li>
