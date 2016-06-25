@@ -49,6 +49,8 @@ function mainContent() { ?>
                   <td>
                     <input type="text" ng-model="o.abbr" class="form-control" list="catList"/>
                   </td>
+                </tr>
+                <tr>
                   <td>IUCN Status</td>
                   <td>
                     <input type="text" ng-model="o.long_name" class="form-control" list="catList"/>
