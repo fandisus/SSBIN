@@ -18,3 +18,4 @@ foreach ($paths as $v) include $v;
 //seedIndoStatus();
 //seedLocation();
 //seedLandcover();
+//seedGrids();
