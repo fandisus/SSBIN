@@ -1,18 +1,11 @@
 <?php
 function seedIUCNStatus() {
-  $status = file(DIR."/php/builder/rawdata/iucn", FILE_IGNORE_NEW_LINES);
-  foreach ($status as $k=>$v) $status[$k]=  explode(",",$v);
-  $datainfo = json_encode(\Trust\Model::newDataInfo());
+  \Trust\DB::exec("DELETE FROM iucn_status", []);
   
-  $idx=0; $sqls=[]; $vals=[];$count=count($status);
-  while ($idx < $count) {
-    $vals[]='(\''.$status[$idx][0].'\',\''.$status[$idx][1]."','$datainfo')";
-    $idx++;
-    if ($idx % 10000 == 0) {
-      $sqls[] = 'INSERT INTO iucn_status VALUES '.implode(',', $vals);
-      $vals=[];
-    }
-  }
-  $sqls[] = 'INSERT INTO iucn_status VALUES '.implode(',', $vals);
-  foreach ($sqls as $s) \Trust\DB::exec($s,[]);
+  $status = file(DIR."/php/builder/rawdata/iucn", FILE_IGNORE_NEW_LINES);
+  $datainfo = json_encode(\Trust\Model::newDataInfo());
+
+  foreach ($status as $k=>$v) $status[$k]= explode(",",$v);
+  foreach ($status as $k=>$v) $status[$k] = ['abbr'=>$v[0],'long_name'=>$v[1],'data_info'=>$datainfo];
+  \SSBIN\IUCN_status::multiInsert($status);
 }
