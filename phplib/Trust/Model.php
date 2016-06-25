@@ -90,7 +90,7 @@ abstract class Model implements iSaveable, iLoadable {
     foreach ($objects as $i=>$obj) {
       foreach ($obj as $key=>$val) if (gettype($val) == "boolean") $objects[$i][$key] = ($val) ? 'true' : '0';
     }
-    
+
     $idx=0; $sqls=[]; $vals=[];$count=count($objects);
     while ($idx < $count) {
       $vals = array_values(array_shift($objects));
@@ -104,7 +104,7 @@ abstract class Model implements iSaveable, iLoadable {
     }
     $sqls[] = $sql.implode(',', $strVals);
     try {
-      foreach ($sqls as $s) { \Trust\DB::exec($s,[]); echo $s.'<br /><br />'; }
+      foreach ($sqls as $s) { \Trust\DB::exec($s,[]); }
     } catch (Exception $ex) {
       throw $ex;
     }
