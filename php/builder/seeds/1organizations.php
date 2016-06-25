@@ -5,7 +5,7 @@ function seedOrganizations() {
       "Corporations"=>["PT REKI","PT Sinar Mas"],
       "Academics"=>["UNSRI","UMP"],
       "NGO"=>['WBH'],
-      "Individual"=>['']
+      "Participatory"=>['']
   ];
   foreach ($cats as $cat=>$orgs) {
     foreach ($orgs as $org) {
