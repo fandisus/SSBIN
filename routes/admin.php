@@ -9,7 +9,7 @@ $services = [
     "visitors"
     ];
 $taxonServices = ['classes','families','genus','species']; //taxonomies
-$lookupServices = ['iucn','indo','landcover','location']; //lookup
+$lookupServices = ['iucn','indo','landcover','location','grids']; //lookup
 
 if (!isset($paths[1]) || $paths[1]=="") include "$ctrlDir/admin/home.php";
 elseif ($paths[1]=='taxonomies' && in_array($paths[2], $taxonServices)) 
