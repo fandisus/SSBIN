@@ -32,11 +32,11 @@ abstract class Model implements iSaveable, iLoadable {
     if (!isset($this->$key) || !$this->$key) $this->insert(); else $this->update();
   }
 
-  public function publicPropsToArr($json=true) {
+  public function publicPropsToArr() {
     $props = get_object_vars($this);
     $classVars = get_class_vars(get_class($this));
     foreach ($classVars as $k=>$v) unset($props[$k]); //Throw away protected properties
-    if ($json) foreach (static::$json_columns as $v) { if (isset($props[$v])) $props[$v] = json_encode($props[$v]);}
+    foreach (static::$json_columns as $v) { if (isset($props[$v])) $props[$v] = json_encode($props[$v]);}
     foreach ($props as $k=>$v) if (gettype($v) == "boolean") $props[$k] = ($v) ? 'true' : '0';
     //if (get_class($this) == "SSBIN\\User") JSONResponse::Debug ($props);
     return $props;
@@ -79,6 +79,35 @@ abstract class Model implements iSaveable, iLoadable {
       throw $ex;
     }
     return true;
+  }
+  
+  public static function multiInsert(&$objects) {
+    //$objects, harus berupa nested array, ndak terimo object
+    //cols sesuai kiriman di $objects, dan ndak diencode di sini.
+    $cols = array_keys($objects[0]);
+    $sql = "INSERT INTO \"".static::$table_name."\" (\"".implode("\",\"", $cols)."\") VALUES ";
+
+    foreach ($objects as $i=>$obj) {
+      foreach ($obj as $key=>$val) if (gettype($val) == "boolean") $objects[$i][$key] = ($val) ? 'true' : '0';
+    }
+    
+    $idx=0; $sqls=[]; $vals=[];$count=count($objects);
+    while ($idx < $count) {
+      $vals = array_values(array_shift($objects));
+      $idx++;
+      foreach ($vals as $k=>$v) $vals[$k] = DB::$pdo->quote($v);
+      $strVals[]='('. implode(',', $vals). ')';
+      if ($idx % 10000 == 0) {
+        $sqls[] = $sql.implode(',', $strVals);
+        $strVals=[];
+      }
+    }
+    $sqls[] = $sql.implode(',', $strVals);
+    try {
+      foreach ($sqls as $s) { \Trust\DB::exec($s,[]); echo $s.'<br /><br />'; }
+    } catch (Exception $ex) {
+      throw $ex;
+    }
   }
 
   public function getDirtyProps(&$props) {
