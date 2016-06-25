@@ -6,7 +6,7 @@ app.controller('ctrlLandcover',function($scope) {
   $scope.pager.filterOptions = [{key:'landcover',text:'Landcover'}];
   $scope.pager.orderOptions = [{key:'landcover',text:'Landcover'}];
   $scope.pager.pageChanged = function(rep) {
-    $scope.landcover = rep.landcover;
+    $scope.landcovers = rep.landcover;
     $scope.$apply();
   };
   

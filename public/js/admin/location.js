@@ -6,7 +6,7 @@ app.controller('ctrlLocation',function($scope) {
   $scope.pager.filterOptions = [{key:'location',text:'Location'}];
   $scope.pager.orderOptions = [{key:'location',text:'Location'}];
   $scope.pager.pageChanged = function(rep) {
-    $scope.location = rep.location;
+    $scope.locations = rep.location;
     $scope.$apply();
   };
   
