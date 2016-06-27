@@ -302,8 +302,11 @@ function dd_menus() { ?>
       <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
     </a>
     <ul class="dropdown-menu dropdown-user">
+      <li><a href="/users"><i class="fa fa-fw fa-home"></i> User Home</a></li>
       <li><a href="/users/profile"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
       <li><a href="/users/password"><i class="fa fa-gear fa-fw"></i> Change Password</a></li>
+      <li class="divider"></li>
+      <li><a href="/users/inputdata"><i class="fa fa-fw fa-database"></i> Input Data</a></li>
       <li class="divider"></li>
       <li><a href="/expert/input"><i class="fa fa-fw fa-edit"></i> Data Validation</a></li>
       <li><a href="/expert/users"><i class="fa fa-fw fa-users"></i> User Validation</a></li>
