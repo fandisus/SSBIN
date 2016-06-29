@@ -6,7 +6,7 @@ class Families extends \Trust\Model{
   protected static $table_name = "families", $increment=false, $hasTimestamps = true;
   protected static $json_columns = ['data_info'];
   public static function getList() {
-    $all = static::all();
+    $all = static::allWhere('ORDER BY family',[]);
     foreach ($all as $k=>$v) $all[$k] = $v->family;
     return $all;
   }
