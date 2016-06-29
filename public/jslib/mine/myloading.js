@@ -34,6 +34,11 @@ tr.post = function(uri,oPost, successcb,errorcb) {
     tr.handleResponse(reply,successcb,errorcb);
   }).always(function() { tr.loading(false); });
 };
+tr.silentPost = function(uri,oPost, successcb,errorcb) {
+  $.post(uri, oPost, function(reply) {
+    tr.handleResponse(reply,successcb,errorcb);
+  });
+};
 
 //modifikasi dari http://stackoverflow.com/questions/166221/how-can-i-upload-files-asynchronously-with-jquery
 tr.postForm = function(uri,form,successcb,errorcb) { //Form is a DOM object e.g: $("#formLoadFCA")[0]
