@@ -1,0 +1,109 @@
+app.controller('ctrlFindings',function($scope) {
+  var init = JSON.parse($("#init").html());
+  $scope.classes = init.classes;
+  $scope.districts = init.districts;
+  $scope.landcovers = init.landcovers;
+  $scope.iucns = init.iucns;
+  $scope.indos = init.indos;
+  $scope.months = init.months;
+  var uri = "/users/findings";
+  
+  $scope.families=[]; $scope.genuses=[]; $scope.species=[];
+  $scope.searchFamily = function(o) { if (o.taxonomy.family.trim() == '') return;
+    var oPost = {a:'getFamilies',q:o.taxonomy.family,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.families = rep.families; $scope.$apply(); });
+  };
+  $scope.searchGenus = function(o) { if (o.taxonomy.genus.trim() == '') return;
+    var oPost = {a:'getGenuses',q:o.taxonomy.genus,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.genuses = rep.genuses; $scope.$apply(); });
+  };
+  $scope.searchSpecies = function(o) { if (o.taxonomy.species.trim() == '') return;
+    var oPost = {a:'getSpecies',q:o.taxonomy.species,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.species = rep.species; $scope.$apply(); });
+  };
+  $scope.searchGrid = function(o) { if (o.grid.trim() == '') return;
+    var oPost = {a:'getGrids',q:o.grid,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.grids = rep.grids; $scope.$apply(); });
+  };
+  
+  $scope.pager = {uri:uri, totalItems:init.totalItems}
+  var fields = [
+    {key:'localname', text:'Local Name'},
+    {key:'othername', text:'Other Name'},
+    {key:"taxonomy->>'class'", text:'Class'},
+    {key:"taxonomy->>'family'", text:'Family'},
+    {key:"taxonomy->>'genus'", text:'Genus'},
+    {key:"taxonomy->>'species'", text:'Species'},
+    {key:'commonname', text:'Common Name'},
+    {key:'latitude', text:'Longitude'},
+    {key:'longitude', text:'Longitude'},
+    {key:'grid', text:'Grid'},
+    {key:'village', text:'Village'},
+    {key:'district', text:'District'},
+    {key:'landcover', text:'Landcover'},
+    {key:'iucn_status', text:'IUCN Status'},
+    {key:'indo_status', text:'Indonesia Status'},
+    {key:'cites_status', text:'CITES Status'},
+    {key:'data_source', text:'Data Source'}
+  ]
+  $scope.pager.filterOptions = fields;
+  $scope.pager.orderOptions = fields;
+  $scope.pager.pageChanged = function(rep) {
+    $scope.findings = rep.findings;
+    $scope.$apply();
+  };
+  //Sampe di sini
+  
+  
+  $scope.target = null; $scope.o = {};
+  $scope.printDataInfo = printDataInfo;
+  $('[data-toggle="popover"]').popover();
+  
+  $scope.newO = function() {
+    $scope.target = null;
+    $scope.modalTitle = "New Findings";
+    $scope.o = {};
+    $("#modalEdit").modal('show');
+  };
+  $scope.edit = function(o) {
+    $scope.target = o;
+    $scope.modalTitle = "Edit landcover: " + o.landcover;
+    $scope.o = angular.copy(o);
+    $("#modalEdit").modal('show');
+  };
+  $scope.saveChanges = function(o) {
+    if ($scope.target == null) saveNew(o); else $scope.saveOld(o);
+  };
+  var saveNew = function(o) {
+    var oPost = {a:'saveNew',o:o,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $scope.landcovers.push(rep.new);
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.saveOld = function(o) {
+    var oPost = {a:'saveOld',o:o,target:$scope.target,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $scope.target.landcover = rep.o.landcover;
+      $scope.target.data_info = rep.o.data_info;
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.delete = function(o) {
+    if (confirm("Are you sure you want to delete?\n\Landcover: " + o.landcover) == false) return;
+    var oPost={a:"delete",o:$scope.target,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $scope.landcovers.remove($scope.target);
+      $("#modalEdit").modal('hide');
+      $.notify(rep.message,"success");
+      $scope.$apply();
+    });
+  };
+  $scope.oChanged = function() {
+    console.log($scope.o);
+  };
+});
