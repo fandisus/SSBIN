@@ -12,6 +12,7 @@ $t->date('survey_date')->index();
 $t->date('date_precision')->index();
 $t->double('latitude')->index();
 $t->double('longitude')->index();
+$t->double('grid')->index();
 $t->string('village',50)->index();
 $t->string('district',50)->index();
 $t->string('landcover',50)->index();
