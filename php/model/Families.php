@@ -5,4 +5,9 @@ class Families extends \Trust\Model{
   protected static $key_name="family";
   protected static $table_name = "families", $increment=false, $hasTimestamps = true;
   protected static $json_columns = ['data_info'];
+  public static function getList() {
+    $all = static::all();
+    foreach ($all as $k=>$v) $all[$k] = $v->family;
+    return $all;
+  }
 }
