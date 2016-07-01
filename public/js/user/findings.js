@@ -6,6 +6,8 @@ app.controller('ctrlFindings',function($scope) {
   $scope.iucns = init.iucns;
   $scope.indos = init.indos;
   $scope.months = init.months;
+  
+  $scope.findings = init.findings;
   var uri = "/users/findings";
   
   $scope.families=[]; $scope.genuses=[]; $scope.species=[];
@@ -28,6 +30,7 @@ app.controller('ctrlFindings',function($scope) {
   
   $scope.pager = {uri:uri, totalItems:init.totalItems}
   var fields = [
+    {key:'id', text:'ID'},
     {key:'localname', text:'Local Name'},
     {key:'othername', text:'Other Name'},
     {key:"taxonomy->>'class'", text:'Class'},
@@ -52,23 +55,27 @@ app.controller('ctrlFindings',function($scope) {
     $scope.findings = rep.findings;
     $scope.$apply();
   };
-  //Sampe di sini
   
+  $scope.getMonth = function(d) { return moment(d).format('MMMM'); };
+  $scope.getYear = function(d) { return moment(d).format('YYYY'); };
   
   $scope.target = null; $scope.o = {};
   $scope.printDataInfo = printDataInfo;
+  $scope.printValidationInfo = printValidationInfo;
   $('[data-toggle="popover"]').popover();
   
   $scope.newO = function() {
     $scope.target = null;
     $scope.modalTitle = "New Findings";
-    $scope.o = {};
+    $scope.o = {taxonomy:{class:'',family:'',genus:'',species:''},localname:'',commonname:'',othername:'',n:0,survey_month:'',survey_year:'',latitude:'',longitude:'',grid:'',village:'',district:'',landcover:'',iucn_status:'',indo_status:'',data_source:'',reference:'',other_info:''};
     $("#modalEdit").modal('show');
   };
   $scope.edit = function(o) {
     $scope.target = o;
-    $scope.modalTitle = "Edit landcover: " + o.landcover;
+    $scope.modalTitle = "Edit findings with id:#" + o.id;
     $scope.o = angular.copy(o);
+    $scope.o.survey_month=moment(o.survey_date).month();
+    $scope.o.survey_year=moment(o.survey_date).year();
     $("#modalEdit").modal('show');
   };
   $scope.saveChanges = function(o) {
@@ -77,33 +84,29 @@ app.controller('ctrlFindings',function($scope) {
   var saveNew = function(o) {
     var oPost = {a:'saveNew',o:o,token:token};
     tr.post(uri,oPost, function(rep) {
-      $scope.landcovers.push(rep.new);
+      $scope.findings.push(rep.new);
       $.notify(rep.message,"success");
       $("#modalEdit").modal('hide');
       $scope.$apply();
     });
   };
   $scope.saveOld = function(o) {
-    var oPost = {a:'saveOld',o:o,target:$scope.target,token:token};
+    var oPost = {a:'saveOld',o:o,target:$scope.target.id,token:token};
     tr.post(uri,oPost, function(rep) {
-      $scope.target.landcover = rep.o.landcover;
-      $scope.target.data_info = rep.o.data_info;
+      $.extend($scope.target,rep.o);
       $.notify(rep.message,"success");
       $("#modalEdit").modal('hide');
       $scope.$apply();
     });
   };
   $scope.delete = function(o) {
-    if (confirm("Are you sure you want to delete?\n\Landcover: " + o.landcover) == false) return;
-    var oPost={a:"delete",o:$scope.target,token:token};
+    if (confirm("Are you sure you want to delete?\n\Findings with ID:#" + o.id) == false) return;
+    var oPost={a:"delete",o:$scope.target.id,token:token};
     tr.post(uri,oPost, function(rep) {
-      $scope.landcovers.remove($scope.target);
+      $scope.findings.remove($scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();
     });
-  };
-  $scope.oChanged = function() {
-    console.log($scope.o);
   };
 });

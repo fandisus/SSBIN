@@ -1,9 +1,10 @@
 <?php
+session_start();
 include "../phplib/autoload.php";
 
-$users = \SSBIN\User::all();
-$u = $users[0];
-
-if (is_object($u->data_info)) echo "yes"; else echo "no";
-//Trust\Debug::print_r($u->data_info);
-
+$arr = [
+  'b'=>'jum\'at',
+  'a'=>1,
+  'c'=>3
+];
+echo json_encode($arr);

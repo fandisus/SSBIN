@@ -5,3 +5,9 @@ printDataInfo = function(o) {
           "<br />Updated By: " + o.data_info.updated_by +
           "<br />Updated At: " + moment(o.data_info.updated_at).calendar();
 };
+printValidationInfo = function(o) {
+  if (o.validation == undefined) return '';
+  if (!o.validation.validated) return 'Not validated yet';
+  return "Validated By: " + o.validation_info.validated_by +
+          "<br />Validated At: " + moment(o.validation_info.validated_at).calendar();
+};

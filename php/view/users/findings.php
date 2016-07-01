@@ -100,19 +100,19 @@ function mainContent() {
                   <td><input type="text" ng-model="o.id" readonly="readonly"/></td>
                 </tr>
                 <tr>
-                  <td>Class</td>
+                  <td>Class *</td>
                   <td><input type="text" ng-model="o.taxonomy.class" list="list-class"/></td>
                 </tr>
                 <tr>
-                  <td>Local Name</td>
+                  <td>Local Name *</td>
                   <td><input type="text" ng-model="o.localname"/></td>
                 </tr>
                 <tr>
-                  <td>Other Name</td>
+                  <td>Other Name *</td>
                   <td><input type="text" ng-model="o.othername"/></td>
                 </tr>
                 <tr>
-                  <td>N</td>
+                  <td>N *</td>
                   <td><input type="text" ng-model="o.n"/></td>
                 </tr>
                 <tr>
@@ -198,6 +198,9 @@ function mainContent() {
               <button class="btn btn-info btn-xs" ng-show="o.data_info != undefined"
                       data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom"
                       title="Data info" data-content="{{printDataInfo(o)}}">Data info</button>
+              <button class="btn btn-info btn-xs" ng-show="o.validation != undefined"
+                      data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom"
+                      title="Validation info" data-content="{{printValidationInfo(o)}}">Validation info</button>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -233,6 +236,8 @@ function mainContent() {
       ['num'=>11,'name'=>'November'],
       ['num'=>12,'name'=>'December']
     ];
+    $init->findings = \SSBIN\Finding::allWhere("ORDER BY id DESC LIMIT 50", []);
+    $init->totalItems = \SSBIN\Finding::count();
     echo json_encode($init);
     ?></div>
   <?php
