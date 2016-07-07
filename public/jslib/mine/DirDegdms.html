@@ -1,5 +1,5 @@
 <div class="degdms-input">
-  {{mode}}
+  {{public.mode}}
   <input type="text" ng-model="$parent.deg" ng-if="public.mode==='deg'" placeholder="deg" ng-change="public.degChanged()"/>
   <input type="text" ng-model="$parent.dms" ng-if="public.mode==='dms'" placeholder="dms" ng-change="public.dmsChanged()"/>
   <button ng-click="changeMode()"><i class="fa fa-refresh fa-fw"></i></button>
