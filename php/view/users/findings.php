@@ -11,6 +11,7 @@ function htmlHead() {
   <script src="/js/common.js"></script>
   <script src="/js/user/findings.js"></script>
   <script src="/jslib/mine/DirPaging2.js"></script>
+  <script src="/jslib/mine/DirDegdms.js"></script>
   <script>
     $(document).ready(function() {
       $("input, select").addClass('form-control');
@@ -141,11 +142,11 @@ function mainContent() {
                 </tr>
                 <tr>
                   <td>Latitude</td>
-                  <td><input type="text" ng-model="o.latitude"/></td>
+                  <td><tr-degdms deg="o.latitude" public='latinput' type="lat" mode="dms"></tr-degdms></td>
                 </tr>
                 <tr>
                   <td>Longitude</td>
-                  <td><input type="text" ng-model="o.longitude"/></td>
+                  <td><tr-degdms deg="o.longitude" public='longinput' type="long" mode="dms"></tr-degdms></td>
                 </tr>
                 <tr>
                   <td>Grid</td>

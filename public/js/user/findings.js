@@ -7,6 +7,9 @@ app.controller('ctrlFindings',function($scope) {
   $scope.indos = init.indos;
   $scope.months = init.months;
   
+  $scope.latinput = {type:'lat',mode:'dms'};
+  $scope.longinput = {type:'long',mode:'dms'};
+  
   $scope.findings = init.findings;
   var uri = "/users/findings";
   
@@ -64,11 +67,19 @@ app.controller('ctrlFindings',function($scope) {
   $scope.printValidationInfo = printValidationInfo;
   $('[data-toggle="popover"]').popover();
   
+  var updateLatLongDMS = function() {
+    setTimeout(function() {
+      $scope.latinput.degChanged();
+      $scope.longinput.degChanged();
+      $scope.$apply();
+    },5);
+  };
   $scope.newO = function() {
     $scope.target = null;
     $scope.modalTitle = "New Findings";
-    $scope.o = {taxonomy:{class:'',family:'',genus:'',species:''},localname:'',commonname:'',othername:'',n:0,survey_month:'',survey_year:'',latitude:'',longitude:'',grid:'',village:'',district:'',landcover:'',iucn_status:'',indo_status:'',data_source:'',reference:'',other_info:''};
+    $scope.o = {taxonomy:{class:'',family:'',genus:'',species:''},localname:'',commonname:'',othername:'',n:0,survey_month:'',survey_year:'',latitude:null,longitude:null,grid:'',village:'',district:'',landcover:'',iucn_status:'',indo_status:'',data_source:'',reference:'',other_info:''};
     $("#modalEdit").modal('show');
+    updateLatLongDMS();
   };
   $scope.edit = function(o) {
     $scope.target = o;
@@ -77,6 +88,7 @@ app.controller('ctrlFindings',function($scope) {
     $scope.o.survey_month=moment(o.survey_date).month();
     $scope.o.survey_year=moment(o.survey_date).year();
     $("#modalEdit").modal('show');
+    updateLatLongDMS();
   };
   $scope.saveChanges = function(o) {
     if ($scope.target == null) saveNew(o); else $scope.saveOld(o);
