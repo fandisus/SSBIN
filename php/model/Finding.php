@@ -1,5 +1,6 @@
 <?php
 namespace SSBIN;
+use Trust\JSONResponse;
 use SSBIN\Classes;
 use SSBIN\IUCN_status; use SSBIN\Indo_status; use SSBIN\Location; use SSBIN\Landcover; use SSBIN\Grid;
 
