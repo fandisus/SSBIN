@@ -8,8 +8,8 @@ var degDms = function(val) {
   var sec = Math.round(n * 100)/100;
   return {deg:deg, min:min, sec:sec};
 };
-var dmsDeg = function(o) {
-  var maxDeg = (s.public.type === 'lat') ? 90 : 180;
+var dmsDeg = function(o,type) {
+  var maxDeg = (type === 'lat') ? 90 : 180;
   if (o.deg >= maxDeg) return null;
   if (o.min >= 60) return null;
   if (o.sec >= 60) return null;
@@ -24,5 +24,5 @@ var dmsDegStr = function(str, type) {
   var match = str.match(patt);
   if (match === null) { return null; }
   var o = {pole:match[1],deg:parseInt(match[2]),min:parseInt(match[3]),sec:parseFloat(match[4])};
-  s.deg = dmsDeg(o);
+  return dmsDeg(o,type);
 };
