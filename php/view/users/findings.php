@@ -11,6 +11,7 @@ function htmlHead() {
   <script src="/js/common.js"></script>
   <script src="/js/user/findings.js"></script>
   <script src="/jslib/mine/DirPaging2.js"></script>
+  <script src="/jslib/mine/degdms.js"></script>
   <script src="/jslib/mine/DirDegdms.js"></script>
   <script>
     $(document).ready(function() {
