@@ -41,7 +41,7 @@ app.controller('ctrlFindings',function($scope) {
     {key:"taxonomy->>'genus'", text:'Genus'},
     {key:"taxonomy->>'species'", text:'Species'},
     {key:'commonname', text:'Common Name'},
-    {key:'latitude', text:'Longitude'},
+    {key:'latitude', text:'Latitude'},
     {key:'longitude', text:'Longitude'},
     {key:'grid', text:'Grid'},
     {key:'village', text:'Village'},
