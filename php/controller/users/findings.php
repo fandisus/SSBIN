@@ -6,6 +6,8 @@ use SSBIN\Families; use SSBIN\Genus; use SSBIN\Species; use SSBIN\Grid;
 use SSBIN\Finding;
 use Trust\Forms;
 use Trust\Pager;
+use Trust\Date;
+use Trust\Geo;
 
 $services = ['getFamilies','getGenuses','getSpecies','getGrids','saveNew','saveOld','delete','get'];
 if (in_array($_POST['a'], $services)) $_POST['a'](); else JSONResponse::Error("Service unavailable");
@@ -41,6 +43,41 @@ function getGrids() {
 
 function get() {
   $p = Pager::GetQueryAttributes();
+  $more = Forms::getPostObject('more');
+  foreach ($more as $k=>$v) if (trim($v) == '') $more->$k = null;
+  $wheres = [];
+  if ($more->startDate == null ^ $more->endDate == null) JSONResponse::Error('Date range incomplete. Please input start and end survey date');
+  if ($more->startDate != null) { //If date range not empty, validate.
+    if ($more->startDate != null && !Date::isJavaDate($more->startDate)) JSONResponse::Error('Invalid date format at survey date start date');
+    if ($more->endDate != null && !Date::isJavaDate($more->endDate)) JSONResponse::Error('Invalid date format at survey date end date');
+    $startDate = Date::fromJavascriptToSQLDate($more->startDate);
+    $endDate = Date::fromJavascriptToSQLDate($more->endDate);
+    $wheres[] = "DATE_TRUNC('month',survey_date) BETWEEN '$startDate' AND '$endDate'";
+  }
+
+  if ($more->startLat == null ^ $more->endLat == null) JSONResponse::Error('Incomplete latitude range');
+  if ($more->startLat != null) { //if lat range not empty, validate
+    $startLat = Geo::degreeFromStr($more->startLat, 'lat');
+    $endLat = Geo::degreeFromStr($more->endLat, 'lat');
+    if ($more->startLat != null && !$startLat) JSONResponse::Error ('Invalid input at starting latitude');
+    if ($more->endLat != null && !$endLat) JSONResponse::Error ('Invalid input at ending latitude');
+    $wheres[] = "latitude BETWEEN $startLat AND $endLat";
+  }
+  
+  if ($more->startLong == null ^ $more->endLong == null) JSONResponse::Error('Incomplete longitude range');
+  if ($more->startLong != null) { //if long range not empty, validate
+    $startLong = Geo::degreeFromStr($more->startLong, 'long');
+    $endLong = Geo::degreeFromStr($more->endLong, 'long');
+    if ($more->startLong != null && !$startLong) JSONResponse::Error ('Invalid input at starting longitude');
+    if ($more->endLong != null && !$endLong) JSONResponse::Error ('Invalid input at ending longitude');
+    $wheres[] = "longitude BETWEEN $startLong AND $endLong";
+  }
+  if (count($wheres)) {
+    $p->strWhere = ($p->strWhere == '') 
+      ? 'WHERE '.implode(' AND ',$wheres) 
+      : "$p->strWhere ".implode(' AND ',$wheres);
+  }
+
   $p->strOrder = ($p->strOrder != "") ? $p->strOrder : " ORDER BY id DESC";
   $p->findings = Finding::allWhere("$p->strWhere $p->strOrder $p->strLimit", []);
   $p->totalItems = Finding::countWhere($p->strWhere, []);
@@ -70,9 +107,9 @@ function saveOld() {
   $old = Finding::find($targetid);
   if (!$old) JSONResponse::Error("Record not found");
 
-  $o = new Finding($o);
-  $o->validation = $old->validation;
-  $o->update();
+  unset ($o->validation);
+  foreach ($o as $k=>$v) $old->$k = $v;
+  $old->update();
 
   JSONResponse::Success(['message'=>"Data successfully updated",'o'=>$o]);
 }

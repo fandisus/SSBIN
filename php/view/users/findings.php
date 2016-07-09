@@ -20,6 +20,8 @@ function htmlHead() {
   </script>
   <style>
     td>input.form-control, td>select.form-control { width:100%;}
+    .form-group { margin-bottom: 0px;}
+    .pagination { margin:5px 0;}
   </style>
 <?php }
 
@@ -27,7 +29,21 @@ function mainContent() {
   ?>
   <div class="row" ng-controller="ctrlFindings">
     <div class="col-md-12">
-      <tr-paging public="pager"></tr-paging>
+      <table class="form-group form-group-sm">
+        <tr>
+          <td>Survey Date </td><td><input type="date" placeholder="yyyy-mm-dd" ng-model="params.startDate" /></td>
+          <td>To :</td><td><input type="date" placeholder="yyyy-mm-dd" ng-model="params.endDate"/></td>
+        </tr>
+        <tr>
+          <td>Latitude </td><td><input type="text" placeholder="DMS / Deg" ng-model="params.startLat"/></td>
+          <td>To</td><td><input type="text" placeholder="DMS / Deg" ng-model="params.endLat"/></td>
+        </tr>
+        <tr>
+          <td>Longitude </td><td><input type="text" placeholder="DMS / Deg" ng-model="params.startLong"/></td>
+          <td>To</td><td><input type="text" placeholder="DMS / Deg" ng-model="params.endLong"/></td>
+        </tr>
+      </table>
+      <tr-paging public="pager"></tr-paging><br />
       <button ng-click="newO()" class="btn btn-success">New <i class="fa fa-plus fa-fw"></i></button>
       <br /><br />
       <div class="table-responsive">
