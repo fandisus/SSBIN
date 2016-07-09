@@ -111,7 +111,8 @@ abstract class Model implements iSaveable, iLoadable {
   }
 
   public function getDirtyProps(&$props) {
-    foreach (static::$json_columns as $v) $this->old_vals[$v] = json_encode(json_decode($this->old_vals[$v]));
+    foreach (static::$json_columns as $v)
+      if (is_string($this->old_vals[$v])) $this->old_vals[$v] = json_encode(json_decode($this->old_vals[$v]));
     foreach ($this->old_vals as $k=>$v) {
       //Kalau update, pasti old_vals ada semua, props ada semua. ndak ada berarti ndak mau diupdate.
       if (isset($props[$k]) && $props[$k] == $v) unset($props[$k]);
