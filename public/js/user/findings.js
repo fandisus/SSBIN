@@ -30,8 +30,8 @@ app.controller('ctrlFindings',function($scope) {
     var oPost = {a:'getGrids',q:o.grid,token:token};
     tr.silentPost(uri,oPost,function(rep) { $scope.grids = rep.grids; $scope.$apply(); });
   };
-  
-  $scope.pager = {uri:uri, totalItems:init.totalItems}
+  $scope.params = {startDate:null,endDate:null,startLat:null,endLat:null,startLong:null,endLong:null};
+  $scope.pager = {uri:uri, totalItems:init.totalItems, moreParams:{more:$scope.params}};
   var fields = [
     {key:'id', text:'ID'},
     {key:'localname', text:'Local Name'},
@@ -85,7 +85,7 @@ app.controller('ctrlFindings',function($scope) {
     $scope.target = o;
     $scope.modalTitle = "Edit findings with id:#" + o.id;
     $scope.o = angular.copy(o);
-    $scope.o.survey_month=moment(o.survey_date).month();
+    $scope.o.survey_month=moment(o.survey_date).month()+1;
     $scope.o.survey_year=moment(o.survey_date).year();
     $("#modalEdit").modal('show');
     updateLatLongDMS();
