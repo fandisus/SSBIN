@@ -111,6 +111,7 @@ abstract class Model implements iSaveable, iLoadable {
   }
 
   public function getDirtyProps(&$props) {
+    foreach (static::$json_columns as $v) $this->old_vals[$v] = json_encode(json_decode($this->old_vals[$v]));
     foreach ($this->old_vals as $k=>$v) {
       //Kalau update, pasti old_vals ada semua, props ada semua. ndak ada berarti ndak mau diupdate.
       if (isset($props[$k]) && $props[$k] == $v) unset($props[$k]);
@@ -120,8 +121,8 @@ abstract class Model implements iSaveable, iLoadable {
     $this->setTimestamps();
     $props = $this->publicPropsToArr();
     $this->getDirtyProps($props);
-    $props[static::$key_name] = $this->{static::$key_name};
     foreach ($props as $k=>$v) { $cols[]="$k=:$k"; }
+    $props[static::$key_name] = $this->{static::$key_name};
     $sql = "UPDATE \"".static::$table_name."\" SET ".implode(",",$cols)." WHERE ".static::$key_name."=:".static::$key_name;
     try {
       return DB::exec($sql, $props);
