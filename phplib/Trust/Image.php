@@ -56,18 +56,18 @@ class Image {
   
   static function checkImageUpload($upload) {
     $errMsgs = [
-        UPLOAD_ERR_INI_SIZE=>"Gambar yang diupload terlalu besar",
-        UPLOAD_ERR_FORM_SIZE=>"Gambar yang diupload terlalu besar",
-        UPLOAD_ERR_PARTIAL=>"Upload gambar terhenti di tengah jalan",
-        UPLOAD_ERR_NO_FILE=>"Tidak ada gambar yang diupload"
+        UPLOAD_ERR_INI_SIZE=>"File size too large",
+        UPLOAD_ERR_FORM_SIZE=>"File size too large",
+        UPLOAD_ERR_PARTIAL=>"Upload interrupted",
+        UPLOAD_ERR_NO_FILE=>"File not found"
     ];
-    if (!isset($upload)) return "Gagal mengirim gambar";
+    if (!isset($upload)) return "Upload not found";
     $errorCode = $upload['error'];
     if ($errorCode != 0) return ($errMsgs[$errorCode]);
-    
+
     if (!Image::IsImage($upload['tmp_name'])) {
       unlink($upload['tmp_name']);
-      return "Gambar yang diupload tidak dapat diproses.\nHanya tipe gif, jpg atau png yang diterima.";
+      return "Image format not supported.\nOnly gif, jpg or png accepted.";
     }
     
     return null;
