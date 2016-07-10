@@ -55,21 +55,11 @@ class Image {
   }
   
   static function checkImageUpload($upload) {
-    $errMsgs = [
-        UPLOAD_ERR_INI_SIZE=>"File size too large",
-        UPLOAD_ERR_FORM_SIZE=>"File size too large",
-        UPLOAD_ERR_PARTIAL=>"Upload interrupted",
-        UPLOAD_ERR_NO_FILE=>"File not found"
-    ];
-    if (!isset($upload)) return "Upload not found";
-    $errorCode = $upload['error'];
-    if ($errorCode != 0) return ($errMsgs[$errorCode]);
-
+    Files::checkUpload($upload);
     if (!Image::IsImage($upload['tmp_name'])) {
       unlink($upload['tmp_name']);
       return "Image format not supported.\nOnly gif, jpg or png accepted.";
     }
-    
     return null;
   }
 }
