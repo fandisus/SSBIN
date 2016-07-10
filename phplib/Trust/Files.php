@@ -65,4 +65,15 @@ class Files {
     $decrypted_string = mcrypt_decrypt(MCRYPT_BLOWFISH, $encryption_key, $encrypted_string, MCRYPT_MODE_ECB, $iv);
     return $decrypted_string;
   }
+  static function checkUpload($upload) {
+    $errMsgs = [
+        UPLOAD_ERR_INI_SIZE=>"File size too large",
+        UPLOAD_ERR_FORM_SIZE=>"File size too large",
+        UPLOAD_ERR_PARTIAL=>"Upload interrupted",
+        UPLOAD_ERR_NO_FILE=>"File not found"
+    ];
+    if (!isset($upload)) return "Upload not found";
+    $errorCode = $upload['error'];
+    if ($errorCode != 0) JSONResponse::Error($errMsgs[$errorCode]);
+  }
 }
