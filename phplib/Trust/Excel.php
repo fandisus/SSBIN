@@ -1,7 +1,7 @@
 <?php
-define("SYSTEMNAME", "FORBIS");
+require(DIR."/phplib/excel/PHPExcel.php");
 namespace Trust;
-class ExcelRowElement {
+class ExcelRowElement { //Caknyo perlu diganti namo, misal: ExcelHeaderElement
     public $col;
     public $row;
     public $val;
@@ -13,16 +13,15 @@ class ExcelRowElement {
 }
 
 class Excel {
-  static function ExcelFromData($title, $sheetName, $tableHeader, $rows, $filename="Data") {
-    require(DIR."/jslib/excel/PHPExcel.php");
+  static function ExcelFromData($title, $sheetName, $tableHeaders, $rows, $filename="Data") {
     $oExcel = new PHPExcel();
-    $oExcel->getProperties()->setCreator(SYSTEMNAME)
-                             ->setLastModifiedBy(SYSTEMNAME)
+    $oExcel->getProperties()->setCreator(APPNAME)
+                             ->setLastModifiedBy(APPNAME)
                              ->setTitle($title)
                              ->setSubject($title)
                              ->setDescription("");
     $oSheet = $oExcel->setActiveSheetIndex(0); $maxHeaderRow = $maxHeaderCol= 0;
-    foreach($tableHeader as $v) {
+    foreach($tableHeaders as $v) {
       $oSheet->setCellValueByColumnAndRow($v->col, $v->row, $v->val);
       if ($v->colSpan > 1) {
         $oSheet->mergeCellsByColumnAndRow($v->col, $v->row, $v->col+$v->colSpan-1, $v->row);
@@ -63,5 +62,18 @@ class Excel {
     $objWriter = PHPExcel_IOFactory::createWriter($oExcel, 'Excel2007');
     $objWriter->save('php://output');
     exit;
+  }
+  static function checkUpload($upload) {
+    Files::checkUpload($upload);
+    $extension = pathinfo($upload['name'])['extension'];
+    if (!in_array($extension,['xlsx','xls','ods'])) JSONResponse::Error('File type unsupported');
+    return $extension;
+  }
+  static function getExcelObject($namaFile) {
+    $excelType = \PHPExcel_IOFactory::identify($namaFile);
+    $oReader = \PHPExcel_IOFactory::createReader($excelType);
+    $oReader->setReadDataOnly(true);
+    $oExcel = $oReader->Load($namaFile);
+    return $oExcel;
   }
 }
