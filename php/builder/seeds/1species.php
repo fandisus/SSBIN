@@ -5,6 +5,6 @@ function seedSpecies() {
   $species = file(DIR."/php/builder/rawdata/species.txt", FILE_IGNORE_NEW_LINES);
   $datainfo = json_encode(\Trust\Model::newDataInfo());
   
-  foreach ($species as $k=>$v) $species[$k] = ['species'=>$v,'data_info'=>$datainfo];
+  foreach ($species as $k=>$v) $species[$k] = (object)['species'=>$v,'data_info'=>$datainfo];
   \SSBIN\Species::multiInsert($species);
 }

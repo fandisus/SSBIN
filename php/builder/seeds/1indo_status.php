@@ -6,6 +6,6 @@ function seedIndoStatus() {
   $datainfo = json_encode(\Trust\Model::newDataInfo());
   
   foreach ($status as $k=>$v) $status[$k]= explode(",",$v);
-  foreach ($status as $k=>$v) $status[$k] = ['abbr'=>$v[0],'long_name'=>$v[1],'data_info'=>$datainfo];
+  foreach ($status as $k=>$v) $status[$k] = (object)['abbr'=>$v[0],'long_name'=>$v[1],'data_info'=>$datainfo];
   \SSBIN\Indo_status::multiInsert($status);
 }
