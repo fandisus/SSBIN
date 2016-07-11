@@ -121,4 +121,19 @@ app.controller('ctrlFindings',function($scope) {
       $scope.$apply();
     });
   };
+  $('#formSS')
+    .append($('<input/>').attr({type:'hidden',name:'a',value:'upload_spreadsheet'}))
+    .append($('<input/>').attr({type:'hidden',name:'token',value:token}));
+  $scope.uploadSS = function() {
+    tr.postForm(uri,$('#formSS')[0],function(rep) {
+      for (var i in rep.findings) {
+        if (typeof rep.findings[i] === 'function') continue;
+        $scope.findings.push(rep.findings[i]);
+      }
+      $scope.$apply();
+      $('#modalUpload').modal('hide');
+    }, function (rep) {
+      if (rep.data != undefined) console.log(rep.data);
+    });
+  };
 });

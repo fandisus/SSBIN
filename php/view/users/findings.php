@@ -27,6 +27,8 @@ function htmlHead() {
 
 function mainContent() {
   ?>
+  <h2>Data Input</h2>
+  <h3>Import from Excel</h3>
   <div class="row" ng-controller="ctrlFindings">
     <div class="col-md-12">
       <table class="form-group form-group-sm">
@@ -45,6 +47,7 @@ function mainContent() {
       </table>
       <tr-paging public="pager"></tr-paging><br />
       <button ng-click="newO()" class="btn btn-success">New <i class="fa fa-plus fa-fw"></i></button>
+      <button class="btn btn-success" data-toggle="modal" data-target="#modalUpload">Upload Spreadsheet... <i class="fa fa-fw fa-file-excel-o"></i></button>
       <br /><br />
       <div class="table-responsive">
         <table class="table table-bordered table-striped table-condensed table-hover">
@@ -104,6 +107,28 @@ function mainContent() {
           </tbody>
         </table>
       </div>
+      
+<div id="modalUpload" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Upload Spreadsheet</h4>
+      </div>
+      <div class="modal-body">
+        <form id="formSS" enctype="multipart/form-data">
+          <label>Spreadsheet File:</label>
+          <input type="file" name="spreadsheet" />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button ng-click="uploadSS()" type="button" class="btn btn-primary">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>      
+      
       <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">

@@ -8,8 +8,13 @@ use Trust\Forms;
 use Trust\Pager;
 use Trust\Date;
 use Trust\Geo;
+use Trust\Excel;
 
-$services = ['getFamilies','getGenuses','getSpecies','getGrids','saveNew','saveOld','delete','get'];
+$services = [
+  'upload_spreadsheet',
+  'getFamilies','getGenuses','getSpecies','getGrids',
+  'saveNew','saveOld','delete','get'
+];
 if (in_array($_POST['a'], $services)) $_POST['a'](); else JSONResponse::Error("Service unavailable");
 
 function getFamilies() {
@@ -118,4 +123,78 @@ function delete() {
   $targetid = Forms::getPostObject('o');
   Finding::delete($targetid);
   JSONResponse::Success(["message"=>'Data deleted successfully']);
+}
+
+function upload_spreadsheet() { global $login;
+  $upload = $_FILES['spreadsheet'];
+  $file_ext = Excel::checkUpload($upload);
+
+  $filename = "uploads/u-$login->id-$upload[name]";
+  move_uploaded_file($upload['tmp_name'], $filename);
+  
+  $headers=['ID','Class','Picture','Local name','Other name','N'
+    ,'Family','Genus','Species','Common name','Survey-Month','Survey-Years','Latitude','Longitude','Grid'
+    ,'Location Village','Location District','Landcover','IUCN Status','CITES Status','Indonesia Status'
+    ,'Data Source','Reference','Other information'];
+  $oExcel = Excel::getExcelObject($filename);
+  $starttime = microtime(true);
+  $sheet = $oExcel->getSheetByName("Findings");
+  if ($sheet ==  null) JSONResponse::Error('Worksheet "Findings" not found');
+
+  $errors = [];
+  for ($i=0; $i<23; $i++) {
+    $head = $sheet->getCellByColumnAndRow($i,1)->getValue();
+    if ($head != $headers[$i]) $errors[] = "Column #$i:'$head' should be '".$headers[$i]."'";
+  }
+  if (count($errors)) JSONResponse::Error('Column header mismatch. Press F12 For more information',['data'=>$errors]);
+  
+  //Note: pic column will be ignored
+  $di = json_encode(\Trust\Model::newDataInfo());
+  $jumbar = $sheet->getHighestRow();
+  for ($i=2;$i<=$jumbar; $i++) {
+    $f = [
+      'id'=>$sheet->getCellByColumnAndRow(0,$i)->getValue(),
+      'pic'=>[],
+      'localname'=>$sheet->getCellByColumnAndRow(3,$i)->getValue(),
+      'othername'=>$sheet->getCellByColumnAndRow(4,$i)->getValue(),
+      'n'=>$sheet->getCellByColumnAndRow(5,$i)->getValue(),
+      'taxonomy'=>(object)[
+        'class'=>$sheet->getCellByColumnAndRow(1,$i)->getValue(),
+        'family'=>$sheet->getCellByColumnAndRow(6,$i)->getValue(),
+        'genus'=>$sheet->getCellByColumnAndRow(7,$i)->getValue(),
+        'species'=>$sheet->getCellByColumnAndRow(8,$i)->getValue()
+      ],
+      'commonname'=>$sheet->getCellByColumnAndRow(9,$i)->getValue(),
+      'survey_month'=> Date::monthFromName($sheet->getCellByColumnAndRow(10,$i)->getValue()),
+      'survey_year'=>$sheet->getCellByColumnAndRow(11,$i)->getValue(),
+      'latitude'=>$sheet->getCellByColumnAndRow(12,$i)->getValue(),
+      'longitude'=>$sheet->getCellByColumnAndRow(13,$i)->getValue(),
+      'grid'=>$sheet->getCellByColumnAndRow(14,$i)->getValue(),
+      'village'=>$sheet->getCellByColumnAndRow(15,$i)->getValue(),
+      'district'=>$sheet->getCellByColumnAndRow(16,$i)->getValue(),
+      'landcover'=>$sheet->getCellByColumnAndRow(17,$i)->getValue(),
+      'iucn_status'=>$sheet->getCellByColumnAndRow(18,$i)->getValue(),
+      'cites_status'=>$sheet->getCellByColumnAndRow(19,$i)->getValue(),
+      'indo_status'=>$sheet->getCellByColumnAndRow(20,$i)->getValue(),
+      'data_source'=>$sheet->getCellByColumnAndRow(21,$i)->getValue(),
+      'reference'=>$sheet->getCellByColumnAndRow(22,$i)->getValue(),
+      'other_info'=>$sheet->getCellByColumnAndRow(23,$i)->getValue(),
+      'data_info'=>$di,
+    ];
+    $o = new Finding($f);
+    $check = Finding::validationString($o);
+    if ($check!=null) $errors[]="Row #$i:$check";
+    Finding::createValidationInfo($o);
+    Finding::prepareInputForDB($o);
+    $o->json_encode();
+    $findings[] = $o;
+  }
+  if (count($errors)) JSONResponse::Error('Data validation error. Press F12 for more information',['data'=>$errors]);
+  
+  Finding::multiInsert($findings);
+  
+  $endtime = microtime(true);
+  $duration = $endtime - $starttime;
+  foreach ($findings as $o) $o->json_decode();
+  JSONResponse::Success(['message'=>"Upload successful ($duration s)",'findings'=>$findings]);
 }
