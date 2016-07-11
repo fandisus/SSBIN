@@ -6,6 +6,16 @@ class Date {
    * @param string $theDate The date string to be checked
    * @return boolean
    */
+  protected static $engMonths = ['zz','january','february','march','april','may','june','july','august','september','October','november','december'];
+  protected static $indMonths = ['zz','januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
+  static function monthFromName($monthName) {
+    $monthName = trim($monthName);
+    $res = array_search(strtolower($monthName),Date::$engMonths);
+    if ($res) return $res;
+    JSONResponse::Error($res);
+    return array_search(strtolower($monthName), Date::$indMonths);
+    //returns false when not found
+  }
 //  static function isValidDate($theDate) {
 //      $test = date_parse($theDate);
 //      if (count($test['errors']) || count($test['warnings'])) return false;
