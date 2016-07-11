@@ -1,6 +1,7 @@
 <?php
 namespace SSBIN;
 use Trust\JSONResponse;
+use Trust\Geo;
 use SSBIN\Classes;
 use SSBIN\IUCN_status; use SSBIN\Indo_status; use SSBIN\Location; use SSBIN\Landcover; use SSBIN\Grid;
 
@@ -22,8 +23,8 @@ class Finding extends \Trust\Model{
     if ($o->n == '' || !is_numeric($o->n) || $o->n < 1) return 'N cannot be empty';
     if ($o->survey_month == '' || !is_numeric($o->survey_month)) return 'Survey month cannot be empty';
     if ($o->survey_year == '' || !is_numeric($o->survey_year)) return 'Survey year cannot be empty';
-    if ($o->latitude != '' && !is_numeric($o->latitude)) return 'Invalid latitude';
-    if ($o->longitude != '' && !is_numeric($o->longitude)) return 'Invalid longitude';
+    if ($o->latitude != '' && Geo::degreeFromStr($o->latitude,'lat') == null) return 'Invalid latitude';
+    if ($o->longitude != '' && Geo::degreeFromStr($o->longitude,'long') == null) return 'Invalid longitude';
     if ($o->grid != '' && !in_array($o->grid, Finding::$lookups['grids'])) return 'Grid not listed';
     if ($o->district != '' && !in_array($o->district, Finding::$lookups['districts'])) return 'Location not listed';
     if ($o->landcover != '' && !in_array($o->landcover, Finding::$lookups['landcovers'])) return 'Landcover not listed';
@@ -46,8 +47,8 @@ class Finding extends \Trust\Model{
     $o->survey_date = "$o->survey_year-$o->survey_month-01";
     unset ($o->survey_month, $o->survey_year);
     $o->date_precision = 'month';
-    $o->latitude = ($o->latitude == '') ? null : doubleval($o->latitude);
-    $o->longitude = ($o->longitude == '') ? null : doubleval($o->longitude);
+    $o->latitude = ($o->latitude == '') ? null : Geo::degreeFromStr($o->latitude,'lat');
+    $o->longitude = ($o->longitude == '') ? null : Geo::degreeFromStr($o->longitude,'long');
     $o->grid = ($o->grid == '') ? null : intval($o->grid);
   }
   public static function createValidationInfo(&$o) {
