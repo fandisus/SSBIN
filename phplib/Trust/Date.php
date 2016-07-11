@@ -1,13 +1,13 @@
 <?php
 namespace Trust;
 class Date {
-  /**
-   * Checks if the specified string is a valid date.
-   * @param string $theDate The date string to be checked
-   * @return boolean
-   */
   protected static $engMonths = ['zz','january','february','march','april','may','june','july','august','september','October','november','december'];
   protected static $indMonths = ['zz','januari','februari','maret','april','mei','juni','juli','agustus','september','oktober','november','desember'];
+  /**
+   * Converts string to month number
+   * @param string $monthName the string representation of the month
+   * @return int/false returns month number or false when not found
+   */
   static function monthFromName($monthName) {
     $monthName = trim($monthName);
     $res = array_search(strtolower($monthName),Date::$engMonths);
@@ -16,13 +16,6 @@ class Date {
     return array_search(strtolower($monthName), Date::$indMonths);
     //returns false when not found
   }
-//  static function isValidDate($theDate) {
-//      $test = date_parse($theDate);
-//      if (count($test['errors']) || count($test['warnings'])) return false;
-//      if (!$test['year'] || !$test['month'] || !$test['day']) return false;
-//      if (!checkdate($test['month'], $test['day'], $test['year'])) return false;
-//      return true;
-//  }
   /**
    * Check if the specified string is a valid javascript datetime string.
    * Might be a problem for non US computers
