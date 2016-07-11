@@ -81,11 +81,18 @@ abstract class Model implements iSaveable, iLoadable {
     return true;
   }
   
-  public static function multiInsert(&$objects) {
-    //$objects, harus berupa nested array, ndak terimo object
+  public function json_encode() {
+    foreach (static::$json_columns as $v) $this->$v = json_encode($this->$v);
+  }
+  public function json_decode() {
+    foreach (static::$json_columns as $v) $this->$v = json_decode($this->$v);
+  }
+  public static $temp_cols=[];
+  public static function multiInsert($objects) {
     //cols sesuai kiriman di $objects, dan ndak diencode di sini.
-    $cols = array_keys($objects[0]);
-    $sql = "INSERT INTO \"".static::$table_name."\" (\"".implode("\",\"", $cols)."\") VALUES ";
+    foreach ($objects as $k=>$v) unset ($objects[$k]->old_vals);
+    if (!count(static::$temp_cols)){ foreach ($objects[0] as $k=>$v) static::$temp_cols[]=$k; }
+    $sql = "INSERT INTO \"".static::$table_name."\" (\"".implode("\",\"", static::$temp_cols)."\") VALUES ";
 
     foreach ($objects as $i=>$obj) {
       foreach ($obj as $key=>$val) if (gettype($val) == "boolean") $objects[$i][$key] = ($val) ? 'true' : '0';
@@ -93,9 +100,12 @@ abstract class Model implements iSaveable, iLoadable {
 
     $idx=0; $sqls=[]; $vals=[];$count=count($objects);
     while ($idx < $count) {
-      $vals = array_values(array_shift($objects));
+      $o = array_shift($objects);
+      $vals = [];
+      foreach ($o as $k=>$v) $vals[]=$v;
       $idx++;
-      foreach ($vals as $k=>$v) $vals[$k] = DB::$pdo->quote($v);
+      //print_r($vals);die();
+      foreach ($vals as $k=>$v) $vals[$k] = ($v==null) ? 'NULL' : DB::$pdo->quote($v);
       $strVals[]='('. implode(',', $vals). ')';
       if ($idx % 10000 == 0) {
         $sqls[] = $sql.implode(',', $strVals);
