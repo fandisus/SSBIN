@@ -19,6 +19,7 @@ function htmlHead() {
     });
   </script>
   <style>
+    td { white-space: nowrap;}
     td>input.form-control, td>select.form-control { width:100%;}
     .form-group { margin-bottom: 0px;}
     .pagination { margin:5px 0;}
@@ -212,11 +213,11 @@ function mainContent() {
                 </tr>
                 <tr>
                   <td>CITES Status</td>
-                  <td><select ng-model="o.cites_status" ng-options="s.abbr as s.long_name for s in indos"/></td>
+                  <td><input type="text" ng-model="o.cites_status" list="list-indo"/></td>
                 </tr>
                 <tr>
                   <td>Indonesia Status</td>
-                  <td><input type="text" ng-model="o.indo_status" list="list-indo"/></td>
+                  <td><select ng-model="o.indo_status" ng-options="s.abbr as s.long_name for s in indos"/></td>
                 </tr>
                 <tr>
                   <td>Data Source</td>
