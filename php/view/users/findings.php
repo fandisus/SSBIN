@@ -29,7 +29,6 @@ function htmlHead() {
 function mainContent() {
   ?>
   <h2>Data Input</h2>
-  <h3>Import from Excel</h3>
   <div class="row" ng-controller="ctrlFindings">
     <div class="col-md-12">
       <table class="form-group form-group-sm">
