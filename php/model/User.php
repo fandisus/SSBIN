@@ -35,13 +35,15 @@ class User extends Model {
     }
     parent::__construct($arrProps);
   }
+  const ICONPATH = "/images/userpic/icon";
+  const PICPATH = "/images/userpic/pict";
   public function imageIcon() {
-    if ($this->biodata->profile_pic != null) return "/images/userpic/icon".$this->biodata->profile_pic;
+    if ($this->biodata->profile_pic != null) return User::ICONPATH.$this->biodata->profile_pic;
     if ($this->biodata->gender == "Male") return "/images/user-male.png";
     if ($this->biodata->gender == "Female") return "/images/user-female.png";
   }
   public function profilePic() {
-    if ($this->biodata->profile_pic != null) return "/images/userpic/pict".$this->biodata->profile_pic;
+    if ($this->biodata->profile_pic != null) return USER::PICPATH.$this->biodata->profile_pic;
     if ($this->biodata->gender == "Male") return "/images/user-male.png";
     if ($this->biodata->gender == "Female") return "/images/user-female.png";
   }

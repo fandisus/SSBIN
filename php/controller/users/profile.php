@@ -8,6 +8,7 @@ if (isset($_POST['a']) && in_array($_POST['a'], $services)) $_POST['a']();
 use Trust\JSONResponse;
 use Trust\Image;
 use Trust\Date;
+use SSBIN\User;
 
 function biodata() { global $login;
   //Note to self: Category dan Organization sengaja diset tidak bisa diubah oleh user.
@@ -36,8 +37,8 @@ function PP() { global $login;
   //copy ke folder
   $file = $_FILES['profile_pic'];
   $ext = pathinfo($file['name'])['extension'];
-  $picpath = DIR."/public/images/userpic/pict$login->id.$ext";
-  $icopath = DIR."/public/images/userpic/icon$login->id.$ext";
+  $picpath = DIR."/public".User::PICPATH."$login->id.$ext";
+  $icopath = DIR."/public".User::ICONPATH."$login->id.$ext";
   Image::GenerateThumb($file['tmp_name'], 300, 300, $picpath);
   Image::GenerateThumb($file['tmp_name'], 30, 30, $icopath);
   unlink($file['tmp_name']);
