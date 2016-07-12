@@ -74,6 +74,6 @@ class Files {
     ];
     if (!isset($upload)) return "Upload not found";
     $errorCode = $upload['error'];
-    if ($errorCode != 0) JSONResponse::Error($errMsgs[$errorCode]);
+    if ($errorCode != 0) return $errMsgs[$errorCode];
   }
 }
