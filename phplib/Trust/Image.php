@@ -55,7 +55,8 @@ class Image {
   }
   
   static function checkImageUpload($upload) {
-    Files::checkUpload($upload);
+    $err = Files::checkUpload($upload);
+    if ($err) return $err;
     if (!Image::IsImage($upload['tmp_name'])) {
       unlink($upload['tmp_name']);
       return "Image format not supported.\nOnly gif, jpg or png accepted.";
