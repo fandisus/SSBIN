@@ -3,7 +3,7 @@ $(document).ready(function() {
   var gaya = document.createElement('style');
   gaya.innerHTML =  ".file-input {position:relative; overflow:hidden;}";
   gaya.innerHTML += ".file-input input[type='file'] {position:absolute;top:0;left:0;display:block;width:100%;height:100%;opacity:0;}";
-  gaya.innerHTML += ".file-input img {display:block;width:auto;height:auto;}";
+  gaya.innerHTML += ".file-input img {display:block;width:auto;height:auto;max-width:100%}";
   document.head.appendChild(gaya);
 
   $(".file-input").each(function() {
@@ -25,7 +25,7 @@ $(document).ready(function() {
 //<form id='picform' enctype="multipart/form-data">
 //  <label for="profile_pic">Profile pic</label>
 //  <div class='file-input'>
-//    <img ng-src='{{biodata.img_profile}}'/>
+//    <img src='/pics/no-image.png'/>  <!-- This can also be ng-src, but it will be changed by vanilla js />
 //    <input type="file" name='profile_pic'/>
 //  </div>
 //  <button ng-click="changePP()" class="btn btn-success"><i class="fa fa-upload"></i> Simpan</button>
