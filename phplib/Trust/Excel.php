@@ -64,10 +64,11 @@ class Excel {
     exit;
   }
   static function checkUpload($upload) {
-    Files::checkUpload($upload);
+    $err = Files::checkUpload($upload);
+    if ($err) return $err;
     $extension = pathinfo($upload['name'])['extension'];
-    if (!in_array($extension,['xlsx','xls','ods'])) JSONResponse::Error('File type unsupported');
-    return $extension;
+    if (!in_array($extension,['xlsx','xls','ods'])) return 'File type unsupported';
+    return null;
   }
   static function getExcelObject($namaFile) {
     $excelType = \PHPExcel_IOFactory::identify($namaFile);
