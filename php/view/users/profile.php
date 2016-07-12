@@ -78,7 +78,7 @@ function mainContent() {
                 </div>
               </div>
               <button ng-click='savePP()' class='btn btn-success'><i class="fa fa-save"></i> Simpan</button>
-              <button ng-click='nullPP()' class='btn btn-default'>Pakai PP Facebook</button>
+              <button ng-click='nullPP()' class='btn btn-default'>Pakai PP Default</button>
             </div>
           </form>
           <!--End Profile Picture-->
