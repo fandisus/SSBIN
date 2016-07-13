@@ -9,9 +9,10 @@ use Trust\Pager;
 use Trust\Date;
 use Trust\Geo;
 use Trust\Excel;
+use Trust\Image;
 
 $services = [
-  'upload_spreadsheet',
+  'upload_spreadsheet','savepic','delPic','picReorder',
   'getFamilies','getGenuses','getSpecies','getGrids',
   'saveNew','saveOld','delete','get'
 ];
@@ -121,13 +122,14 @@ function saveOld() {
 
 function delete() {
   $targetid = Forms::getPostObject('o');
-  Finding::delete($targetid);
+  Finding::delete($targetid); //pics also get deleted here.
   JSONResponse::Success(["message"=>'Data deleted successfully']);
 }
 
 function upload_spreadsheet() { global $login;
   $upload = $_FILES['spreadsheet'];
-  $file_ext = Excel::checkUpload($upload);
+  $err = Excel::checkUpload($upload);
+  if ($err) JSONResponse::Error($err);
 
   $filename = "uploads/u-$login->id-$upload[name]";
   move_uploaded_file($upload['tmp_name'], $filename);
@@ -197,4 +199,59 @@ function upload_spreadsheet() { global $login;
   $duration = $endtime - $starttime;
   foreach ($findings as $o) $o->json_decode();
   JSONResponse::Success(['message'=>"Upload successful ($duration s)",'findings'=>$findings]);
+}
+
+function savepic() {
+  $id = Forms::getPostObject('target');
+  $upload = $_FILES['pic'];
+  $err = Image::checkImageUpload($upload);
+  if ($err) JSONResponse::Error($err);
+
+  $o = Finding::find($id);
+  if (!$o) JSONResponse::Error('Data not found');
+
+  $ext = pathinfo($upload['name'])['extension'];
+  $filename = "$id-".time().".$ext";
+
+  //Save to database
+  $o->pic[] = $filename;
+  $o->update();
+
+  $iconpath = DIR.'/public'.Finding::ICONPATH."$filename";
+  $thumbpath = DIR.'/public'.Finding::THUMBPATH."$filename";
+  $picpath = DIR.'/public'.Finding::PICPATH."$filename";
+
+  Image::GenerateThumb($upload['tmp_name'], 40, 40, $iconpath);
+  Image::GenerateThumb($upload['tmp_name'], 160, 160, $thumbpath);
+  move_uploaded_file($upload['tmp_name'], $picpath);
+
+  JSONResponse::Success(['pic'=>$filename,'message'=>'Image uploaded successfully']);
+}
+function delPic() {
+  $target = Forms::getPostObject('target');
+  $pic = Forms::getPostObject('p');
+  $o = Finding::find($target);
+  if (!$o) JSONResponse::Error('Data not found');
+  
+  $rem = \Trust\Basic::array_remove($o->pic, $pic);
+  if (!$rem) JSONResponse::Error('Picture deletion failed');
+  $o->update();
+  
+  unlink(DIR.'/public'.Finding::ICONPATH.$pic);
+  unlink(DIR.'/public'.Finding::THUMBPATH.$pic);
+  unlink(DIR.'/public'.Finding::PICPATH.$pic);
+  
+  JSONResponse::Success(['message'=>'Picture deleted']);
+}
+function picReorder() {
+  $target = Forms::getPostObject('target');
+  $pics = Forms::getPostObject('pics');
+  
+  $o = Finding::find($target);
+  if (!$o) JSONResponse::Error('Data not found');
+  
+  $o->pic = $pics;
+  $o->update();
+  
+  JSONResponse::Success(['message'=>'Picture reordered']);
 }

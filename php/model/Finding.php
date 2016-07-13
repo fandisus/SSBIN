@@ -10,6 +10,10 @@ class Finding extends \Trust\Model{
   protected static $table_name = "findings", $increment=true, $hasTimestamps = true;
   protected static $json_columns = ['pic','taxonomy','data_info','validation'];
   protected static $lookups=null;
+  
+  const ICONPATH = "/pics/icon/";
+  const THUMBPATH = "/pics/thumb/";
+  const PICPATH = "/pics/";
   public static function validateInputObject($o) {
     $strError = static::validationString($o);
     if ($strError) JSONResponse::Error($strError);
@@ -53,5 +57,19 @@ class Finding extends \Trust\Model{
   }
   public static function createValidationInfo(&$o) {
     $o->validation = ['validated'=>false,'validated_by'=>null,'validated_at'=>null];
+  }
+  public static function delete($PK) {
+    $o = Finding::find($PK);
+    foreach ($o->pic as $v) {
+      unlink(DIR.'/public'.Finding::ICONPATH.$v);
+      unlink(DIR.'/public'.Finding::THUMBPATH.$v);
+      unlink(DIR.'/public'.Finding::PICPATH.$v);
+    }
+    $sql = "DELETE FROM \"".static::$table_name."\" WHERE ".static::$key_name."=:".static::$key_name;
+    try {
+      return \Trust\DB::exec($sql, [static::$key_name=>$PK]);
+    } catch (\Exception $ex) {
+      throw $ex;
+    }
   }
 }

@@ -1,5 +1,7 @@
+app.requires.push('dndLists');
 app.controller('ctrlFindings',function($scope) {
   var init = JSON.parse($("#init").html());
+  var paths = init.paths;
   $scope.classes = init.classes;
   $scope.districts = init.districts;
   $scope.landcovers = init.landcovers;
@@ -115,7 +117,7 @@ app.controller('ctrlFindings',function($scope) {
     if (confirm("Are you sure you want to delete?\n\Findings with ID:#" + o.id) == false) return;
     var oPost={a:"delete",o:$scope.target.id,token:token};
     tr.post(uri,oPost, function(rep) {
-      $scope.findings.remove($scope.target);
+      arrRemoveElement($scope.findings,$scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();
@@ -134,6 +136,55 @@ app.controller('ctrlFindings',function($scope) {
       $('#modalUpload').modal('hide');
     }, function (rep) {
       if (rep.data != undefined) console.log(rep.data);
+    });
+  };
+  $('#picform')
+    .append($('<input/>').attr({type:'hidden',name:'a',value:'savepic'}))
+    .append($('<input/>').attr({type:'hidden',name:'token',value:token}));
+  $scope.editPic = function(o,e) {
+    $scope.target = o;
+    $scope.o = angular.copy(o);
+    $('.file-input img').attr('src','/pics/dropImageHere.png'); //Off from angularjs
+    $('#modalPic').modal('show');
+    e.stopPropagation();
+  };
+  $scope.uploadPic = function() {
+    tr.postForm(uri,$('#picform')[0],function(rep) {
+      $scope.target.pic.push(rep.pic);
+      $scope.o.pic.push(rep.pic);
+      $.notify(rep.message);
+      $scope.$apply();
+    });
+  };
+  $scope.icon = function(o) {
+    if (o.pic.length === 0) return paths.pic + 'no-image.svg';
+    return paths.icon + o.pic[0];
+  };
+  $scope.thumb = function(p) {
+    return paths.thumb + p;
+  };
+  $scope.rem = function(p,idx) {
+    var idx2 = $scope.o.pic.indexOf(p);
+    if (idx > idx2) idx++;
+    $scope.o.pic.splice(idx,1);
+    console.clear();
+  };
+  $scope.delPic = function(p) {
+    if (!confirm('Are you sure?')) return;
+    var oPost={a:'delPic',p:p,target:$scope.o.id,token:token};
+    tr.post(uri,oPost,function(rep) {
+      arrRemoveElement($scope.target.pic,p);
+      arrRemoveElement($scope.o.pic,p);
+      $.notify(rep.message,'success');
+      $scope.$apply();
+    });
+  };
+  $scope.picReorder = function() {
+    var oPost={a:'picReorder',pics:$scope.o.pic,target:$scope.o.id,token:token};
+    tr.post(uri,oPost,function(rep) {
+      $scope.target.pic = JSON.parse(JSON.stringify($scope.o.pic));
+      $.notify(rep.message,'success');
+      $scope.$apply();
     });
   };
 });

@@ -8,7 +8,9 @@ function htmlHead() {
   <script>var token = '<?= \Trust\Server::csrf_token(); ?>';</script>
   <script src="/jslib/moment.min.js"></script>
   <script src="/jslib/mine/commonjs.js"></script>
+  <script src="/jslib/mine/file-input.js"></script>
   <script src="/js/common.js"></script>
+  <script src="/jslib/angular-drag-and-drop-lists.min.js"></script>
   <script src="/js/user/findings.js"></script>
   <script src="/jslib/mine/DirPaging2.js"></script>
   <script src="/jslib/mine/degdms.js"></script>
@@ -19,6 +21,14 @@ function htmlHead() {
     });
   </script>
   <style>
+    #tabel-data td>img{max-height: 40px; max-width: 40px;}
+    ul.pic-list { padding: 0; list-style-type: none;}
+    .pic-list li { position:relative; top:0px; left:0px; vertical-align: top;
+      display:inline-block; width: 170px; height: 170px;
+      padding:5px; margin:3px; text-align:center;
+      border: 1px solid gray; border-radius: 3px;
+    }
+    .pic-list button { position: absolute; top:0px; right:0px; }
     td { white-space: nowrap;}
     td>input.form-control, td>select.form-control { width:100%;}
     .form-group { margin-bottom: 0px;}
@@ -50,9 +60,10 @@ function mainContent() {
       <button class="btn btn-success" data-toggle="modal" data-target="#modalUpload">Upload Spreadsheet... <i class="fa fa-fw fa-file-excel-o"></i></button>
       <br /><br />
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-condensed table-hover">
+        <table id="tabel-data" class="table table-bordered table-striped table-condensed table-hover">
           <thead>
             <tr>
+              <th>Pic</th>
               <th>ID</th>
               <th>Class</th>
               <th>Local Name</th>
@@ -80,6 +91,7 @@ function mainContent() {
           </thead>
           <tbody>
             <tr ng-repeat="o in findings" ng-click="edit(o)">
+              <td><img ng-click="editPic(o,$event);" ng-src="{{icon(o)}}" /></td>
               <td>{{o.id}}</td>
               <td>{{o.taxonomy.class}}</td>
               <td>{{o.localname}}</td>
@@ -107,6 +119,40 @@ function mainContent() {
           </tbody>
         </table>
       </div>
+
+<div id="modalPic" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Manage pictures</h4>
+      </div>
+      <div class="modal-body">
+        <form id='picform' enctype="multipart/form-data">
+          <input name="target" type="hidden" ng-value="o.id"/>
+          <label for="pic">Profile pic</label>
+          <div class='file-input' style="margin-bottom: 8px;">
+            <img/>
+            <input type="file" name='pic'/>
+          </div>
+          <button ng-click="uploadPic()" class="btn btn-success"><i class="fa fa-upload"></i> Upload pic</button>
+        </form>
+        <ul dnd-list="o.pic" class="pic-list">
+          <li ng-repeat="p in o.pic"
+               dnd-draggable="p"
+               dnd-moved="rem(p,$index)"
+               dnd-effect-allowed="move">
+            <img ng-src="{{thumb(p)}}"/>
+            <button ng-click="delPic(p)" class="btn btn-default btn-xs">&times;</button>
+          </li>
+        </ul>
+        <button ng-click="picReorder()" class="btn btn-primary">Save pics order</button>
+      </div>
+    </div>
+  </div>
+</div>      
+
+
       
 <div id="modalUpload" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">
@@ -281,6 +327,11 @@ function mainContent() {
     ];
     $init->findings = \SSBIN\Finding::allWhere("ORDER BY id DESC LIMIT 50", []);
     $init->totalItems = \SSBIN\Finding::count();
+    $init->paths = [
+      'pic'=> \SSBIN\Finding::PICPATH,
+      'thumb'=> \SSBIN\Finding::THUMBPATH,
+      'icon'=> \SSBIN\Finding::ICONPATH
+    ];
     echo json_encode($init);
     ?></div>
   <?php
