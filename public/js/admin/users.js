@@ -45,7 +45,7 @@ app.controller("ctrlUsers",function($scope) {
     $("#modalExpertise").modal('show');
   };
   $scope.remExpertise = function(e) {
-    $scope.editUser.expertise.remove(e);
+    arrRemoveElement($scope.editUser.expertise,e);
   };
   $scope.addClass = function(c) {
     if (c == undefined) return;

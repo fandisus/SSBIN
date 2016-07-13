@@ -53,7 +53,7 @@ app.controller('ctrlIndo',function($scope) {
     if (confirm("Are you sure you want to delete?\n\Indonesia Status: " + o.long_name) == false) return;
     var oPost={a:"delete",o:$scope.target,token:token};
     tr.post(uri,oPost, function(rep) {
-      $scope.statuses.remove($scope.target);
+      arrRemoveElement($scope.statuses,$scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();

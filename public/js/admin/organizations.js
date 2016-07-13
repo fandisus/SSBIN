@@ -50,7 +50,7 @@ app.controller('ctrlOrg', function($scope) {
     if (confirm("Are you sure you want to delete?\n\Category: " + o.category + "\nOrganization: " + o.name) == false) return;
     var oPost={a:"delete",o:$scope.target,token:token};
     tr.post("/admin/organizations",oPost, function(rep) {
-      $scope.organizations.remove($scope.target);
+      arrRemoveElement($scope.organizations,$scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();

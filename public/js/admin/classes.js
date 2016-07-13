@@ -45,7 +45,7 @@ app.controller('ctrlClass',function($scope) {
     if (confirm("Are you sure you want to delete?\n\Class: " + o.class) == false) return;
     var oPost={a:"delete",o:$scope.target,token:token};
     tr.post("/admin/taxonomies/classes",oPost, function(rep) {
-      $scope.classes.remove($scope.target);
+      arrRemoveElement($scope.classes,$scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();

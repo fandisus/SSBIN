@@ -52,7 +52,7 @@ app.controller('ctrlGrid',function($scope) {
     if (confirm("Are you sure you want to delete?\n\Grid: " + o.location) == false) return;
     var oPost={a:"delete",o:$scope.target,token:token};
     tr.post(uri,oPost, function(rep) {
-      $scope.grids.remove($scope.target);
+      arrRemoveElement($scope.grids,$scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();

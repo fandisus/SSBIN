@@ -53,7 +53,7 @@ app.controller('ctrlFamily',function($scope) {
     if (confirm("Are you sure you want to delete?\n\Family: " + o.family) == false) return;
     var oPost={a:"delete",o:$scope.target,token:token};
     tr.post("/admin/taxonomies/families",oPost, function(rep) {
-      $scope.families.remove($scope.target);
+      arrRemoveElement($scope.families,$scope.target);
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
       $scope.$apply();
