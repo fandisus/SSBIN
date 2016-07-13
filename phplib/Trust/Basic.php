@@ -23,6 +23,12 @@ class Basic {
     foreach ($arr as $v) foreach ($v as $i) $all[] = $i;
     return $all;
   }
+  public static function array_remove(&$arr,$item) {
+    $idx = array_search($item,$arr);
+    if ($idx === false) return false;
+    array_splice($arr, $idx,1);
+    return true;
+  }
   function RandomString($num) { 
     $characters = '0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ';//tanpa huruf kecil dan O
     $randstring = '';
