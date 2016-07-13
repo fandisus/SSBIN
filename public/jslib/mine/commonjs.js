@@ -11,10 +11,17 @@ var n = this,
    return s + (j ? i.substr(0, j) + thousand : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) + (comma ? dec + Math.abs(n - i).toFixed(comma).slice(2) : "");
 };
 
-Array.prototype.remove = function(element) {
-  var a = this;
-  a.splice(a.indexOf(element),1);
+arrRemoveElement = function(arr,element){
+  arr.splice(arr.indexOf(element),1);
 };
+arrMoveElement = function(arr, from, to) {
+  arr.splice(to,0,arr.splice(from,1)[0]);
+};
+arrSwapElement = function(array, indexA, indexB) {
+  var tmp = array[indexA];
+  array[indexA] = array[indexB];
+  array[indexB] = tmp;
+}
 
 //Courtesy of: http://stackoverflow.com/questions/600763/check-if-a-variable-contains-a-numerical-value-in-javascript/601877#601877
 function isNumber(n){
