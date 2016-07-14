@@ -187,4 +187,10 @@ app.controller('ctrlFindings',function($scope) {
       $scope.$apply();
     });
   };
+  $scope.exportSS = function() {
+    var pager = JSON.stringify({filterBy:$scope.pager.filterBy});
+    var params = JSON.stringify($scope.params);
+    var oPost = {a:'export_ss',pager:pager,more:params,token:token};
+    $.redirect(uri,oPost,'POST');
+  };
 });

@@ -9,6 +9,7 @@ function htmlHead() {
   <script src="/jslib/moment.min.js"></script>
   <script src="/jslib/mine/commonjs.js"></script>
   <script src="/jslib/mine/file-input.js"></script>
+  <script src="/jslib/jquery.redirect.js"></script>
   <script src="/js/common.js"></script>
   <script src="/jslib/angular-drag-and-drop-lists.min.js"></script>
   <script src="/js/user/findings.js"></script>
@@ -58,6 +59,7 @@ function mainContent() {
       <tr-paging public="pager"></tr-paging><br />
       <button ng-click="newO()" class="btn btn-success">New <i class="fa fa-plus fa-fw"></i></button>
       <button class="btn btn-success" data-toggle="modal" data-target="#modalUpload">Upload Spreadsheet... <i class="fa fa-fw fa-file-excel-o"></i></button>
+      <button ng-click="exportSS()" class="btn btn-primary">Download as spreadsheet <i class="fa fa-download fa-fw"></i></button>
       <br /><br />
       <div class="table-responsive">
         <table id="tabel-data" class="table table-bordered table-striped table-condensed table-hover">

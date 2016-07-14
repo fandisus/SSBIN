@@ -12,10 +12,16 @@ use Trust\Excel;
 use Trust\Image;
 
 $services = [
-  'upload_spreadsheet','savepic','delPic','picReorder',
+  'upload_spreadsheet','export_ss','savepic','delPic','picReorder',
   'getFamilies','getGenuses','getSpecies','getGrids',
   'saveNew','saveOld','delete','get'
 ];
+
+const EXCEL_HEADERS = ['ID','Class','Picture','Local name','Other name','N'
+    ,'Family','Genus','Species','Common name','Survey-Month','Survey-Years','Latitude','Longitude','Grid'
+    ,'Location Village','Location District','Landcover','IUCN Status','CITES Status','Indonesia Status'
+    ,'Data Source','Reference','Other information'];
+
 if (in_array($_POST['a'], $services)) $_POST['a'](); else JSONResponse::Error("Service unavailable");
 
 function getFamilies() {
@@ -50,41 +56,8 @@ function getGrids() {
 function get() {
   $p = Pager::GetQueryAttributes();
   $more = Forms::getPostObject('more');
-  foreach ($more as $k=>$v) if (trim($v) == '') $more->$k = null;
-  $wheres = [];
-  if ($more->startDate == null ^ $more->endDate == null) JSONResponse::Error('Date range incomplete. Please input start and end survey date');
-  if ($more->startDate != null) { //If date range not empty, validate.
-    if ($more->startDate != null && !Date::isJavaDate($more->startDate)) JSONResponse::Error('Invalid date format at survey date start date');
-    if ($more->endDate != null && !Date::isJavaDate($more->endDate)) JSONResponse::Error('Invalid date format at survey date end date');
-    $startDate = Date::fromJavascriptToSQLDate($more->startDate);
-    $endDate = Date::fromJavascriptToSQLDate($more->endDate);
-    $wheres[] = "DATE_TRUNC('month',survey_date) BETWEEN '$startDate' AND '$endDate'";
-  }
+  more_pager($more,$p);
 
-  if ($more->startLat == null ^ $more->endLat == null) JSONResponse::Error('Incomplete latitude range');
-  if ($more->startLat != null) { //if lat range not empty, validate
-    $startLat = Geo::degreeFromStr($more->startLat, 'lat');
-    $endLat = Geo::degreeFromStr($more->endLat, 'lat');
-    if ($more->startLat != null && !$startLat) JSONResponse::Error ('Invalid input at starting latitude');
-    if ($more->endLat != null && !$endLat) JSONResponse::Error ('Invalid input at ending latitude');
-    $wheres[] = "latitude BETWEEN $startLat AND $endLat";
-  }
-  
-  if ($more->startLong == null ^ $more->endLong == null) JSONResponse::Error('Incomplete longitude range');
-  if ($more->startLong != null) { //if long range not empty, validate
-    $startLong = Geo::degreeFromStr($more->startLong, 'long');
-    $endLong = Geo::degreeFromStr($more->endLong, 'long');
-    if ($more->startLong != null && !$startLong) JSONResponse::Error ('Invalid input at starting longitude');
-    if ($more->endLong != null && !$endLong) JSONResponse::Error ('Invalid input at ending longitude');
-    $wheres[] = "longitude BETWEEN $startLong AND $endLong";
-  }
-  if (count($wheres)) {
-    $p->strWhere = ($p->strWhere == '') 
-      ? 'WHERE '.implode(' AND ',$wheres) 
-      : "$p->strWhere ".implode(' AND ',$wheres);
-  }
-
-  $p->strOrder = ($p->strOrder != "") ? $p->strOrder : " ORDER BY id DESC";
   $p->findings = Finding::allWhere("$p->strWhere $p->strOrder $p->strLimit", []);
   $p->totalItems = Finding::countWhere($p->strWhere, []);
 
@@ -134,10 +107,6 @@ function upload_spreadsheet() { global $login;
   $filename = "uploads/u-$login->id-$upload[name]";
   move_uploaded_file($upload['tmp_name'], $filename);
   
-  $headers=['ID','Class','Picture','Local name','Other name','N'
-    ,'Family','Genus','Species','Common name','Survey-Month','Survey-Years','Latitude','Longitude','Grid'
-    ,'Location Village','Location District','Landcover','IUCN Status','CITES Status','Indonesia Status'
-    ,'Data Source','Reference','Other information'];
   $oExcel = Excel::getExcelObject($filename);
   $starttime = microtime(true);
   $sheet = $oExcel->getSheetByName("Findings");
@@ -146,7 +115,7 @@ function upload_spreadsheet() { global $login;
   $errors = [];
   for ($i=0; $i<23; $i++) {
     $head = $sheet->getCellByColumnAndRow($i,1)->getValue();
-    if ($head != $headers[$i]) $errors[] = "Column #$i:'$head' should be '".$headers[$i]."'";
+    if ($head != EXCEL_HEADERS[$i]) $errors[] = "Column #$i:'$head' should be '".EXCEL_HEADERS[$i]."'";
   }
   if (count($errors)) JSONResponse::Error('Column header mismatch. Press F12 For more information',['data'=>$errors]);
   
@@ -254,4 +223,116 @@ function picReorder() {
   $o->update();
   
   JSONResponse::Success(['message'=>'Picture reordered']);
+}
+function export_ss() {
+  $_POST['pager'] = json_decode($_POST['pager']);
+  $_POST['more'] = json_decode($_POST['more']);
+  $p = Pager::GetQueryAttributes();
+  $more = Forms::getPostObject('more');
+  more_pager($more, $p);
+  
+  $findings = Finding::allWhere("$p->strWhere $p->strOrder", []);
+  //prepare for export
+  $count = count($findings);
+  $idx=0;$rows=[];
+  while ($idx<$count) { $idx++;
+    $o = array_shift($findings); //biar hemat memori
+    $date_stamp = strtotime($o->survey_date);
+    $month = date('F',$date_stamp);
+    $year = date('Y',$date_stamp);
+    $rows[]=[
+      $o->id,
+      $o->taxonomy->class,
+      '',//pic
+      $o->localname,
+      $o->othername,
+      $o->n,
+      $o->taxonomy->family,
+      $o->taxonomy->genus,
+      $o->taxonomy->species,
+      $o->commonname,
+      $month,
+      $year,
+      $o->latitude,
+      $o->longitude,
+      $o->grid,
+      $o->village,
+      $o->district,
+      $o->landcover,
+      $o->iucn_status,
+      $o->cites_status,
+      $o->indo_status,
+      $o->data_source,
+      $o->reference,
+      $o->other_info
+    ];
+  }
+  
+  require DIR.'/phplib/excel/PHPExcel.php';
+  $title = 'Findings';
+  $oExcel = new PHPExcel();
+  $oExcel->getProperties()
+    ->setCreator(APPNAME)
+    ->setLastModifiedBy(APPNAME)
+    ->setTitle($title)
+    ->setSubject($title)
+    ->setDescription("");
+  
+  $req_index = [0,1,2,3,4,5];
+  $sheet = $oExcel->setActiveSheetIndex(0);
+  $sheet->setTitle('Findings');
+  
+  $styleArray = array('font'=> array('bold'=>true,'color'=>array('rgb'=>'FF0000')));
+  foreach ($req_index as $colIdx) $sheet->getStyleByColumnAndRow($colIdx)->applyFromArray($styleArray);
+  
+  $colCount=count(EXCEL_HEADERS);
+  for($i=0; $i<$colCount; $i++) $sheet->setCellValueByColumnAndRow($i, 1, EXCEL_HEADERS[$i]);
+
+  $sheet->fromArray($rows, null,'A2');
+  for ($i=0; $i<=$colCount; $i++) $sheet->getColumnDimensionByColumn($i)->setAutoSize(true);
+
+  header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  header('Content-Disposition: attachment;filename="Data.xlsx"');
+  header('Cache-Control: max-age=0');
+
+  $objWriter = PHPExcel_IOFactory::createWriter($oExcel, 'Excel2007');
+  //$objWriter = PHPExcel_IOFactory::createWriter($oExcel, 'PDF');
+  $objWriter->save('php://output');
+}
+
+function more_pager($more, &$p) {
+  foreach ($more as $k=>$v) if (trim($v) == '') $more->$k = null;
+  $wheres = [];
+  if ($more->startDate == null ^ $more->endDate == null) JSONResponse::Error('Date range incomplete. Please input start and end survey date');
+  if ($more->startDate != null) { //If date range not empty, validate.
+    if ($more->startDate != null && !Date::isJavaDate($more->startDate)) JSONResponse::Error('Invalid date format at survey date start date');
+    if ($more->endDate != null && !Date::isJavaDate($more->endDate)) JSONResponse::Error('Invalid date format at survey date end date');
+    $startDate = Date::fromJavascriptToSQLDate($more->startDate);
+    $endDate = Date::fromJavascriptToSQLDate($more->endDate);
+    $wheres[] = "DATE_TRUNC('month',survey_date) BETWEEN '$startDate' AND '$endDate'";
+  }
+
+  if ($more->startLat == null ^ $more->endLat == null) JSONResponse::Error('Incomplete latitude range');
+  if ($more->startLat != null) { //if lat range not empty, validate
+    $startLat = Geo::degreeFromStr($more->startLat, 'lat');
+    $endLat = Geo::degreeFromStr($more->endLat, 'lat');
+    if ($more->startLat != null && !$startLat) JSONResponse::Error ('Invalid input at starting latitude');
+    if ($more->endLat != null && !$endLat) JSONResponse::Error ('Invalid input at ending latitude');
+    $wheres[] = "latitude BETWEEN $startLat AND $endLat";
+  }
+  
+  if ($more->startLong == null ^ $more->endLong == null) JSONResponse::Error('Incomplete longitude range');
+  if ($more->startLong != null) { //if long range not empty, validate
+    $startLong = Geo::degreeFromStr($more->startLong, 'long');
+    $endLong = Geo::degreeFromStr($more->endLong, 'long');
+    if ($more->startLong != null && !$startLong) JSONResponse::Error ('Invalid input at starting longitude');
+    if ($more->endLong != null && !$endLong) JSONResponse::Error ('Invalid input at ending longitude');
+    $wheres[] = "longitude BETWEEN $startLong AND $endLong";
+  }
+  if (count($wheres)) {
+    $p->strWhere = ($p->strWhere == '') 
+      ? 'WHERE '.implode(' AND ',$wheres) 
+      : "$p->strWhere ".implode(' AND ',$wheres);
+  }
+  $p->strOrder = ($p->strOrder != "") ? $p->strOrder : " ORDER BY id DESC";
 }
