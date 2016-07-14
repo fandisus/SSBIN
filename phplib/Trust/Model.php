@@ -88,7 +88,7 @@ abstract class Model implements iSaveable, iLoadable {
     foreach (static::$json_columns as $v) $this->$v = json_decode($this->$v);
   }
   public static $temp_cols=[];
-  public static function multiInsert($objects) {
+  public static function multiInsert(&$objects) { //Pake byref biar hemat memory
     //cols sesuai kiriman di $objects, dan ndak diencode di sini.
     foreach ($objects as $k=>$v) unset ($objects[$k]->old_vals);
     if (!count(static::$temp_cols)){ foreach ($objects[0] as $k=>$v) static::$temp_cols[]=$k; }
@@ -100,10 +100,9 @@ abstract class Model implements iSaveable, iLoadable {
 
     $idx=0; $sqls=[]; $vals=[];$count=count($objects);
     while ($idx < $count) {
-      $o = array_shift($objects);
+      $o = $objects[$idx++];
       $vals = [];
       foreach ($o as $k=>$v) $vals[]=$v;
-      $idx++;
       //print_r($vals);die();
       foreach ($vals as $k=>$v) $vals[$k] = ($v==null) ? 'NULL' : DB::$pdo->quote($v);
       $strVals[]='('. implode(',', $vals). ')';
