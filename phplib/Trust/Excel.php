@@ -1,6 +1,6 @@
 <?php
-require(DIR."/phplib/excel/PHPExcel.php");
 namespace Trust;
+require(DIR."/phplib/excel/PHPExcel.php");
 class ExcelRowElement { //Caknyo perlu diganti namo, misal: ExcelHeaderElement
     public $col;
     public $row;
