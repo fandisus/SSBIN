@@ -54,6 +54,18 @@ class Files {
     }
     return $files;
   }
+  static function recurse_copy($src,$dst) { //http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php
+    $dir = opendir($src);
+    @mkdir($dst);
+    while($file = readdir($dir)) { 
+      if ($file != '.' && $file != '..' ) { 
+        $srcpath = "$src/$file"; $dstpath = "$dst/$file";
+        if (is_dir($srcpath)) recurse_copy($srcpath,$dstpath);
+        else copy($srcpath,$dstpath);
+      }
+    }
+    closedir($dir);
+  }
 
   static function Encrypt($pure_string, $encryption_key) {
     $iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
