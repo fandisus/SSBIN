@@ -60,7 +60,7 @@ class Files {
     while($file = readdir($dir)) { 
       if ($file != '.' && $file != '..' ) { 
         $srcpath = "$src/$file"; $dstpath = "$dst/$file";
-        if (is_dir($srcpath)) recurse_copy($srcpath,$dstpath);
+        if (is_dir($srcpath)) Files::recurse_copy($srcpath,$dstpath);
         else copy($srcpath,$dstpath);
       }
     }
