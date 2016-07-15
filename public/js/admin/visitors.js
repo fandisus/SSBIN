@@ -1,4 +1,4 @@
-app.controller('ctrlVisit', function($scope) {
+app.controller('ctrlVisit',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.logs = init.logs;
   $scope.types = init.types;
@@ -61,7 +61,7 @@ app.controller('ctrlVisit', function($scope) {
       $("#modalDelete").modal('hide');
     });
   };
-}).filter('startFrom', function() {
+}]).filter('startFrom', function() {
   return function(input, start) {
     if (input) {start = +start; return input.slice(start); }
     return [];

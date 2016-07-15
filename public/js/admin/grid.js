@@ -1,4 +1,4 @@
-app.controller('ctrlGrid',function($scope) {
+app.controller('ctrlGrid',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.grids = init.grids;
   var uri = "/admin/lookup/grid";
@@ -61,4 +61,4 @@ app.controller('ctrlGrid',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

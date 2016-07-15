@@ -1,4 +1,4 @@
-app.controller('ctrlGenus',function($scope) {
+app.controller('ctrlGenus',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.genus = init.genus;
   var uri = "/admin/taxonomies/genus";
@@ -61,4 +61,4 @@ app.controller('ctrlGenus',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

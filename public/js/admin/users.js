@@ -1,4 +1,4 @@
-app.controller("ctrlUsers",function($scope) {
+app.controller("ctrlUsers",['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $("#init").html("");
   $scope.users = init.users;
@@ -77,4 +77,4 @@ app.controller("ctrlUsers",function($scope) {
       $.notify(rep.message,"success");
     });
   };
-});
+}]);

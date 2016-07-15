@@ -1,4 +1,4 @@
-app.controller('ctrlFamily',function($scope) {
+app.controller('ctrlFamily',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.families = init.families;
   $scope.familyList = []; //load via ajax
@@ -62,4 +62,4 @@ app.controller('ctrlFamily',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

@@ -1,4 +1,4 @@
-app.controller('ctrlLocation',function($scope) {
+app.controller('ctrlLocation',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.locations = init.locations;
   var uri = "/admin/lookup/location";
@@ -61,4 +61,4 @@ app.controller('ctrlLocation',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

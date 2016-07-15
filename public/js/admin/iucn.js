@@ -1,4 +1,4 @@
-app.controller('ctrlIUCN',function($scope) {
+app.controller('ctrlIUCN',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.statuses = init.statuses;
   var uri = "/admin/lookup/iucn";
@@ -62,4 +62,4 @@ app.controller('ctrlIUCN',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

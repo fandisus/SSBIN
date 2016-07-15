@@ -1,4 +1,4 @@
-app.controller('ctrlLandcover',function($scope) {
+app.controller('ctrlLandcover',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.landcovers = init.landcovers;
   var uri = "/admin/lookup/landcover";
@@ -61,4 +61,4 @@ app.controller('ctrlLandcover',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

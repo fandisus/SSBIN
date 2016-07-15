@@ -1,4 +1,4 @@
-app.controller('ctrlOrg', function($scope) {
+app.controller('ctrlOrg',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.organizations = init.organizations;
   $scope.catList = init.catList;
@@ -56,4 +56,4 @@ app.controller('ctrlOrg', function($scope) {
       $scope.$apply();
     });
   };
-});
+}]);

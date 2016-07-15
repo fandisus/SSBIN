@@ -1,4 +1,4 @@
-app.controller('ctrlReg',function($scope) {
+app.controller('ctrlReg',['$scope',function($scope) {
   var timeout, timeout2;
   $scope.user = {email:'',username:'',name:'',pass:'',repass:'',gender:'',category:'',organization:''};
   var init = JSON.parse($("#init").html()); $("#init").html("");
@@ -50,4 +50,4 @@ app.controller('ctrlReg',function($scope) {
       $(".forgot-link").show(1000);
     });
   };
-});
+}]);

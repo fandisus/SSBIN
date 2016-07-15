@@ -1,4 +1,4 @@
-app.controller('ctrlIndo',function($scope) {
+app.controller('ctrlIndo',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.statuses = init.statuses;
   var uri = "/admin/lookup/indo";
@@ -62,4 +62,4 @@ app.controller('ctrlIndo',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

@@ -1,4 +1,4 @@
-app.controller('ctrlClass',function($scope) {
+app.controller('ctrlClass',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.classes = init.classes;
   $scope.classList = []; //load via ajax
@@ -54,4 +54,4 @@ app.controller('ctrlClass',function($scope) {
   $scope.oChanged = function() {
     console.log($scope.o);
   };
-});
+}]);

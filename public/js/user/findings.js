@@ -1,5 +1,5 @@
 app.requires.push('dndLists');
-app.controller('ctrlFindings',function($scope) {
+app.controller('ctrlFindings',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   var paths = init.paths;
   $scope.classes = init.classes;
@@ -193,4 +193,4 @@ app.controller('ctrlFindings',function($scope) {
     var oPost = {a:'export_ss',pager:pager,more:params,token:token};
     $.redirect(uri,oPost,'POST');
   };
-});
+}]);
