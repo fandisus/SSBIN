@@ -29,6 +29,19 @@ class Basic {
     array_splice($arr, $idx,1);
     return true;
   }
+  static function flatten_array(&$arr) { //Nested array into one toplevel array. usage: for output of Files::GetDirFiles
+    foreach ($arr as $k=>$v) {
+      if (is_array($arr[$k])) {
+        Basic::flatten_array($arr[$k]);
+        foreach ($arr[$k] as $k2=>$v2) {
+          $arr[] = $v2;
+        }
+        unset ($arr[$k]);
+      }
+    }
+  }
+  
+  
   function RandomString($num) { 
     $characters = '0123456789ABCDEFGHIJKLMNPQRSTUVWXYZ';//tanpa huruf kecil dan O
     $randstring = '';
