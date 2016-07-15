@@ -28,25 +28,31 @@ class Files {
   /**
    * Scan files informations in a directory.
    * @param type $directory The directory to be scanned
-   * @return string
-   * array: a[filename][size/modTime/path]
+   * @return arrayofobj a[filename][size/modTime/path]
    */
-  function GetDirFiles($directory) {
-    $file = array();
+  static function GetDirFiles($directory, $isObj=false) { //recursive, 
+    $files = array();
     $dh = opendir($directory);
     while ($filename = readdir($dh)) {
       if (($filename != ".") && ($filename != "..")) {
-        if (is_dir($directory . "/" . $filename)) {
-          continue;
+        $path = "$directory/$filename";
+        if (is_dir($path)) {
+          $files[$path] = Files::GetDirFiles($path, $isObj);
         } else {
-          $file[$filename] = array();
-          $file[$filename]['size'] = round(filesize($directory . "/" . $filename) / 1024);
-          $file[$filename]['modTime'] = filemtime($directory . "/" . $filename);
-          $file[$filename]['path'] = $directory . "/" . $filename;
+          if ($isObj) {
+            $o = new \stdClass();
+            $o->size = round(filesize($path) / 1024);
+            $o->modTime = filemtime($path);
+            $o->filename = $filename;
+            $o->path = $path;
+            $files[]=$o;
+          } else {
+            $files[] = $path;
+          }
         }
       }
     }
-    return $file;
+    return $files;
   }
 
   static function Encrypt($pure_string, $encryption_key) {
