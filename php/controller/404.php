@@ -10,16 +10,6 @@ function mainContent() { ?>
       <td>Uri</td>
       <td><?= DOMAIN.$_SERVER['REQUEST_URI'] ?></td>
     </tr>
-    <tr>
-      <td>IP Address</td>
-      <td><?= $_SERVER['REMOTE_ADDR'] ?></td>
-    </tr>
-    <?php foreach (get_browser() as $k=>$v) { ?>
-    <tr>
-      <td><?= $k ?></td>
-      <td><?= $v ?></td>
-    </tr>
-    <?php } ?>
   </table>
 </div>
 <?php }
