@@ -5,7 +5,7 @@ if (!isset($login) || !in_array($login->level,[\SSBIN\User::USER_ADMIN,\SSBIN\Us
 $template = DIR."/php/view/expert/tulang.php";
 $services = [
     "users", //validate users
-    "validate", //Findings data validation
+    "input", //Findings data validation
     ];
 
 if (!isset($paths[1]) || $paths[1]=="") include "$ctrlDir/expert/home.php";
