@@ -361,8 +361,6 @@ function side_menus() { ?>
     <ul class="nav nav-second-level">
       <li><a href="/admin/database/backup"><i class="fa fa-download fa-fw"></i> Backup</li></a>
       <li><a href="/admin/database/restore"><i class="fa fa-upload fa-fw"></i> Restore</li></a>
-      <li><a href="/admin/database/iexcel"><i class="fa fa-file-excel-o fa-fw"></i> Import Excel</li></a>
-      <li><a href="/admin/database/eexcel"><i class="fa fa-upload fa-fw"></i> Export Excel</li></a>
     </ul>
   </li>
   <li><a href="/admin/visitors"><i class="fa fa-bar-chart-o fa-fw"></i> Visitors Log</a></li>
