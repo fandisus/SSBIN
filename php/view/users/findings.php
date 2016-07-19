@@ -23,6 +23,7 @@ function htmlHead() {
   </script>
   <style>
     #tabel-data td>img{max-height: 40px; max-width: 40px;}
+    #tabel-data tr.invalidated {color:#ccc;}
     ul.pic-list { padding: 0; list-style-type: none;}
     .pic-list li { position:relative; top:0px; left:0px; vertical-align: top;
       display:inline-block; width: 170px; height: 170px;
@@ -92,7 +93,7 @@ function mainContent() {
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="o in findings" ng-click="edit(o)">
+            <tr ng-repeat="o in findings" ng-click="edit(o)" ng-class="{invalidated:!o.validation.validated}">
               <td><img ng-click="editPic(o,$event);" ng-src="{{icon(o)}}" /></td>
               <td>{{o.id}}</td>
               <td>{{o.taxonomy.class}}</td>
