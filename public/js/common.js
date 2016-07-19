@@ -8,6 +8,6 @@ printDataInfo = function(o) {
 printValidationInfo = function(o) {
   if (o.validation == undefined) return '';
   if (!o.validation.validated) return 'Not validated yet';
-  return "Validated By: " + o.validation_info.validated_by +
-          "<br />Validated At: " + moment(o.validation_info.validated_at).calendar();
+  return "Validated By: " + o.validation.validated_by +
+          "<br />Validated At: " + moment(o.validation.validated_at).calendar();
 };
