@@ -147,7 +147,7 @@
                 <li><a tabindex="-1" href="#"> Diversity Indices </a></li>
               </ul>
             </li>
-            <li><a href="/about">About Us</a></li>
+            <li><a href="/about">About SSBIN</a></li>
             <li><a href="/contactus">Contact us</a></li>
           </ul>
         </div>
