@@ -109,6 +109,7 @@
         </div>
         <div id="navbar-collapse-1" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
+            <li><a href="/"><i class="fa fa-home fa-fw"></i> Home</a></li>
             <!-- Classic list -->
             <li class="dropdown">
               <a href="#" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">
@@ -146,7 +147,8 @@
                 <li><a tabindex="-1" href="#"> Diversity Indices </a></li>
               </ul>
             </li>
-            
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contactus">Contact us</a></li>
           </ul>
         </div>
       </div>
