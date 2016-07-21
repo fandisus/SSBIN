@@ -87,12 +87,12 @@ abstract class Model implements iSaveable, iLoadable {
   public function json_decode() {
     foreach (static::$json_columns as $v) $this->$v = json_decode($this->$v);
   }
-  public static $temp_cols=[];
   public static function multiInsert(&$objects) { //Pake byref biar hemat memory
     //cols sesuai kiriman di $objects, dan ndak diencode di sini.
     foreach ($objects as $k=>$v) unset ($objects[$k]->old_vals);
-    if (!count(static::$temp_cols)){ foreach ($objects[0] as $k=>$v) static::$temp_cols[]=$k; }
-    $sql = "INSERT INTO \"".static::$table_name."\" (\"".implode("\",\"", static::$temp_cols)."\") VALUES ";
+    $temp_cols = [];
+    foreach ($objects[0] as $k=>$v) $temp_cols[]=$k;
+    $sql = "INSERT INTO \"".static::$table_name."\" (\"".implode("\",\"", $temp_cols)."\") VALUES ";
 
     foreach ($objects as $i=>$obj) {
       foreach ($obj as $key=>$val) if (gettype($val) == "boolean") $objects[$i][$key] = ($val) ? 'true' : '0';
