@@ -9,6 +9,8 @@ while ($filename = readdir($dh)) {
 asort($paths);
 foreach ($paths as $v) include $v;
 
+ini_set('memory_limit','256M');
+
 //seedOrganizations();
 //seedClasses();
 //seedFamilies();
