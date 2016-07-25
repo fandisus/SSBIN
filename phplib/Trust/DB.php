@@ -103,4 +103,31 @@ class DB {
     //foreach ($out as $v) echo $v.PHP_EOL;
     echo $out;
   }
+  public static function pgRestore($dbname, $file) {
+    $path = DIR.'/uploads/restore.tmp';
+    
+    $isi = file_get_contents($file['tmp_name']);
+    unlink($file['tmp_name']);
+    $decoded = @gzdecode($isi);
+    if (!$decoded) JSONResponse::Error('Invalid backup file');
+    
+    $restore = explode(PHP_EOL,$decoded);
+    $pop = array_shift($restore);
+    $backupInfo = json_decode($pop);
+    if ($backupInfo == null) JSONResponse::Error('Invalid backup file');
+    
+    if ($backupInfo->app != APPNAME) JSONResponse::Error('Invalid backup file version');
+    if ($backupInfo->ver != 1) JSONResponse::Error('Invalid backup file version');
+    
+    $fh = fopen($path, 'w');
+    fwrite($fh, implode(PHP_EOL, $restore));
+    fclose($fh);
+    
+    putenv('PGPASSWORD='.DB::$pass);
+    $comm='psql -U '.DB::$user.' -d '.DB::$db.' -p '.DB::$port. ' < "'.$path.'"';
+    exec($comm, $out, $ret);
+    putenv('PGPASSWORD');
+    
+    unlink($path);
+  }
 }
