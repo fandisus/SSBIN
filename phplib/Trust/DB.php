@@ -79,4 +79,28 @@ class DB {
       throw $ex;
     }
   }
+  public static function pgBackup($dbname, $backupInfo) {
+    static::$db = $dbname;
+    try { static::init(true); }
+    catch (\Exception $ex) { throw new \Exception('Failed to connect to database',0,$ex); }
+
+    putenv('PGPASSWORD='.DB::$pass);
+    exec('pg_dump -U '.DB::$user.' -p '.DB::$port.' -d '.$dbname.' -c -O',$out, $ret);//pg_dump -U '.DB::$user.' -p '.DB::$port.' -d '.$dbname.' -c -O
+    putenv('PGPASSWORD');
+    if (!count($out)) die ('Database backup failed');
+    $filesize = 0;
+    array_unshift($out, $backupInfo);
+    foreach ($out as $v) $filesize += strlen($v);
+    $filesize += (count($out)) * strlen(PHP_EOL);
+    $out = gzencode(implode(PHP_EOL, $out),5);
+    
+
+    header("Content-Disposition: attachment; filename=\"".date('Ymd').".ssbin\"");
+    header("Content-type: application/octet-stream");
+    header("Content-Length: " .$filesize);
+    header("Connection: close");
+    
+    //foreach ($out as $v) echo $v.PHP_EOL;
+    echo $out;
+  }
 }
