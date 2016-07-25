@@ -38,6 +38,8 @@
     <script src="/jslib/notify.min.js"></script>
     <!-- myloading.js -->
     <script src="/jslib/mine/myloading.js"></script>
+    <!-- gaya.scss-->
+    <link rel="stylesheet" href="/css/s.php/gaya.scss"/>
     <script>var app = angular.module('<?= APPNAME ?>', []);</script>
     <?php if (function_exists("htmlHead")) htmlHead(); ?>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
