@@ -6,7 +6,13 @@ function htmlHead() {
   
 }
 
-function mainContent() {
+function mainContent() { global $login;
+  if (!$login->active) { ?>
+<div class="alert alert-warning flex flex-vcenter" style="max-width: 500px;">
+  <i class="fa fa-warning fa-fw"></i>
+  Account has not been activated. Please check email for activation link.
+</div>
+  <?php }
   echo "halaman home: inbox, confirmed data input<br />For experts: New validation requests";
 }
 /* 
