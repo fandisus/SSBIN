@@ -11,7 +11,6 @@ app.controller('ctrlReg',['$scope',function($scope) {
       $.notify(rep.message);
       setTimeout(function() {window.location = "/login";}, 5000);
     }, function (rep) {
-      $.notify(rep.message,"error");
       if (rep.email_error) $(".forgot-link").show(1000);
       else $(".forgot-link").hide(1000);
     });
