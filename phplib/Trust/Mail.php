@@ -3,8 +3,29 @@
 //$subject = 'PHPMailer test';
 //$body = "Percobaan PHPMailer, bukan pake gmail, tapi pake icodeformoney.com";
 namespace Trust;
-class Mail {
-  public static function sendMail($recipient, $subject, $body, $altBody='') {
+class Mail {  
+  public static function sendMail($recipient, $subject, $body, $altBody='', $usingSMTP=false) {
+    if ($usingSMTP) sendSMTPMail($recipient, $subject, $body, $altBody);
+    else sendPostfixMail($recipient,$subject,$body,$altBody);
+  }
+  //Using local SMTP Mailserver (postfix)
+  public static function sendPostfixMail($recipient,$subject,$body,$altBody) {
+    date_default_timezone_set('Asia/Jakarta');
+    require DIR.'/phplib/PHPMailer/PHPMailerAutoload.php';
+    $email = new \PHPMailer;
+    $email->From      = PHPMAILER_FROM;
+    $email->FromName  = PHPMAILER_NAME;
+    $email->Subject   = $subject;
+    $email->Body      = $body;
+    $email->AltBody   = $altBody;
+    $email->AddAddress($recipient);
+//    $file_to_attach = 'PATH_OF_YOUR_FILE_HERE';
+//    $email->AddAttachment( $file_to_attach , 'NameOfFile.pdf' );
+    $email->isHTML();
+    return $email->Send();
+  }
+  //Using external SMTP Mailserver
+  public static function sendSMTPMail($recipient, $subject, $body, $altBody='') {
     $mail = self::createPHPMailer();
     $mail->setFrom(PHPMAILER_FROM, PHPMAILER_NAME);
     //$mail->addReplyTo('replyto@example.com', 'First Last');
