@@ -21,7 +21,7 @@ function register() {
   if (strlen($user->name) < 3) JSONResponse::Error("Please fill in your name");
   if (!in_array($user->gender, ['Male','Female'])) JSONResponse::Error("Please input gender");
   if ($user->category == "") JSONResponse::Error("Please input your category");
-  if ($user->category != "Individual" && $user->organization == "") JSONResponse::Error ("Please input your organization");
+  if ($user->category != "Participatory" && $user->organization == "") JSONResponse::Error ("Please input your organization");
   
   $p = new User([
       "username"=>$user->username,
