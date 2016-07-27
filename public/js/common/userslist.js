@@ -19,7 +19,6 @@ app.controller("ctrlUsers",['$scope',function($scope) {
     $("#modalShowUser").modal('show');
   };
   $scope.imageIcon=function(u) {
-    console.log(u);
     if (u == undefined || u.biodata == undefined) return '';
     if (u.biodata.profile_pic != null) return icopath + u.biodata.profile_pic;
     if (u.biodata.gender === "Male") return "/images/user-male.png";
