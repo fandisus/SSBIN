@@ -1,4 +1,5 @@
 <?php
+if (!$login->validated) {include "$ctrlDir/403.php"; die();}
 if (!count($_POST)) { include DIR."/php/view/users/findings.php"; die(); }
 
 use Trust\JSONResponse;

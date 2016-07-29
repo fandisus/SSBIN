@@ -76,8 +76,10 @@
                 <li><a href="/users/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
                 <li><a href="/users/password"><i class="fa fa-fw fa-unlock-alt"></i> Password</a></li>
                 <li class="divider"></li>
+                <?php if ($login->validated) { ?>
                 <li><a href="/users/findings"><i class="fa fa-fw fa-database"></i> Input Data</a></li>
                 <li class="divider"></li>
+                <?php } ?>
                 <?php if (in_array($login->level,[User::USER_EXPERT,User::USER_ADMIN])) { ?>
                 <li><a href="/expert/input"><i class="fa fa-fw fa-edit"></i> Data Validation</a></li>
                 <li><a href="/expert/users"><i class="fa fa-fw fa-users"></i> User Validation</a></li>
@@ -139,12 +141,9 @@
             <!-- Classic dropdown -->
             <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Species Distribution<b class="caret"></b></a>
               <ul role="menu" class="dropdown-menu">
-                <li><a tabindex="-1" href="/specieslist/class"> By Class </a></li>
-                <li><a tabindex="-1" href="/specieslist/location"> By Region </a></li>
-                <li><a tabindex="-1" href="/specieslist/landcover"> By Habitat </a></li>
-                <li><a tabindex="-1" href="/specieslist/iucn"> By IUCN Status </a></li>
+                <li><a tabindex="-1" href="/specieslist"> Search</a></li>
                 <li class="divider"></li>
-                <li><a tabindex="-1" href="#"> Diversity Indices </a></li>
+                <li><a tabindex="-1" href="/indices"> Diversity Indices </a></li>
               </ul>
             </li>
             <li><a href="/about">About SSBIN</a></li>
