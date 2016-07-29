@@ -5,8 +5,8 @@
 namespace Trust;
 class Mail {  
   public static function sendMail($recipient, $subject, $body, $altBody='', $usingSMTP=false) {
-    if ($usingSMTP) sendSMTPMail($recipient, $subject, $body, $altBody);
-    else sendPostfixMail($recipient,$subject,$body,$altBody);
+    if ($usingSMTP) Mail::sendSMTPMail($recipient, $subject, $body, $altBody);
+    else Mail::sendPostfixMail($recipient,$subject,$body,$altBody);
   }
   //Using local SMTP Mailserver (postfix)
   public static function sendPostfixMail($recipient,$subject,$body,$altBody) {
