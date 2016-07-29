@@ -13,3 +13,7 @@ define("PHPMAILER_PORT", 26);
 
 define("APPNAME", "SSBIN");
 define("DOMAIN", "http://93.188.161.185");
+
+const CONTACTUS_FROM = 'ssbin-system@unsri.ac.id';
+const CONTACTUS_FROMNAME = 'SSBIN System';
+const CONTACTUS_RECIPIENT = 'idr_yustian@unsri.ac.id';
