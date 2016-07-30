@@ -162,9 +162,9 @@
     <footer>
       <div class="container">
         <style>
-          div { text-align: right; }
-          div#copyright { text-align: center;}
-          img { width: 80px; height: 80px;}
+          footer div { text-align: right; }
+          footer div#copyright { text-align: center;}
+          footer img { width: 80px; height: 80px;}
         </style>
         <div>
           <img />
