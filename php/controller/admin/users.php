@@ -4,7 +4,7 @@ if (!count($_POST)) { include DIR."/php/view/admin/users.php"; die(); }
 use Trust\JSONResponse;
 use SSBIN\User;
 use Trust\Forms;
-$services = ['toggleValidation','save','saveExpertise'];
+$services = ['toggleValidation','save','saveExpertise','del','activationEmail'];
 if (in_array($_POST['a'], $services)) $_POST['a']();
 
 function toggleValidation() { global $login;
@@ -41,4 +41,26 @@ function saveExpertise() {
   $user->save();
   
   JSONResponse::Success(['message'=>'Expertise updated successfully','o'=>$user]);
+}
+
+
+function del() {
+  $id = Forms::getPostObject('id');
+  $user = User::find($id);
+  if (!$user) JSONResponse::Error('User not found');
+  if ($user->level == User::USER_ADMIN) JSONResponse::Error('Can not delete admin users');
+
+  $findings = \SSBIN\Finding::where("WHERE data_info->>'created_by'=:user", ['user'=>$user->username]);
+  if ($findings) JSONResponse::Error ('Can\'t delete user. Some data are associated with the users.');
+  User::delete($id);
+  JSONResponse::Success(['message'=>'User removed']);
+}
+
+function activationEmail() {
+  $id = Forms::getPostObject('id');
+  $user = User::find($id);
+  if (!$user) JSONResponse::Error('User not found');
+  
+  $user->sendActivationEmail();
+  JSONResponse::Success(['message'=>'Email sent']);
 }

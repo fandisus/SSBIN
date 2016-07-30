@@ -8,6 +8,7 @@ function htmlHead() { ?>
   <script src="/jslib/moment.min.js"></script>
   <script src="/jslib/mine/commonjs.js"></script>
   <script src="/js/admin/users.js"></script>
+  <script src="/jslib/mine/commonjs.js"></script>
   <style>
 .rem-button {
   color:#F00; cursor: pointer;
@@ -27,6 +28,7 @@ function mainContent() { ?>
           <th>Level</th>
           <th>Expertise</th>
           <th>Validated</th>
+          <th><i class="fa fa-gear fa-fw"></i></th>
         </tr>
       </thead>
       <tbody>
@@ -43,6 +45,10 @@ function mainContent() { ?>
           <td>
             <button ng-click="toggleValidation(u)" ng-if="u.validated" class="btn btn-success btn-xs">{{u.validated}}</button>
             <button ng-click="toggleValidation(u)" ng-if="!u.validated" class="btn btn-danger btn-xs">{{u.validated}}</button>
+          </td>
+          <td>
+            <button ng-click="del(u)" class="btn btn-danger btn-xs"><i class="fa fa-remove fa-fw"></i></button>
+            <button ng-click="activationEmail(u.id)" class="btn btn-info btn-xs"><i class="fa fa-envelope-o fa-fw"></i></button>
           </td>
         </tr>
       </tbody>

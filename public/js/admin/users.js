@@ -1,4 +1,5 @@
 app.controller("ctrlUsers",['$scope',function($scope) {
+  var uri = "/admin/users";
   var init = JSON.parse($("#init").html());
   $("#init").html("");
   $scope.users = init.users;
@@ -13,7 +14,7 @@ app.controller("ctrlUsers",['$scope',function($scope) {
   };
   $scope.toggleValidation = function(u) {
     var oPost = {a:"toggleValidation",id:u.id,token:token};
-    tr.post("/admin/users",oPost,function(rep) {
+    tr.post(uri,oPost,function(rep) {
       u.validated = rep.validated;
       $scope.$apply();
     });
@@ -54,7 +55,7 @@ app.controller("ctrlUsers",['$scope',function($scope) {
   $scope.saveExpertise = function(eu) {
     var obj = {id:eu.id,expertise:eu.expertise};
     var oPost = {a:'saveExpertise',u:obj, token:token};
-    tr.post("/admin/users",oPost,function(rep) {
+    tr.post(uri,oPost,function(rep) {
       $scope.u.expertise = rep.o.expertise;
       $scope.u.data_info = rep.o.data_info;
       $scope.$apply();
@@ -66,7 +67,7 @@ app.controller("ctrlUsers",['$scope',function($scope) {
   $scope.saveChanges = function(eu) {
     var obj = {id:eu.id,level:eu.level,category:eu.category,organization:eu.organization};
     var oPost = {a:'save',u:obj,token:token};
-    tr.post("/admin/users",oPost,function(rep) {
+    tr.post(uri,oPost,function(rep) {
       $scope.u.level = rep.o.level;
       $scope.u.category = rep.o.category;
       $scope.u.organization = rep.o.organization;
@@ -75,6 +76,19 @@ app.controller("ctrlUsers",['$scope',function($scope) {
       
       $("#modalEdit").modal('hide');
       $.notify(rep.message,"success");
+    });
+  };
+  $scope.del = function(u) {
+    if (!confirm('Are you sure?')) return;
+    tr.post(uri,{a:'del',id:u.id,token:token}, function(rep) {
+      $.notify(rep.message,'success');      
+      arrRemoveElement($scope.users, u);
+      $scope.$apply();
+    });
+  };
+  $scope.activationEmail = function(id) {
+    tr.post(uri,{a:'activationEmail',id:id,token:token}, function(rep) {
+      $.notify(rep.message,'success');
     });
   };
 }]);
