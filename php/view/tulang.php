@@ -161,31 +161,18 @@
     </main>
     <footer>
       <div class="container">
-        <div class="row flex flex-vtop">
-          <div class="col-lg-3 col-md-6 col-xs-12">
-            <h3>How To</h3>
-            <ul>
-              <li><a href="#">Register</a></li>
-              <li><a href="#">Input Data</a></li>
-              <li><a href="#">Find Data</a></li>
-              <li><a href="#">Request Data</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-md-6 col-xs-12">
-            <h3>About Us</h3>
-            <ul>
-              <li><a href="#">SSBIN Project</a></li>
-              <li><a href="#">Universitas Sriwijaya</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-md-6 col-xs-12">
-            <h3>Terms and Usage</h3>
-            <ul>
-              <li><a href="#">Data Ownership</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Disclaimer</a></li>
-            </ul>
-          </div>
+        <style>
+          div { text-align: right; }
+          div#copyright { text-align: center;}
+          img { width: 80px; height: 80px;}
+        </style>
+        <div>
+          <img />
+          <img />
+          <img />
+          <img />
+          <img />
+          <img />
         </div>
         <div id="copyright">Copyright &copy; 2016 by Universitas Sriwijaya</div>
       </div>
