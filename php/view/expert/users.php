@@ -27,6 +27,7 @@ function mainContent() { ?>
           <th>Level</th>
           <th>Expertise</th>
           <th>Validated</th>
+          <th><i class="fa fa-gear fa-fw"></i></th>
         </tr>
       </thead>
       <tbody>
@@ -41,8 +42,11 @@ function mainContent() { ?>
               <div ng-repeat="e in u.expertise">{{e}}</div>
           </td>
           <td>
-            <button ng-click="toggleValidation(u)" ng-if="u.validated" class="btn btn-success btn-xs">{{u.validated}}</button>
-            <button ng-click="toggleValidation(u)" ng-if="!u.validated" class="btn btn-danger btn-xs">{{u.validated}}</button>
+            <button title="Invalidate user" ng-click="toggleValidation(u)" ng-if="u.validated" class="btn btn-success btn-xs">{{u.validated}}</button>
+            <button title="Validate user" ng-click="toggleValidation(u)" ng-if="!u.validated" class="btn btn-danger btn-xs">{{u.validated}}</button>
+          </td>
+          <td>
+            <button title="Send activation email" ng-click="activationEmail(u.id)" class="btn btn-info btn-xs"><i class="fa fa-envelope-o fa-fw"></i></button>
           </td>
         </tr>
       </tbody>

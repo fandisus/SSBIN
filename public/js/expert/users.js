@@ -25,4 +25,9 @@ app.controller("ctrlUsers",['$scope',function($scope) {
     $scope.u = u;
     $("#modalShowUser").modal('show');
   };
+  $scope.activationEmail = function(id) {
+    tr.post(uri,{a:'activationEmail',id:id,token:token}, function(rep) {
+      $.notify(rep.message,'success');
+    });
+  };
 }]);
