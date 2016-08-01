@@ -162,19 +162,14 @@
     <footer>
       <div class="container">
         <style>
-          footer div { text-align: right; }
+          footer div { text-align: center; }
           footer div#copyright { text-align: center;}
-          footer img { width: 80px; height: 80px;}
         </style>
-        <div>
-          <img />
-          <img />
-          <img />
-          <img />
-          <img />
-          <img />
-        </div>
         <div id="copyright">Copyright &copy; 2016 by Universitas Sriwijaya</div>
+        <div style="margin-top: 8px; margin-bottom: 20px;">
+          <img src="/images/unsri.png" />
+          <img src="/images/giz dkk.png" />
+        </div>
       </div>
     </footer>
   </body>
