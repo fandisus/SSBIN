@@ -165,11 +165,11 @@
           footer div { text-align: center; }
           footer div#copyright { text-align: center;}
         </style>
-        <div id="copyright">Copyright &copy; 2016 by Universitas Sriwijaya</div>
         <div style="margin-top: 8px; margin-bottom: 20px;">
           <img src="/images/unsri.png" />
           <img src="/images/giz dkk.png" />
         </div>
+        <div id="copyright">Copyright &copy; 2016 by Universitas Sriwijaya</div>
       </div>
     </footer>
   </body>
