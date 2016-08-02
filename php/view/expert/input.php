@@ -130,7 +130,7 @@ function mainContent() {
       <div class="modal-body">
         <form id='picform' enctype="multipart/form-data">
           <input name="target" type="hidden" ng-value="o.id"/>
-          <label for="pic">Profile pic</label>
+          <label for="pic">Choose pic to upload</label>
           <div class='file-input' style="margin-bottom: 8px;">
             <img/>
             <input type="file" name='pic'/>
