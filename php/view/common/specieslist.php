@@ -34,7 +34,7 @@ function htmlHead() {
 
 function mainContent() {
   ?>
-  <h2>Findings List</h2>
+  <h2>Species Distribution</h2>
   <div class="row" ng-controller="ctrlFindings">
     <div class="col-md-12">
       <div class="form-group form-inline">
@@ -132,7 +132,8 @@ function mainContent() {
           <td>Other Info</td><td><input type="text" placeholder="Village" ng-model="params.other_info" /></td>
         </tr>
       </table>
-      <tr-paging public="pager"></tr-paging><button class="btn btn-default btn-xs">View on map <i class="fa fa-map-marker fa-fw"></i></button>
+      <tr-paging public="pager"></tr-paging>
+      <button ng-click="showMap()" class="btn btn-default btn-xs">View on map <i class="fa fa-map-marker fa-fw"></i></button>
       <br /><br />
       <div class="table-responsive">
         <table id="tabel-data" class="table table-bordered table-striped table-condensed table-hover">

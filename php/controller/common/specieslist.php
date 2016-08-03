@@ -8,10 +8,24 @@ use Trust\Forms;
 use Trust\Geo;
 use SSBIN\Finding;
 
-$services = ['get'];
+$services = ['get','showMap'];
 if (!in_array($_POST['a'], $services)) JSONResponse::Error('Service not available');
 $_POST['a']();
 
+function showMap() { global $p, $message, $login;
+  $GLOBALS['message'] = '';
+  $p = (object) ['strWhere'=>'','strOrder'=>''];
+  if (isset($_POST['more'])) $more = json_decode($_POST['more']); else $more = [];
+  
+  if ($more == null) $GLOBALS['message'] = 'Error reading map parameters';
+  $GLOBALS['message'] = 'abc';
+  more_pager($more,$p);
+
+  $p->findings = Finding::allWhere($p->strWhere, []);
+  $p->totalItems = Finding::countWhere($p->strWhere, []);
+  
+  include DIR.'/php/view/common/speciesmap.php';
+}
 function get() {
   $p = Pager::GetQueryAttributes();
   if (isset($_POST['more'])) $more = Forms::getPostObject('more'); else $more = [];
@@ -25,7 +39,7 @@ function get() {
 
 function more_pager($more, &$p) {
   $wheres = [];
-  $wheres = ["validation->>'validated'='true'"];
+  //$wheres = ["validation->>'validated'='true'"];
   //localname, othername, class, family, genus, species, commonname, surveydate, latitude, longitude,
   //grid, village, district, landcover, iucn_status, cites_status, indo_status, data_source, reference, other_info
   foreach ($more as $k=>$v) if (trim($v) == '') $more->$k = null;

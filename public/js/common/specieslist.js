@@ -69,11 +69,10 @@ app.controller('ctrlFindings',['$scope',function($scope) {
   $scope.show = function(o) {
     window.open(uri + '?id='+o.id);
   };
-  
-  $scope.printDataInfo = printDataInfo;
-  $scope.printValidationInfo = printValidationInfo;
-  $('[data-toggle="popover"]').popover();
-  
+  $scope.showMap = function() {
+    $.redirect(uri,{a:'showMap',more:JSON.stringify($scope.params),token:token},'POST');
+  };
+    
   $scope.icon = function(o) {
     if (o.pic.length === 0) return paths.pic + 'no-image.svg';
     return paths.icon + o.pic[0];
