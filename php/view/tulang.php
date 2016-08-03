@@ -141,7 +141,7 @@
             <!-- Classic dropdown -->
             <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Species <b class="caret"></b></a>
               <ul role="menu" class="dropdown-menu">
-                <li><a tabindex="-1" href="/specieslist"> Search</a></li>
+                <li><a tabindex="-1" href="/specieslist"> Species Distribution</a></li>
                 <li class="divider"></li>
                 <li><a tabindex="-1" href="/indices"> Diversity Indices </a></li>
               </ul>
