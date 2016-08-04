@@ -157,10 +157,11 @@ $init = new stdClass();
 $today = strtotime('00:00:00');
 $yesterday = strtotime('-1 day',$today);
 $yesterdayNight = $today-1;
-$strWhere = ' WHERE time BETWEEN \''.\Trust\Date::toSqlDateTime($yesterday).'\' AND \''. \Trust\Date::toSqlDateTime($yesterdayNight).'\' ORDER BY time DESC';
+$strWhere = ' WHERE time BETWEEN \''.\Trust\Date::toSqlDateTime($yesterday).'\' AND \''. \Trust\Date::toSqlDateTime($yesterdayNight).'\'';
+$strOrder = ' ORDER BY time DESC';
 
-$init->logs = \SSBIN\Logger::allWhere($strWhere,[]);
-$init->totalItems = \Trust\DB::getOneVal("SELECT COUNT(*) FROM access_logs");
+$init->logs = \SSBIN\Logger::allWhere($strWhere.$strOrder,[]);
+$init->totalItems = \Trust\DB::getOneVal("SELECT COUNT(*) FROM access_logs $strWhere");
 $init->types = TYPES;
 echo json_encode($init);
 ?></div>
