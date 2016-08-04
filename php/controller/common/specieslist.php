@@ -39,7 +39,7 @@ function get() {
 
 function more_pager($more, &$p) {
   $wheres = [];
-  //$wheres = ["validation->>'validated'='true'"];
+  $wheres = ["validation->>'validated'='true'"];
   //localname, othername, class, family, genus, species, commonname, surveydate, latitude, longitude,
   //grid, village, district, landcover, iucn_status, cites_status, indo_status, data_source, reference, other_info
   foreach ($more as $k=>$v) if (trim($v) == '') $more->$k = null;

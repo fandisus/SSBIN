@@ -21,7 +21,7 @@ function mainContent() { global $login, $p, $message;
   <div class="row">
     <div class="col-md-12">
       <h2>Species map</h2>
-      <h5><?= count($p->findings).' data found' ?></h5>
+      <h5><?= count($p->findings).' data found'?><?= ($center->errCount > 0) ? ', ('.$center->errCount.') has incomplete coordinates' : '' ?></h5>
       <div id="map"></div>
     </div>
   </div>
@@ -48,20 +48,27 @@ function mainContent() { global $login, $p, $message;
 
 
 function getCenter($coordinates) {
-  $x=0; $y=0; $z=0; $count=count($coordinates);
+  $x=0; $y=0; $z=0; $count=count($coordinates); $errCount=0;
+  if ($count == 0) return (object) ['longitude'=>0,'latitude'=>0];
   foreach ($coordinates as $v) {
+    if ($v->latitude == null || $v->longitude == null) {
+      $count--; $errCount++;
+      continue;
+    }
     $lat = $v->latitude * M_PI / 180;
     $long = $v->longitude * M_PI / 180;
     $x += cos($lat) * cos($long);
     $y += cos($lat) * sin($long);
     $z += sin($lat);
   }
-  $x /= $count; $y /= $count; $z /= $count;
+  //$x /= $count; $y /= $count; $z /= $count;  //Ndak perlu. |$xyz| ndak akan ubah arah
   
   $base_r = sqrt($x*$x + $y*$y);
   $res = (object) [
     'longitude'=>atan2($y,$x) * 180/M_PI,
-    'latitude'=>atan2($z,$base_r) * 180/M_PI
+    'latitude'=>atan2($z,$base_r) * 180/M_PI,
+    'count'=>$count,
+    'errCount'=>$errCount
   ];
   return $res;
 }
@@ -69,6 +76,7 @@ function getCenter($coordinates) {
 function summarize($findings) {
   $res = [];
   foreach ($findings as $v) {
+    if ($v->latitude == null || $v->longitude == null) continue;
     $key = $v->latitude.','.$v->longitude;
     if (!isset($res[$key])) {
       $res[$key] = (object) [
