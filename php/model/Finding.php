@@ -23,7 +23,7 @@ class Finding extends \Trust\Model{
     if ($o->taxonomy->class == '') return "Class cannot be empty";
     if (!in_array($o->taxonomy->class,  Finding::$lookups['classes'])) return 'Class not known. Please choose only from existing classes';
     if ($o->localname == '') return 'Local name cannot be empty';
-    if ($o->othername == '') return 'Other name cannot be empty';
+    //if ($o->othername == '') return 'Other name cannot be empty';
     if ($o->n == '' || !is_numeric($o->n) || $o->n < 1) return 'N cannot be empty';
     if ($o->survey_month == '' || !is_numeric($o->survey_month)) return 'Survey month cannot be empty';
     if ($o->survey_year == '' || !is_numeric($o->survey_year)) return 'Survey year cannot be empty';

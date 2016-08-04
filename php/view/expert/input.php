@@ -177,7 +177,7 @@ function mainContent() {
             <td><input type="text" ng-model="o.localname"/></td>
           </tr>
           <tr>
-            <td>Other Name *</td>
+            <td>Other Name</td>
             <td><input type="text" ng-model="o.othername"/></td>
           </tr>
           <tr>
