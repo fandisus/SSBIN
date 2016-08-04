@@ -71,7 +71,7 @@ function saveNew() {
   Finding::prepareInputForDB($o);
   Finding::createValidationInfo($o);
 
-  $o = new Finding($o);
+  $o = new Finding($o); $o->pic=[];
   $o->insert();
 
   JSONResponse::Success(['message'=>"Data successfully added", "new"=>$o]);
@@ -87,7 +87,7 @@ function saveOld() {
   $old = Finding::find($targetid);
   if (!$old) JSONResponse::Error("Record not found");
 
-  unset ($o->validation);
+  unset ($o->validation, $o->pic);
   foreach ($o as $k=>$v) $old->$k = $v;
   $old->update();
 
@@ -153,7 +153,7 @@ function upload_spreadsheet() { global $login;
       'other_info'=>$sheet->getCellByColumnAndRow(23,$i)->getValue(),
       'data_info'=>$di,
     ];
-    $o = new Finding($f);
+    $o = new Finding($f); $o->pic=[];
     $check = Finding::validationString($o);
     if ($check!=null) $errors[]="Row #$i:$check";
     Finding::createValidationInfo($o);

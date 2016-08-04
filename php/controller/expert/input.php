@@ -76,7 +76,7 @@ function saveOld() {
   $old = Finding::find($targetid);
   if (!$old) JSONResponse::Error("Record not found");
 
-  unset ($o->validation);
+  unset ($o->validation, $o->pic);
   foreach ($o as $k=>$v) $old->$k = $v;
   $old->update();
 
@@ -110,6 +110,7 @@ function saveValidate() { global $login;
   if (!$old) JSONResponse::Error("Record not found");
 
   $o->validation = ['validated'=>true,'validated_by'=>$login->username,'validated_at'=>date('Y-m-d H:i:s')];
+  unset ($o->pic);
   foreach ($o as $k=>$v) $old->$k = $v;
   $old->update();
 
