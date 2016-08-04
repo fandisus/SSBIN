@@ -22,4 +22,16 @@ class Logger extends \Trust\Model{
     }
     return true;
   }
+  
+  public static function allWhere($strWhere, $colVals, $cols="*") {
+    $sql = 'SELECT ip_address, time, requested_url, u.username AS userid, post '
+  . 'FROM access_logs LEFT JOIN users u ON u.id=access_logs.userid '.$strWhere;
+    try {
+      $read = DB::get($sql, $colVals);
+    } catch (\Exception $ex) {
+      throw $ex;
+    }
+    foreach ($read as $k=>$v) $read[$k] = new static($v);
+    return $read;
+  }
 }
