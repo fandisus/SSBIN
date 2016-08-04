@@ -49,7 +49,7 @@ function mainContent() { global $login, $p, $message;
 
 function getCenter($coordinates) {
   $x=0; $y=0; $z=0; $count=count($coordinates); $errCount=0;
-  if ($count == 0) return (object) ['longitude'=>0,'latitude'=>0];
+  if ($count == 0) return (object) ['longitude'=>0,'latitude'=>0,'count'=>0,'errCount'=>0];
   foreach ($coordinates as $v) {
     if ($v->latitude == null || $v->longitude == null) {
       $count--; $errCount++;
