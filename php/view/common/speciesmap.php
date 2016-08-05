@@ -6,7 +6,7 @@ function htmlHead() { ?>
   <script src="http://maps.google.com/maps/api/js"></script>
   <script src="/jslib/gmaps.js"></script>
   <style>
-    #map, #panorama { height:300px; background:#6699cc; }
+    #map, #panorama { height:450px; background:#6699cc; }
   </style>
 <?php }
 
