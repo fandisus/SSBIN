@@ -5,7 +5,7 @@ class Organization extends \Trust\Model{
   static protected $json_columns = ['data_info'];
   protected static $table_name = "organizations", $increment=false, $hasTimestamps = true;
   public static function getNestedArray() {
-    $cats = static::all();
+    $cats = Organization::all('name,category');
     $newCats = [];
     foreach ($cats as $objCat) {
       if (!isset($newCats[$objCat->category])) $newCats[$objCat->category] = [];
