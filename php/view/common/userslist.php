@@ -14,38 +14,85 @@ function htmlHead() { ?>
 <?php }
 
 function mainContent() { global $paths;
+  $cat = $paths[1];
+  if (isset($paths[2])) {
+    $org = $paths[2];
+    $description = \SSBIN\Organization::where('WHERE name=:org AND category=:cat', ['org'=>$org,'cat'=>$cat],'description')->description;
+    //untuk di bagian data contribution
+    $strWhere = 'WHERE organization=:org AND category=:cat'; 
+    $colVals = ['org'=>$org,'cat'=>$cat];
+  } else {
+    $org = null;
+    $description = null;
+    //untuk di bagian data contribution
+    $strWhere = 'WHERE category=:cat'; 
+    $colVals = ['cat'=>$cat];
+  }
 ?>
-  <h2>Users list</h2>
-  <h4>Category: <?= $paths[1]; ?></h4>
-  <?php if (isset($paths[2])) { ?><h4>Organization: <?= $paths[2]; ?></h4><?php } ?>
-  <div class="row" ng-controller="ctrlUsers">
-    <table class="table table-bordered table-striped table-condensed table-responsive table-hover">
-      <thead>
-        <tr>
-          <th>Pic</th>
-          <th>Username</th>
-          <th>Full Name</th>
-          <th>Category</th>
-          <th>Organization</th>
-          <th>Level</th>
-          <th>Expertise</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="u in users" ng-click="show(u)">
-          <td><img ng-src="{{imageIcon(u)}}" style="width:40px; height:40px;"/></td>
-          <td>{{u.username}}</td>
-          <td>{{u.biodata.name}}</td>
-          <td>{{u.category}}</td>
-          <td>{{u.organization}}</td>
-          <td>{{u.level}}</td>
-          <td>
-              <div ng-if="u.expertise.length == 0">-</div>
-              <div ng-repeat="e in u.expertise">{{e}}</div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+  <div class='row'>
+    <h3>Category: <?= $cat; ?></h3>
+    <?php if ($org != null) { ?>
+    <h3>Organization: <?= $org; ?></h3>
+    <p style='max-width: 450px;'><?=$description ?></p>
+    <?php } ?>
+    <h4>Data Contribution</h4>
+    <?php
+      $contribs = \Trust\DB::get("SELECT taxonomy->>'class' AS class, COUNT(*) FROM findings "
+      . "WHERE data_info->>'created_by' IN "
+      . "(SELECT username FROM users $strWhere) AND validation->>'validated'='true' GROUP BY taxonomy->>'class';", $colVals);
+    if (!count($contribs)) { ?>
+    <h5>No data found</h5>
+    <?php } else { ?>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-condensed" style='max-width: 300px;'>
+        <thead>
+          <th>Class</th>
+          <th>Data Count</th>
+        </thead>
+        <tbody>
+          <?php foreach ($contribs as $d) { ?>
+          <tr>
+            <td><?= $d->class ?></td>
+            <td><?= $d->count ?></td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    </div>
+    <?php } ?>
+  </div>
+  <div class="row" ng-controller='ctrlUsers'>
+    <h4>Users list</h4>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-condensed table-hover">
+        <thead>
+          <tr>
+            <th>Pic</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Category</th>
+            <th>Organization</th>
+            <th>Level</th>
+            <th>Expertise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="u in users" ng-click="show(u)">
+            <td><img ng-src="{{imageIcon(u)}}" style="width:40px; height:40px;"/></td>
+            <td>{{u.username}}</td>
+            <td>{{u.biodata.name}}</td>
+            <td>{{u.category}}</td>
+            <td>{{u.organization}}</td>
+            <td>{{u.level}}</td>
+            <td>
+                <div ng-if="u.expertise.length == 0">-</div>
+                <div ng-repeat="e in u.expertise">{{e}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     
 <div id="modalShowUser" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">
