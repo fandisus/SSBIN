@@ -55,6 +55,12 @@ function mainContent() { ?>
                     <datalist id="orgList"><option ng-repeat="org in orgList" value="{{org}}"></option></datalist>
                   </td>
                 </tr>
+                <tr>
+                  <td>Description</td>
+                  <td>
+                    <textarea ng-model="o.description" class="form-control"></textarea>
+                  </td>
+                </tr>
               </table>
               <button class="btn btn-info btn-xs" ng-show="o.data_info != undefined"
                       data-toggle="popover" data-trigger="focus" data-html="true" data-placement="bottom"

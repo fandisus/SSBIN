@@ -30,13 +30,14 @@ function saveOld() {
   $colVals = [
     "newcat"=>$o->category,
     "newname"=>$o->name,
+    'description'=>$o->description,
     "oldcat"=>$target->category,
     "oldname"=>$target->name,
     "data_info"=>json_encode($o->data_info)
   ];
   Trust\DB::exec( //data_info?
-    "UPDATE organizations SET category=:newcat, name=:newname, data_info=:data_info WHERE category=:oldcat AND name=:oldname", $colVals);
-  unset ($colVals['data_info']);
+    "UPDATE organizations SET category=:newcat, name=:newname, description=:description, data_info=:data_info WHERE category=:oldcat AND name=:oldname", $colVals);
+  unset ($colVals['data_info'],$colVals['description']);
   Trust\DB::exec(
     "UPDATE users SET category=:newcat, organization=:newname WHERE category=:oldcat AND organization=:oldname", $colVals);
 

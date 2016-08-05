@@ -1,3 +1,60 @@
-app.controller("ctrlOrg",["$scope",function(a){var c=JSON.parse($("#init").html());a.organizations=c.organizations;a.catList=c.catList;a.orgList=c.orgList;a.o={};a.target=null;$('[data-toggle="popover"]').popover();a.printDataInfo=printDataInfo;a.momenter=function(a){return moment(a).calendar()};a.edit=function(b){a.target=b;a.modalTitle="Edit category: "+b.category+", organization: "+b.name;a.o=angular.copy(b);$("#modalEdit").modal("show")};a.newO=function(){a.target=null;a.modalTitle="New Category/Organization";
-a.o={category:"",name:""};$("#modalEdit").modal("show")};a.saveChanges=function(b){null==a.target?d(b):a.saveOld(b)};var d=function(b){tr.post("/admin/organizations",{a:"saveNew",o:b,token:token},function(b){a.organizations.push(b["new"]);$.notify(b.message,"success");$("#modalEdit").modal("hide");a.$apply()})};a.saveOld=function(b){tr.post("/admin/organizations",{a:"saveOld",o:b,target:a.target,token:token},function(b){a.target.category=b.o.category;a.target.name=b.o.name;a.target.data_info=b.o.data_info;
-$.notify(b.message,"success");$("#modalEdit").modal("hide");a.$apply()})};a["delete"]=function(b){0!=confirm("Are you sure you want to delete?\nCategory: "+b.category+"\nOrganization: "+b.name)&&tr.post("/admin/organizations",{a:"delete",o:a.target,token:token},function(b){arrRemoveElement(a.organizations,a.target);$("#modalEdit").modal("hide");$.notify(b.message,"success");a.$apply()})}}]);
+app.controller('ctrlOrg',['$scope',function($scope) {
+  var init = JSON.parse($("#init").html());
+  $scope.organizations = init.organizations;
+  $scope.catList = init.catList;
+  $scope.orgList = init.orgList;
+  $scope.o = {};
+  $scope.target = null;
+  $('[data-toggle="popover"]').popover();
+  
+  $scope.printDataInfo = printDataInfo;
+  $scope.momenter = function(d) {
+    return moment(d).calendar();
+  };
+  $scope.edit = function(o) {
+    $scope.target = o;
+    $scope.modalTitle = "Edit category: " + o.category + ", organization: " + o.name;
+    $scope.o = angular.copy(o);
+    $("#modalEdit").modal('show');
+  };
+  $scope.newO = function() {
+    $scope.target = null;
+    $scope.modalTitle = "New Category/Organization";
+    $scope.o = {category:'',name:'',description:''};
+    $("#modalEdit").modal('show');
+  };
+  $scope.saveChanges = function(o) {
+    if ($scope.target == null) saveNew(o); else $scope.saveOld(o);
+  };
+  var saveNew = function(o) {
+    var oPost = {a:'saveNew',o:o,token:token};
+    tr.post("/admin/organizations",oPost, function(rep) {
+      $scope.organizations.push(rep.new);
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.saveOld = function(o) {
+    var oPost = {a:'saveOld',o:o,target:$scope.target,token:token};
+    tr.post("/admin/organizations",oPost, function(rep) {
+      $scope.target.category = rep.o.category;
+      $scope.target.name = rep.o.name;
+      $scope.target.description = rep.o.description;
+      $scope.target.data_info = rep.o.data_info;
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.delete = function(o) {
+    if (confirm("Are you sure you want to delete?\n\Category: " + o.category + "\nOrganization: " + o.name) == false) return;
+    var oPost={a:"delete",o:$scope.target,token:token};
+    tr.post("/admin/organizations",oPost, function(rep) {
+      arrRemoveElement($scope.organizations,$scope.target);
+      $("#modalEdit").modal('hide');
+      $.notify(rep.message,"success");
+      $scope.$apply();
+    });
+  };
+}]);
