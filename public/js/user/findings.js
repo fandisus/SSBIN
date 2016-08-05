@@ -1,12 +1,196 @@
-app.requires.push("dndLists");
-app.controller("ctrlFindings",["$scope",function(a){var c=JSON.parse($("#init").html()),d=c.paths;a.classes=c.classes;a.districts=c.districts;a.landcovers=c.landcovers;a.iucns=c.iucns;a.indos=c.indos;a.months=c.months;a.latinput={type:"lat",mode:"dms"};a.longinput={type:"long",mode:"dms"};a.findings=c.findings;a.families=[];a.genuses=[];a.species=[];a.searchFamily=function(b){""!=b.taxonomy.family.trim()&&tr.silentPost("/users/findings",{a:"getFamilies",q:b.taxonomy.family,token:token},function(b){a.families=
-b.families;a.$apply()})};a.searchGenus=function(b){""!=b.taxonomy.genus.trim()&&tr.silentPost("/users/findings",{a:"getGenuses",q:b.taxonomy.genus,token:token},function(b){a.genuses=b.genuses;a.$apply()})};a.searchSpecies=function(b){""!=b.taxonomy.species.trim()&&tr.silentPost("/users/findings",{a:"getSpecies",q:b.taxonomy.species,token:token},function(b){a.species=b.species;a.$apply()})};a.searchGrid=function(b){""!=b.grid.trim()&&tr.silentPost("/users/findings",{a:"getGrids",q:b.grid,token:token},
-function(b){a.grids=b.grids;a.$apply()})};a.params={startDate:null,endDate:null,startLat:null,endLat:null,startLong:null,endLong:null};a.pager={uri:"/users/findings",totalItems:c.totalItems,moreParams:{more:a.params}};c=[{key:"id",text:"ID"},{key:"localname",text:"Local Name"},{key:"othername",text:"Other Name"},{key:"taxonomy->>'class'",text:"Class"},{key:"taxonomy->>'family'",text:"Family"},{key:"taxonomy->>'genus'",text:"Genus"},{key:"taxonomy->>'species'",text:"Species"},{key:"commonname",text:"Common Name"},
-{key:"latitude",text:"Latitude"},{key:"longitude",text:"Longitude"},{key:"grid",text:"Grid"},{key:"village",text:"Village"},{key:"district",text:"District"},{key:"landcover",text:"Landcover"},{key:"iucn_status",text:"IUCN Status"},{key:"indo_status",text:"Indonesia Status"},{key:"cites_status",text:"CITES Status"},{key:"data_source",text:"Data Source"}];a.pager.filterOptions=c;a.pager.orderOptions=c;a.pager.pageChanged=function(b){a.findings=b.findings;a.$apply()};a.getMonth=function(a){return moment(a).format("MMMM")};
-a.getYear=function(a){return moment(a).format("YYYY")};a.target=null;a.o={};a.printDataInfo=printDataInfo;a.printValidationInfo=printValidationInfo;$('[data-toggle="popover"]').popover();var e=function(){setTimeout(function(){a.latinput.degChanged();a.longinput.degChanged();a.$apply()},5)};a.newO=function(){a.target=null;a.modalTitle="New Findings";a.o={taxonomy:{"class":"",family:"",genus:"",species:""},localname:"",commonname:"",othername:"",n:0,survey_month:"",survey_year:"",latitude:null,longitude:null,
-grid:"",village:"",district:"",landcover:"",iucn_status:"",indo_status:"",data_source:"",reference:"",other_info:""};$("#modalEdit").modal("show");e()};a.edit=function(b){a.target=b;a.modalTitle="Edit findings with id:#"+b.id;a.o=angular.copy(b);a.o.survey_month=moment(b.survey_date).month()+1;a.o.survey_year=moment(b.survey_date).year();$("#modalEdit").modal("show");e()};a.saveChanges=function(b){null==a.target?f(b):a.saveOld(b)};var f=function(b){tr.post("/users/findings",{a:"saveNew",o:b,token:token},
-function(b){a.findings.push(b["new"]);$.notify(b.message,"success");$("#modalEdit").modal("hide");a.$apply()})};a.saveOld=function(b){tr.post("/users/findings",{a:"saveOld",o:b,target:a.target.id,token:token},function(b){$.extend(a.target,b.o);$.notify(b.message,"success");$("#modalEdit").modal("hide");a.$apply()})};a["delete"]=function(b){0!=confirm("Are you sure you want to delete?\nFindings with ID:#"+b.id)&&tr.post("/users/findings",{a:"delete",o:a.target.id,token:token},function(b){arrRemoveElement(a.findings,
-a.target);$("#modalEdit").modal("hide");$.notify(b.message,"success");a.$apply()})};$("#formSS").append($("<input/>").attr({type:"hidden",name:"a",value:"upload_spreadsheet"})).append($("<input/>").attr({type:"hidden",name:"token",value:token}));a.uploadSS=function(){tr.postForm("/users/findings",$("#formSS")[0],function(b){for(var c in b.findings)"function"!==typeof b.findings[c]&&a.findings.push(b.findings[c]);a.$apply();$("#modalUpload").modal("hide")},function(a){void 0!=a.data&&console.log(a.data)})};
-$("#picform").append($("<input/>").attr({type:"hidden",name:"a",value:"savepic"})).append($("<input/>").attr({type:"hidden",name:"token",value:token}));a.editPic=function(b,c){a.target=b;a.o=angular.copy(b);$(".file-input img").attr("src","/pics/dropImageHere.png");$("#modalPic").modal("show");c.stopPropagation()};a.uploadPic=function(){tr.postForm("/users/findings",$("#picform")[0],function(b){a.target.pic.push(b.pic);a.o.pic.push(b.pic);$.notify(b.message);a.$apply()})};a.icon=function(a){return 0===
-a.pic.length?d.pic+"no-image.svg":d.icon+a.pic[0]};a.thumb=function(a){return d.thumb+a};a.rem=function(b,c){var d=a.o.pic.indexOf(b);c>d&&c++;a.o.pic.splice(c,1);console.clear()};a.delPic=function(b){confirm("Are you sure?")&&tr.post("/users/findings",{a:"delPic",p:b,target:a.o.id,token:token},function(c){arrRemoveElement(a.target.pic,b);arrRemoveElement(a.o.pic,b);$.notify(c.message,"success");a.$apply()})};a.picReorder=function(){tr.post("/users/findings",{a:"picReorder",pics:a.o.pic,target:a.o.id,
-token:token},function(b){a.target.pic=JSON.parse(JSON.stringify(a.o.pic));$.notify(b.message,"success");a.$apply()})};a.exportSS=function(){var b=JSON.stringify({filterBy:a.pager.filterBy}),c=JSON.stringify(a.params);$.redirect("/users/findings",{a:"export_ss",pager:b,more:c,token:token},"POST")}}]);
+app.requires.push('dndLists');
+app.controller('ctrlFindings',['$scope',function($scope) {
+  var init = JSON.parse($("#init").html());
+  var paths = init.paths;
+  $scope.classes = init.classes;
+  $scope.districts = init.districts;
+  $scope.landcovers = init.landcovers;
+  $scope.iucns = init.iucns;
+  $scope.indos = init.indos;
+  $scope.months = init.months;
+  
+  $scope.latinput = {type:'lat',mode:'dms'};
+  $scope.longinput = {type:'long',mode:'dms'};
+  
+  $scope.findings = init.findings;
+  var uri = "/users/findings";
+  
+  $scope.families=[]; $scope.genuses=[]; $scope.species=[];
+  $scope.searchFamily = function(o) { if (o.taxonomy.family.trim() == '') return;
+    var oPost = {a:'getFamilies',q:o.taxonomy.family,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.families = rep.families; $scope.$apply(); });
+  };
+  $scope.searchGenus = function(o) { if (o.taxonomy.genus.trim() == '') return;
+    var oPost = {a:'getGenuses',q:o.taxonomy.genus,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.genuses = rep.genuses; $scope.$apply(); });
+  };
+  $scope.searchSpecies = function(o) { if (o.taxonomy.species.trim() == '') return;
+    var oPost = {a:'getSpecies',q:o.taxonomy.species,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.species = rep.species; $scope.$apply(); });
+  };
+  $scope.searchGrid = function(o) { if (o.grid.trim() == '') return;
+    var oPost = {a:'getGrids',q:o.grid,token:token};
+    tr.silentPost(uri,oPost,function(rep) { $scope.grids = rep.grids; $scope.$apply(); });
+  };
+  $scope.params = {startDate:null,endDate:null,startLat:null,endLat:null,startLong:null,endLong:null};
+  $scope.pager = {uri:uri, totalItems:init.totalItems, moreParams:{more:$scope.params}};
+  var fields = [
+    {key:'id', text:'ID'},
+    {key:'localname', text:'Local Name'},
+    {key:'othername', text:'Other Name'},
+    {key:"taxonomy->>'class'", text:'Class'},
+    {key:"taxonomy->>'family'", text:'Family'},
+    {key:"taxonomy->>'genus'", text:'Genus'},
+    {key:"taxonomy->>'species'", text:'Species'},
+    {key:'commonname', text:'Common Name'},
+    {key:'latitude', text:'Latitude'},
+    {key:'longitude', text:'Longitude'},
+    {key:'grid', text:'Grid'},
+    {key:'village', text:'Village'},
+    {key:'district', text:'District'},
+    {key:'landcover', text:'Landcover'},
+    {key:'iucn_status', text:'IUCN Status'},
+    {key:'indo_status', text:'Indonesia Status'},
+    {key:'cites_status', text:'CITES Status'},
+    {key:'data_source', text:'Data Source'}
+  ]
+  $scope.pager.filterOptions = fields;
+  $scope.pager.orderOptions = fields;
+  $scope.pager.pageChanged = function(rep) {
+    $scope.findings = rep.findings;
+    $scope.$apply();
+  };
+  
+  $scope.getMonth = function(d) { return moment(d).format('MMMM'); };
+  $scope.getYear = function(d) { return moment(d).format('YYYY'); };
+  
+  $scope.target = null; $scope.o = {};
+  $scope.printDataInfo = printDataInfo;
+  $scope.printValidationInfo = printValidationInfo;
+  $('[data-toggle="popover"]').popover();
+  
+  var updateLatLongDMS = function() {
+    setTimeout(function() {
+      $scope.latinput.degChanged();
+      $scope.longinput.degChanged();
+      $scope.$apply();
+    },5);
+  };
+  $scope.newO = function() {
+    $scope.target = null;
+    $scope.modalTitle = "New Findings";
+    $scope.o = {taxonomy:{class:'',family:'',genus:'',species:''},localname:'',commonname:'',othername:'',n:0,survey_month:'',survey_year:'',latitude:null,longitude:null,grid:'',village:'',district:'',landcover:'',iucn_status:'',indo_status:'',data_source:'',reference:'',other_info:''};
+    $("#modalEdit").modal('show');
+    updateLatLongDMS();
+  };
+  $scope.edit = function(o) {
+    $scope.target = o;
+    $scope.modalTitle = "Edit findings with id:#" + o.id;
+    $scope.o = angular.copy(o);
+    $scope.o.survey_month=moment(o.survey_date).month()+1;
+    $scope.o.survey_year=moment(o.survey_date).year();
+    $("#modalEdit").modal('show');
+    updateLatLongDMS();
+  };
+  $scope.saveChanges = function(o) {
+    if ($scope.target == null) saveNew(o); else $scope.saveOld(o);
+  };
+  var saveNew = function(o) {
+    var oPost = {a:'saveNew',o:o,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $scope.findings.push(rep.new);
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.saveOld = function(o) {
+    var oPost = {a:'saveOld',o:o,target:$scope.target.id,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $.extend($scope.target,rep.o);
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.delete = function(o) {
+    if (confirm("Are you sure you want to delete?\n\Findings with ID:#" + o.id) == false) return;
+    var oPost={a:"delete",o:$scope.target.id,token:token};
+    tr.post(uri,oPost, function(rep) {
+      arrRemoveElement($scope.findings,$scope.target);
+      $("#modalEdit").modal('hide');
+      $.notify(rep.message,"success");
+      $scope.$apply();
+    });
+  };
+  $('#formSS')
+    .append($('<input/>').attr({type:'hidden',name:'a',value:'upload_spreadsheet'}))
+    .append($('<input/>').attr({type:'hidden',name:'token',value:token}));
+  $scope.uploadSS = function() {
+    tr.postForm(uri,$('#formSS')[0],function(rep) {
+      for (var i in rep.findings) {
+        if (typeof rep.findings[i] === 'function') continue;
+        $scope.findings.push(rep.findings[i]);
+      }
+      $scope.$apply();
+      $('#modalUpload').modal('hide');
+    }, function (rep) {
+      if (rep.data != undefined) console.log(rep.data);
+    });
+  };
+  $('#picform')
+    .append($('<input/>').attr({type:'hidden',name:'a',value:'savepic'}))
+    .append($('<input/>').attr({type:'hidden',name:'token',value:token}));
+  $scope.editPic = function(o,e) {
+    $scope.target = o;
+    $scope.o = angular.copy(o);
+    $('.file-input img').attr('src','/pics/dropImageHere.png'); //Off from angularjs
+    $('#modalPic').modal('show');
+    e.stopPropagation();
+  };
+  $scope.uploadPic = function() {
+    tr.postForm(uri,$('#picform')[0],function(rep) {
+      $scope.target.pic.push(rep.pic);
+      $scope.o.pic.push(rep.pic);
+      $.notify(rep.message);
+      $scope.$apply();
+    });
+  };
+  $scope.icon = function(o) {
+    if (o.pic.length === 0) return paths.pic + 'no-image.svg';
+    return paths.icon + o.pic[0];
+  };
+  $scope.thumb = function(p) {
+    return paths.thumb + p;
+  };
+  $scope.rem = function(p,idx) {
+    var idx2 = $scope.o.pic.indexOf(p);
+    if (idx > idx2) idx++;
+    $scope.o.pic.splice(idx,1);
+    console.clear();
+  };
+  $scope.delPic = function(p) {
+    if (!confirm('Are you sure?')) return;
+    var oPost={a:'delPic',p:p,target:$scope.o.id,token:token};
+    tr.post(uri,oPost,function(rep) {
+      arrRemoveElement($scope.target.pic,p);
+      arrRemoveElement($scope.o.pic,p);
+      $.notify(rep.message,'success');
+      $scope.$apply();
+    });
+  };
+  $scope.picReorder = function() {
+    var oPost={a:'picReorder',pics:$scope.o.pic,target:$scope.o.id,token:token};
+    tr.post(uri,oPost,function(rep) {
+      $scope.target.pic = JSON.parse(JSON.stringify($scope.o.pic));
+      $.notify(rep.message,'success');
+      $scope.$apply();
+    });
+  };
+  $scope.exportSS = function() {
+    var pager = JSON.stringify({filterBy:$scope.pager.filterBy});
+    var params = JSON.stringify($scope.params);
+    var oPost = {a:'export_ss',pager:pager,more:params,token:token};
+    $.redirect(uri,oPost,'POST');
+  };
+}]);

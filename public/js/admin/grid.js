@@ -1,3 +1,64 @@
-app.controller("ctrlGrid",["$scope",function(a){var c=JSON.parse($("#init").html());a.grids=c.grids;a.pager={uri:"/admin/lookup/grid",totalItems:c.totalItems};a.pager.filterOptions=[{key:"grid",text:"Grid"}];a.pager.orderOptions=[{key:"grid",text:"Grid"}];a.pager.pageChanged=function(b){a.grids=b.grid;a.$apply()};a.target=null;a.o={};a.printDataInfo=printDataInfo;$('[data-toggle="popover"]').popover();a.newO=function(){a.target=null;a.modalTitle="New Grid";a.o={grid:""};$("#modalEdit").modal("show")};
-a.edit=function(b){a.target=b;a.modalTitle="Edit grid: "+b.grid;a.o=angular.copy(b);$("#modalEdit").modal("show")};a.saveChanges=function(b){null==a.target?d(b):a.saveOld(b)};var d=function(b){tr.post("/admin/lookup/grid",{a:"saveNew",o:b,token:token},function(b){a.grids.push(b["new"]);$.notify(b.message,"success");$("#modalEdit").modal("hide");a.$apply()})};a.saveOld=function(b){tr.post("/admin/lookup/grid",{a:"saveOld",o:b,target:a.target,token:token},function(b){a.target.grid=b.o.grid;a.target.data_info=
-b.o.data_info;$.notify(b.message,"success");$("#modalEdit").modal("hide");a.$apply()})};a["delete"]=function(b){0!=confirm("Are you sure you want to delete?\nGrid: "+b.location)&&tr.post("/admin/lookup/grid",{a:"delete",o:a.target,token:token},function(b){arrRemoveElement(a.grids,a.target);$("#modalEdit").modal("hide");$.notify(b.message,"success");a.$apply()})};a.oChanged=function(){console.log(a.o)}}]);
+app.controller('ctrlGrid',['$scope',function($scope) {
+  var init = JSON.parse($("#init").html());
+  $scope.grids = init.grids;
+  var uri = "/admin/lookup/grid";
+  $scope.pager = {uri:uri, totalItems:init.totalItems}
+  $scope.pager.filterOptions = [{key:'grid',text:'Grid'}];
+  $scope.pager.orderOptions = [{key:'grid',text:'Grid'}];
+  $scope.pager.pageChanged = function(rep) {
+    $scope.grids = rep.grid;
+    $scope.$apply();
+  };
+  
+  $scope.target = null; $scope.o = {};
+  $scope.printDataInfo = printDataInfo;
+  $('[data-toggle="popover"]').popover();
+  
+  $scope.newO = function() {
+    $scope.target = null;
+    $scope.modalTitle = "New Grid";
+    $scope.o = {grid:''};
+    $("#modalEdit").modal('show');
+  };
+  $scope.edit = function(o) {
+    $scope.target = o;
+    $scope.modalTitle = "Edit grid: " + o.grid;
+    $scope.o = angular.copy(o);
+    $("#modalEdit").modal('show');
+  };
+  $scope.saveChanges = function(o) {
+    if ($scope.target == null) saveNew(o); else $scope.saveOld(o);
+  };
+  var saveNew = function(o) {
+    var oPost = {a:'saveNew',o:o,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $scope.grids.push(rep.new);
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.saveOld = function(o) {
+    var oPost = {a:'saveOld',o:o,target:$scope.target,token:token};
+    tr.post(uri,oPost, function(rep) {
+      $scope.target.grid = rep.o.grid;
+      $scope.target.data_info = rep.o.data_info;
+      $.notify(rep.message,"success");
+      $("#modalEdit").modal('hide');
+      $scope.$apply();
+    });
+  };
+  $scope.delete = function(o) {
+    if (confirm("Are you sure you want to delete?\n\Grid: " + o.location) == false) return;
+    var oPost={a:"delete",o:$scope.target,token:token};
+    tr.post(uri,oPost, function(rep) {
+      arrRemoveElement($scope.grids,$scope.target);
+      $("#modalEdit").modal('hide');
+      $.notify(rep.message,"success");
+      $scope.$apply();
+    });
+  };
+  $scope.oChanged = function() {
+    console.log($scope.o);
+  };
+}]);
