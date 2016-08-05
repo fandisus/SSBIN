@@ -9,7 +9,7 @@ function seedOrganizations() {
   ];
   foreach ($cats as $cat=>$orgs) {
     foreach ($orgs as $org) {
-      $obj = new \SSBIN\Organization(["name"=>$org, "category"=>$cat]);
+      $obj = new \SSBIN\Organization(["name"=>$org, "category"=>$cat,'description'=>'']);
       $obj->save();
     }
   }
