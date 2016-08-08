@@ -1,7 +1,7 @@
 <?php
+$ctrlDir = DIR.'/php/controller';
 if (!isset($login)) { include "$ctrlDir/403.php"; die(); }
 
-$ctrlDir = DIR.'/php/controller';
 $template = DIR.'/php/view/tulang.php';
 $services = ['password','profile','findings'];
 
