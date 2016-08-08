@@ -26,10 +26,6 @@ app.controller('ctrlFindings',['$scope',function($scope) {
     {key:"species", text:'Species'},
     {key:'commonname', text:'Common Name'},
     {key:'surveydate', text:'Survey Date'},
-    {key:'latitude', text:'Latitude'},
-    {key:'longitude', text:'Longitude'},
-    {key:'grid', text:'Grid'},
-    {key:'village', text:'Village'},
     {key:'district', text:'District'},
     {key:'landcover', text:'Landcover'},
     {key:'iucn_status', text:'IUCN Status'},
@@ -45,8 +41,6 @@ app.controller('ctrlFindings',['$scope',function($scope) {
   $scope.addFilter = function(f) {
     $('#'+f.key).css('display','');
     if (f.key==='surveydate') $scope.params.startDate=null,$scope.params.endDate=null;
-    else if (f.key==='latitude') $scope.params.startLat=null,$scope.params.endLat=null;
-    else if (f.key==='longitude') $scope.params.startLong=null,$scope.params.endLong=null;
     else $scope.params[f.key]=null;
   };
   $scope.removeFilter = function(e) {
@@ -54,8 +48,6 @@ app.controller('ctrlFindings',['$scope',function($scope) {
     row.style.display='none';
     var key = row.getAttribute('id');
     if (key==='surveydate') delete $scope.params.startDate,delete $scope.params.endDate;
-    else if (key==='latitude') delete $scope.params.startLat,delete $scope.params.endLat;
-    else if (key==='longitude') delete $scope.params.startLong,delete $scope.params.endLong;
     else delete $scope.params[key];
   };
   $scope.pager.pageChanged = function(rep) {

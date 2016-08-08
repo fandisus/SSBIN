@@ -27,7 +27,7 @@ use Trust\Geo;
 function mainContent() {  
   if (!isset($_GET['id']) || !is_numeric($_GET['id'])) { echo "<h3>Findings Data with id $_GET[id] was not found</h3>"; return; };
   $id = $_GET['id'];
-  $f = Finding::find($id);
+  $f = Finding::find($id,Finding::PUBLICFIELDS);
   if ($f == null) {echo "<h3>Findings Data with id $_GET[id] was not found</h3>"; return;}
   ?>
   <div class="row">
@@ -91,22 +91,6 @@ function mainContent() {
         <tr>
           <td>Survey Year</td>
           <td><?= date('Y',strtotime($f->survey_date)) ?></td>
-        </tr>
-        <tr>
-          <td>Latitude</td>
-          <td><?= $f->latitude  ?></td>
-        </tr>
-        <tr>
-          <td>Longitude</td>
-          <td><?= $f->longitude ?></td>
-        </tr>
-        <tr>
-          <td>Grid</td>
-          <td><?= $f->grid ?></td>
-        </tr>
-        <tr>
-          <td>Village</td>
-          <td><?= $f->village ?></td>
         </tr>
         <tr>
           <td>District</td>

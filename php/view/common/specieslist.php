@@ -77,24 +77,6 @@ function mainContent() {
           <td>Survey Date </td><td><input type="date" placeholder="yyyy-mm-dd" ng-model="params.startDate" /></td>
           <td>To</td><td><input type="date" placeholder="yyyy-mm-dd" ng-model="params.endDate"/></td>
         </tr>
-        <tr id="latitude">
-          <td><button ng-click="removeFilter($event)" class="btn btn-danger btn-xs round"><i class="fa fa-remove fa-fw"></i></button></td>
-          <td>Latitude </td><td><input type="text" placeholder="DMS / Deg" ng-model="params.startLat"/></td>
-          <td>To</td><td><input type="text" placeholder="DMS / Deg" ng-model="params.endLat"/></td>
-        </tr>
-        <tr id="longitude">
-          <td><button ng-click="removeFilter($event)" class="btn btn-danger btn-xs round"><i class="fa fa-remove fa-fw"></i></button></td>
-          <td>Longitude </td><td><input type="text" placeholder="DMS / Deg" ng-model="params.startLong"/></td>
-          <td>To</td><td><input type="text" placeholder="DMS / Deg" ng-model="params.endLong"/></td>
-        </tr>
-        <tr id="grid">
-          <td><button ng-click="removeFilter($event)" class="btn btn-danger btn-xs round"><i class="fa fa-remove fa-fw"></i></button></td>
-          <td>Grid</td><td><input type="text" placeholder="Grid" ng-model="params.grid" /></td>
-        </tr>
-        <tr id="village">
-          <td><button ng-click="removeFilter($event)" class="btn btn-danger btn-xs round"><i class="fa fa-remove fa-fw"></i></button></td>
-          <td>Village</td><td><input type="text" placeholder="Village" ng-model="params.village" /></td>
-        </tr>
         <tr id="district">
           <td><button ng-click="removeFilter($event)" class="btn btn-danger btn-xs round"><i class="fa fa-remove fa-fw"></i></button></td>
           <td>District </td>
@@ -151,10 +133,6 @@ function mainContent() {
               <th>Common Name</th>
               <th>Survey Month</th>
               <th>Survey Year</th>
-              <th>Latitude</th>
-              <th>Longitude</th>
-              <th>Grid</th>
-              <th>Village</th>
               <th>District</th>
               <th>Landcover</th>
               <th>IUCN Status</th>
@@ -179,10 +157,6 @@ function mainContent() {
               <td>{{o.commonname}}</td>
               <td>{{getMonth(o.survey_date)}}</td>
               <td>{{getYear(o.survey_date)}}</td>
-              <td>{{o.latitude}}</td>
-              <td>{{o.longitude}}</td>
-              <td>{{o.grid}}</td>
-              <td>{{o.village}}</td>
               <td>{{o.district}}</td>
               <td>{{o.landcover}}</td>
               <td>{{o.iucn_status}}</td>
@@ -221,7 +195,7 @@ function mainContent() {
       ['num'=>11,'name'=>'November'],
       ['num'=>12,'name'=>'December']
     ]; //Kalau mau edit months ini, edit di sini, di users/findings, di expert/input
-    $init->findings = \SSBIN\Finding::allWhere("WHERE validation->>'validated'='true' ORDER BY id DESC LIMIT 50", []);
+    $init->findings = \SSBIN\Finding::allWhere("WHERE validation->>'validated'='true' ORDER BY id DESC LIMIT 50", [],SSBIN\Finding::PUBLICFIELDS);
     $init->totalItems = \SSBIN\Finding::countWhere("WHERE validation->>'validated'='true'", []);
     $init->paths = [
       'pic'=> \SSBIN\Finding::PICPATH,

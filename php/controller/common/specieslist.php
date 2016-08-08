@@ -21,7 +21,7 @@ function showMap() { global $p, $message, $login;
   $GLOBALS['message'] = 'abc';
   more_pager($more,$p);
 
-  $p->findings = Finding::allWhere($p->strWhere, []);
+  $p->findings = Finding::allWhere($p->strWhere, [],  Finding::PUBLICFIELDS.',latitude,longitude');
   $p->totalItems = Finding::countWhere($p->strWhere, []);
   
   include DIR.'/php/view/common/speciesmap.php';
@@ -59,28 +59,6 @@ function more_pager($more, &$p) {
       $startDate = Date::fromJavascriptToSQLDate($more->startDate);
       $endDate = Date::fromJavascriptToSQLDate($more->endDate);
       $wheres[] = "DATE_TRUNC('month',survey_date) BETWEEN '$startDate' AND '$endDate'";
-    }
-  }
-
-  if (isset($more->startLat)) {
-    if ($more->startLat == null ^ $more->endLat == null) JSONResponse::Error('Incomplete latitude range');
-    if ($more->startLat != null) { //if lat range not empty, validate
-      $startLat = Geo::degreeFromStr($more->startLat, 'lat');
-      $endLat = Geo::degreeFromStr($more->endLat, 'lat');
-      if ($more->startLat != null && !$startLat) JSONResponse::Error ('Invalid input at starting latitude');
-      if ($more->endLat != null && !$endLat) JSONResponse::Error ('Invalid input at ending latitude');
-      $wheres[] = "latitude BETWEEN $startLat AND $endLat";
-    }
-  }
-
-  if (isset($more->startLong)) {
-    if ($more->startLong == null ^ $more->endLong == null) JSONResponse::Error('Incomplete longitude range');
-    if ($more->startLong != null) { //if long range not empty, validate
-      $startLong = Geo::degreeFromStr($more->startLong, 'long');
-      $endLong = Geo::degreeFromStr($more->endLong, 'long');
-      if ($more->startLong != null && !$startLong) JSONResponse::Error ('Invalid input at starting longitude');
-      if ($more->endLong != null && !$endLong) JSONResponse::Error ('Invalid input at ending longitude');
-      $wheres[] = "longitude BETWEEN $startLong AND $endLong";
     }
   }
   
