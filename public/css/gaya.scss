@@ -15,9 +15,16 @@
 header {
   background:#FD0;
   border-bottom: 1px solid #C70;
-  #logo {font-family: aileron; font-size:2.1em;}
-  #search {text-align:left;}
+  #appname a {
+    text-decoration:none;
+    span {
+      font-style: italic;
+      &:first-child {font-size: 48px; display: block; margin: 15px 0 -15px 0;}
+      &:nth-child(2){font-size: 24px;}
+    }
+  }
   #buttons {text-align:right;
+    &>div{margin-top: 10px;}
     .dropdown {display: inline-block;}
   }
 }
@@ -32,7 +39,7 @@ header {
 main { min-height: 450px;}
 
 footer {
-  background:#B80; border-top: 2px solid #C70; color: #FFF;
+  background:#B80; border-top: 2px solid #C70; color: #750;
   h3 {font-weight: bold; color:#FF5;}
   #copyright {font-family: cornerstone}
   ul { padding:0 0 0 15px; list-style: none; }
@@ -42,8 +49,16 @@ footer {
 @media (max-width:767px) {
   .flex {display:block;}
   header {
-    #logo, #search, #buttons {text-align:center;}
+    #logo, #appname, #buttons {text-align:center;}
   }
 }
+@media (max-width:480px) {
+  header #appname a {text-align: center;}
+  header #appname a span{
+    &:first-child {font-size: 32px; margin: 0;}
+    &:nth-child(2){font-size: 16px;}
+  }
+}
+
 
 #init {display:none;}

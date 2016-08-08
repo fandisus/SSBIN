@@ -41,23 +41,14 @@
   <body>
     <header>
       <div class="container">
-        <div class="row flex flex-vcenter">
+        <div class="row flex flex-vtop">
           <div class="col-lg-2 col-xs-12" id="logo">
-            <a href="/"><span><?= APPNAME ?></span></a>
+            <a href="/"><img src="/images/unsri.png"></a>
           </div>
-          <div class="col-lg-6 col-xs-12" id="search">
-            <form class="flex flex-vcenter">
-              <div class="form-group" style="margin-bottom: 0;">
-                <div class="input-group">
-                  <input type="text" placeholder="Find Species" class="form-control"/>
-                  <div class="input-group-btn">
-                    <button class="btn btn-default">
-                      <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
+          <div class="col-lg-6 col-xs-12" id="appname">
+            <a href="/">
+              <span>South Sumatera</span>
+              <span>Biodiversity Information Network</span></a>
           </div>
           <div class="col-lg-4 col-xs-12" id="buttons">
             <?php if (!isset($_SESSION['login'])) { ?>
@@ -166,8 +157,10 @@
           footer div#copyright { text-align: center;}
         </style>
         <div style="margin-top: 8px; margin-bottom: 20px;">
-          <img src="/images/unsri.png" />
-          <img src="/images/giz dkk.png" />
+          <div style="display:inline-block; text-align: left;">
+            <span>Supported by:</span><br />
+            <img src="/images/giz dkk.png" />
+          </div>
         </div>
         <div id="copyright">Copyright &copy; 2016 by Universitas Sriwijaya</div>
       </div>
