@@ -2,7 +2,7 @@
 if (!count($_POST)) { include DIR."/php/view/expert/input.php"; die(); }
 
 use Trust\JSONResponse;
-use SSBIN\Families; use SSBIN\Genus; use SSBIN\Species; use SSBIN\Grid;
+use SSBIN\Classes; use SSBIN\Families; use SSBIN\Genus; use SSBIN\Species; use SSBIN\Grid;
 use SSBIN\Finding;
 use Trust\Forms;
 use Trust\Pager;
@@ -71,6 +71,12 @@ function saveOld() {
   $targetid = Forms::getPostObject('target');
   if (!is_numeric($targetid)) JSONResponse::Error('Invalid id');
   Finding::validateInputObject($o);
+  $f = Families::where('WHERE family=:family', ['family'=>$o->taxonomy->family],'family');
+  if ($f == null) JSONResponse::Error('Family name not registered');
+  $g = Genus::where('WHERE genus=:genus', ['genus'=>$o->taxonomy->genus],'genus');
+  if ($g == null) JSONResponse::Error('Genus name not registered');
+  $s = Species::where('WHERE species=:species', ['species'=>$o->taxonomy->species],'species');
+  if ($s == null) JSONResponse::Error('Species name not registered');
   Finding::prepareInputForDB($o);
 
   $old = Finding::find($targetid);
@@ -86,6 +92,14 @@ function saveOld() {
 function validate() { global $login;
   $id = Forms::getPostObject('target');
   $o = Finding::find($id);
+  $c = Classes::where('WHERE class=:class', ['class'=>$o->taxonomy->class],'class');
+  if ($c == null) JSONResponse::Error('Class name not registered');
+  $f = Families::where('WHERE family=:family', ['family'=>$o->taxonomy->family],'family');
+  if ($f == null) JSONResponse::Error('Family name not registered');
+  $g = Genus::where('WHERE genus=:genus', ['genus'=>$o->taxonomy->genus],'genus');
+  if ($g == null) JSONResponse::Error('Genus name not registered');
+  $s = Species::where('WHERE species=:species', ['species'=>$o->taxonomy->species],'species');
+  if ($s == null) JSONResponse::Error('Species name not registered');
   $o->validation = ['validated'=>true,'validated_by'=>$login->username,'validated_at'=>date('Y-m-d H:i:s')];
   $o->update();
   
@@ -104,6 +118,13 @@ function saveValidate() { global $login;
   $targetid = Forms::getPostObject('target');
   if (!is_numeric($targetid)) JSONResponse::Error('Invalid id');
   Finding::validateInputObject($o);
+  //Note: Genus check sudah di validateInputObject($o);
+  $f = Families::where('WHERE family=:family', ['family'=>$o->taxonomy->family],'family');
+  if ($f == null) JSONResponse::Error('Family name not registered');
+  $g = Genus::where('WHERE genus=:genus', ['genus'=>$o->taxonomy->genus],'genus');
+  if ($g == null) JSONResponse::Error('Genus name not registered');
+  $s = Species::where('WHERE species=:species', ['species'=>$o->taxonomy->species],'species');
+  if ($s == null) JSONResponse::Error('Species name not registered');
   Finding::prepareInputForDB($o);
 
   $old = Finding::find($targetid);
