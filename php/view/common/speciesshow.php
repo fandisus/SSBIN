@@ -16,8 +16,11 @@ function htmlHead() {
     });
   </script>
   <style>
-    ul#images { list-style: none; list-style-position: inside; margin-left: 0; padding-left: 0;}
+    ul#images { list-style: none; list-style-position: inside; margin-left: 0; padding-left: 0; text-align: center; }
     ul#images li { display: inline-block;}
+    h2 { text-align: center; }
+    tr > td { text-align: center;}
+    tr > td:first-child { font-weight: bold;}
   </style>
 <?php }
 
@@ -31,7 +34,7 @@ function mainContent() {
   if ($f == null) {echo "<h3>Findings Data with id $_GET[id] was not found</h3>"; return;}
   ?>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6 col-md-offset-3">
       <h2>Findings Details: #<?= $f->id ?></h2>
       <div>
         <ul id="images">
@@ -41,7 +44,7 @@ function mainContent() {
         </ul>
       </div>
       
-      <table class="table table-condensed table-striped form-group form-group-sm" style="max-width: 500px;">
+      <table class="table table-condensed table-striped form-group form-group-sm">
         <tr>
           <td>ID</td>
           <td><?= $f->id ?></td>
