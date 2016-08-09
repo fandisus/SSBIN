@@ -14,7 +14,7 @@ class Finding extends \Trust\Model{
   const ICONPATH = "/pics/icon/";
   const THUMBPATH = "/pics/thumb/";
   const PICPATH = "/pics/";
-  const PUBLICFIELDS = 'id,pic,taxonomy,localname,othername,n,commonname,survey_date,district,landcover,iucn_status,indo_status,data_source,reference,other_info,data_info,validation';
+  const PUBLICFIELDS = 'id,pic,taxonomy,localname,othername,n,commonname,survey_date,district,landcover,iucn_status,cites_status,indo_status,data_source,reference,other_info,data_info,validation';
   public static function validateInputObject($o) {
     $strError = static::validationString($o);
     if ($strError) JSONResponse::Error($strError);
