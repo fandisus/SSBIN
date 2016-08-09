@@ -10,7 +10,7 @@ if (in_array($_POST['a'], $services)) $_POST['a'](); else JSONResponse::Error("S
 function saveNew() { global $login;
   $o = Forms::getPostObject('o');
   if ($o->category == "") JSONResponse::Error("Category cannot be empty");
-  $old = Organization::where("WHERE category=:category AND name=:name", (array)$o);
+  $old = Organization::where("WHERE category=:category AND name=:name", ['category'=>$o->category,'name'=>$o->name]);
   if ($old != null) JSONResponse::Error("The category and organization pair has already in the database");
 
   $o = new Organization($o);
