@@ -33,12 +33,6 @@ function mainContent() {
   <div class="row">
     <div class="col-md-12">
       <h2>Findings Details: #<?= $f->id ?></h2>
-      <h5>Data created by: <code><?= $f->data_info->created_by ?></code> at <code><?= $f->data_info->created_at ?></code></h5>
-      <?php if ($f->validation->validated == 'true') { ?>
-      <h5>Validated by: <code><?= $f->validation->validated_by ?></code> at <code><?= $f->validation->validated_at ?></code></h5>
-      <?php } else { ?>
-      <h5><code>Not validated yet</code></h5>
-      <?php } ?>
       <div>
         <ul id="images">
           <?php foreach ($f->pic as $p) { ?>
