@@ -32,7 +32,7 @@ function htmlHead() {
   </style>
 <?php }
 
-function mainContent() {
+function mainContent() { global $login;
   ?>
   <h2>Species Distribution</h2>
   <div class="row" ng-controller="ctrlFindings">
@@ -115,7 +115,9 @@ function mainContent() {
         </tr>
       </table>
       <tr-paging public="pager"></tr-paging>
+      <?php if (isset($login) && $login->validated== '1') { ?>
       <button ng-click="showMap()" class="btn btn-default btn-xs">View on map <i class="fa fa-map-marker fa-fw"></i></button>
+      <?php } ?>
       <br /><br />
       <div class="table-responsive">
         <table id="tabel-data" class="table table-bordered table-striped table-condensed table-hover">
@@ -170,7 +172,6 @@ function mainContent() {
         </table>
       </div>
     </div>
-
   </div>
 
   <div id="init" style="display:none"><?php
