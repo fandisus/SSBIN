@@ -6,11 +6,6 @@ include $template;
 function htmlHead() {
   ?>
   <style>
-    .mild-cyan{ background: rgba(210,230,255,0.6);}
-    .cyan { background: rgba(210,230,255,1)}
-    .mild-orange { background: rgba(255,230,210,0.6);}
-    .orange { background: rgba(255,230,210,1);}
-
     .file-input img {max-height: 300px; max-width: 300px;}
   </style>
   <script src="/jslib/mine/file-input.js"></script>
@@ -62,12 +57,12 @@ function mainContent() {
   <div class="row" ng-controller="ctrlProfil">
     <div class="col-md-offset-3 col-sm-6">
       <div class="panel panel-default">
-        <div class="panel-body mild-cyan">
+        <div class="panel-body">
           <h2>User Profile</h2>
           <h4>Category: {{category}}<br />Organization: {{organization}}</h4>
           <!--Profile Picture-->
           <form id='form-PP' enctype="multipart/form-data" class="panel panel-default">
-            <div class="panel-body bg-info">
+            <div class="panel-body">
               <input type="hidden" name="a" value="PP"/>
               <input type="hidden" name="token" value="" id="token"/>
               <div class='form-group'>
@@ -84,7 +79,7 @@ function mainContent() {
           <!--End Profile Picture-->
           <!--Biodata-->
           <form class="panel panel-default">
-            <div class="panel-body bg-info">
+            <div class="panel-body">
               <div class="form-group">
                 <label for="name" class="control-label">Full Name</label>
                 <input type="text" class="form-control" id="name" ng-model="biodata.name"/>

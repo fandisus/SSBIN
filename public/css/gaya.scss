@@ -13,10 +13,10 @@
 .text-vmid { vertical-align: middle;}
 
 header {
-  background:#FD0;
+  background:#393;
   border-bottom: 1px solid #C70;
   #appname a {
-    text-decoration:none;
+    text-decoration:none; color: #FFF;
     span {
       font-style: italic;
       &:first-child {font-size: 48px; display: block; margin: 15px 0 -15px 0;}
