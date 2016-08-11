@@ -35,6 +35,7 @@ function htmlHead() {
     td>input.form-control, td>select.form-control { width:100%;}
     .form-group { margin-bottom: 0px;}
     .pagination { margin:5px 0;}
+    #modalEdit table td i { color: #E00; font-size: 0.9em }
   </style>
 <?php }
 
@@ -165,95 +166,95 @@ function mainContent() {
       <div class="modal-body">
         <table class="table table-condensed table-striped form-group form-group-sm">
           <tr>
-            <td>ID</td>
+            <td>ID <i>(ID)</i></td>
             <td><input type="text" ng-model="o.id" readonly="readonly"/></td>
           </tr>
           <tr>
-            <td>Class *</td>
+            <td>Class * <i>(Kelas)</i></td>
             <td><input type="text" ng-model="o.taxonomy.class" list="list-class"/></td>
           </tr>
           <tr>
-            <td>Local Name *</td>
+            <td>Local Name * <i>(Nama Lokal)</i></td>
             <td><input type="text" ng-model="o.localname"/></td>
           </tr>
           <tr>
-            <td>Other Name</td>
+            <td>Other Name <i>(Nama Lain)</i></td>
             <td><input type="text" ng-model="o.othername"/></td>
           </tr>
           <tr>
-            <td>N *</td>
+            <td>N * <i>(Jumlah)</i></td>
             <td><input type="text" ng-model="o.n"/></td>
           </tr>
           <tr>
-            <td>Family</td>
+            <td>Family <i>(Famili)</i></td>
             <td><input type="text" ng-model="o.taxonomy.family" list="list-family" ng-change="searchFamily(o)"/></td>
           </tr>
           <tr>
-            <td>Genus</td>
+            <td>Genus <i>(Genus)</i></td>
             <td><input type="text" ng-model="o.taxonomy.genus" list="list-genus" ng-change="searchGenus(o)"/></td>
           </tr>
           <tr>
-            <td>Species</td>
+            <td>Species <i>(Spesies)</i></td>
             <td><input type="text" ng-model="o.taxonomy.species" list="list-species" ng-change="searchSpecies(o)"/></td>
           </tr>
           <tr>
-            <td>Common Name</td>
+            <td>Common Name <i>(Nama Umum)</i></td>
             <td><input type="text" ng-model="o.commonname"/></td>
           </tr>
           <tr>
-            <td>Survey Month</td>
+            <td>Survey Month <i>(Bulan Survey)</i></td>
             <td><select ng-model="o.survey_month" ng-options="m.num as m.name for m in months" /></td>
           </tr>
           <tr>
-            <td>Survey Year</td>
+            <td>Survey Year <i>(Tahun Survey)</i></td>
             <td><input type="text" ng-model="o.survey_year"/></td>
           </tr>
           <tr>
-            <td>Latitude</td>
+            <td>Latitude <i>(Latitude)</i></td>
             <td><tr-degdms deg="o.latitude" public='latinput' type="lat" mode="dms"></tr-degdms></td>
           </tr>
           <tr>
-            <td>Longitude</td>
+            <td>Longitude <i>(Longitude)</i></td>
             <td><tr-degdms deg="o.longitude" public='longinput' type="long" mode="dms"></tr-degdms></td>
           </tr>
           <tr>
-            <td>Grid</td>
+            <td>Grid <i>(Grid)</i></td>
             <td><input type="text" ng-model="o.grid" list="list-grid" ng-change="searchGrid(o)"/></td>
           </tr>
           <tr>
-            <td>Village</td>
+            <td>Village <i>(Desa)</i></td>
             <td><input type="text" ng-model="o.village"/></td>
           </tr>
           <tr>
-            <td>District</td>
+            <td>District <i>(Kabupaten)</i></td>
             <td><input type="text" ng-model="o.district" list="list-district"/></td>
           </tr>
           <tr>
-            <td>Landcover</td>
+            <td>Landcover <i>(Tutupan Lahan)</i></td>
             <td><input type="text" ng-model="o.landcover" list="list-landcover"/></td>
           </tr>
           <tr>
-            <td>IUCN Status</td>
+            <td>IUCN Status <i>(Status IUCN)</i></td>
             <td><select ng-model="o.iucn_status" ng-options="s.abbr as s.long_name for s in iucns"></select></td>
           </tr>
           <tr>
-            <td>CITES Status</td>
+            <td>CITES Status <i>(Status CITES)</i></td>
             <td><input type="text" ng-model="o.cites_status" list="list-indo"/></td>
           </tr>
           <tr>
-            <td>Indonesia Status</td>
+            <td>Indonesia Status <i>(Status Indonesia)</i></td>
             <td><select ng-model="o.indo_status" ng-options="s.abbr as s.long_name for s in indos"/></td>
           </tr>
           <tr>
-            <td>Data Source</td>
+            <td>Data Source <i>(Sumber Data)</i></td>
             <td><input type="text" ng-model="o.data_source"/></td>
           </tr>
           <tr>
-            <td>Reference</td>
+            <td>Reference <i>(Referensi)</i></td>
             <td><input type="text" ng-model="o.reference"/></td>
           </tr>
           <tr>
-            <td>Other Information</td>
+            <td>Other Information <i>(Info lain)</i></td>
             <td><input type="text" ng-model="o.other_info"/></td>
           </tr>
           <datalist id="list-class"><option ng-repeat="c in classes" value="{{c}}"/></datalist>
