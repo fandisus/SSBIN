@@ -109,7 +109,7 @@ class DB {
     $isi = file_get_contents($file['tmp_name']);
     unlink($file['tmp_name']);
     $decoded = @gzdecode($isi);
-    if (!$decoded) JSONResponse::Error('Invalid backup file');
+    if (!$decoded) JSONResponse::Error('Fail to decode backup file');
     
     $restore = explode(PHP_EOL,$decoded);
     $pop = array_shift($restore);
