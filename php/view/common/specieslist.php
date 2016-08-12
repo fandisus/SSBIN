@@ -195,7 +195,7 @@ function mainContent() { global $login;
       ['num'=>10,'name'=>'October'],
       ['num'=>11,'name'=>'November'],
       ['num'=>12,'name'=>'December']
-    ]; //Kalau mau edit months ini, edit di sini, di users/findings, di expert/input
+    ];
     $init->findings = \SSBIN\Finding::allWhere("WHERE validation->>'validated'='true' ORDER BY id DESC LIMIT 50", [],SSBIN\Finding::PUBLICFIELDS);
     $init->totalItems = \SSBIN\Finding::countWhere("WHERE validation->>'validated'='true'", []);
     $init->paths = [
