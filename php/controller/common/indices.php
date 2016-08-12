@@ -28,7 +28,7 @@ function calc() {
 
 function build_query($more) {
   $wheres = [];
-  //$wheres = ["validation->>'validated'='true'"];
+  $wheres = ["validation->>'validated'='true'"];
   //class, family, genus, surveydate, district, landcover
   foreach ($more as $k=>$v) if (trim($v) == '') $more->$k = null;
   
