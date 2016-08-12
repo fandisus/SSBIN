@@ -90,9 +90,10 @@ class DB {
     if (!count($out)) die ('Database backup failed');
     $filesize = 0;
     array_unshift($out, $backupInfo);
-    foreach ($out as $v) $filesize += strlen($v);
-    $filesize += (count($out)) * strlen(PHP_EOL);
+//    foreach ($out as $v) $filesize += strlen($v);
+//    $filesize += (count($out)) * strlen(PHP_EOL);
     $out = gzencode(implode(PHP_EOL, $out),5);
+    $filesize = strlen($out);
     
 
     header("Content-Disposition: attachment; filename=\"".date('Ymd').".ssbin\"");
