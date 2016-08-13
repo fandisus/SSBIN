@@ -113,7 +113,7 @@ function upload_spreadsheet() { global $login;
   $sheet = $oExcel->getSheetByName("Findings");
   if ($sheet ==  null) JSONResponse::Error('Worksheet "Findings" not found');
 
-  $errors = [];
+  $errors = []; $findings = [];
   for ($i=0; $i<23; $i++) {
     $head = $sheet->getCellByColumnAndRow($i,1)->getValue();
     if ($head != EXCEL_HEADERS[$i]) $errors[] = "Column #$i:'$head' should be '".EXCEL_HEADERS[$i]."'";
@@ -124,6 +124,8 @@ function upload_spreadsheet() { global $login;
   $di = json_encode(\Trust\Model::newDataInfo());
   $jumbar = $sheet->getHighestRow();
   for ($i=2;$i<=$jumbar; $i++) {
+    $month = Date::monthFromName($sheet->getCellByColumnAndRow(10,$i)->getValue());
+    if (!$month) { $errors[]="Row #$i:Unrecognized month name"; continue; }
     $f = [
       'id'=>$sheet->getCellByColumnAndRow(0,$i)->getValue(),
       'pic'=>[],
@@ -137,7 +139,7 @@ function upload_spreadsheet() { global $login;
         'species'=>$sheet->getCellByColumnAndRow(8,$i)->getValue()
       ],
       'commonname'=>$sheet->getCellByColumnAndRow(9,$i)->getValue(),
-      'survey_month'=> Date::monthFromName($sheet->getCellByColumnAndRow(10,$i)->getValue()),
+      'survey_month'=> $month,
       'survey_year'=>$sheet->getCellByColumnAndRow(11,$i)->getValue(),
       'latitude'=>$sheet->getCellByColumnAndRow(12,$i)->getValue(),
       'longitude'=>$sheet->getCellByColumnAndRow(13,$i)->getValue(),
@@ -163,8 +165,9 @@ function upload_spreadsheet() { global $login;
   }
   if (count($errors)) JSONResponse::Error('Data validation error. Press F12 for more information',['data'=>$errors]);
   
+  if (!count($findings)) JSONResponse::Error('No rows found');
   Finding::multiInsert($findings);
-  
+  \Trust\DB::exec("SELECT setval('findings_id_seq', (SELECT MAX(id) FROM findings));", []);
   $endtime = microtime(true);
   $duration = $endtime - $starttime;
   foreach ($findings as $o) $o->json_decode();
