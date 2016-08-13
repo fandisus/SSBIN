@@ -12,8 +12,8 @@ class Date {
     $monthName = trim($monthName);
     $res = array_search(strtolower($monthName),Date::$engMonths);
     if ($res) return $res;
-    JSONResponse::Error($res);
-    return array_search(strtolower($monthName), Date::$indMonths);
+    $res = array_search(strtolower($monthName), Date::$indMonths);
+    return $res;
     //returns false when not found
   }
   /**
