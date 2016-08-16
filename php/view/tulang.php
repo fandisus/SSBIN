@@ -42,10 +42,11 @@
     <header>
       <div class="container">
         <div class="row flex flex-vtop">
-          <div class="col-lg-2 col-xs-12" id="logo">
+          <div class="col-lg-3 col-xs-12" id="logo">
             <a href="/"><img src="/images/unsri.png"></a>
+            <a href="/"><img src="/images/bksda.png"></a>
           </div>
-          <div class="col-lg-6 col-xs-12" id="appname">
+          <div class="col-lg-5 col-xs-12" id="appname">
             <a href="/">
               <span>South Sumatera</span>
               <span>Biodiversity Information Network</span></a>
