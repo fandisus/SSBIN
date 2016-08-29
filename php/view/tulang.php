@@ -152,15 +152,24 @@
       </div>
     </main>
     <footer>
+      <style>
+        footer div#copyright { text-align: center;}
+      </style>
       <div class="container">
-        <style>
-          footer div { text-align: center; }
-          footer div#copyright { text-align: center;}
-        </style>
-        <div style="margin-top: 8px; margin-bottom: 20px;">
-          <div style="display:inline-block; text-align: left;">
-            <span>Supported by:</span><br />
-            <img src="/images/giz dkk.png" />
+        <div class="row" style="margin-bottom: 15px;">
+          <div class="col-sm-6">
+            <h3>Terms And Conditions</h3>
+            <ul>
+              <li><a href="#">Privacy Statements and Disclaimer</a></li>
+              <li><a href="#">Data sharing agreement</a></li>
+              <li><a href="#">Data use agreement</a></li>
+            </ul>
+          </div>
+          <div class="col-sm-6">
+            <div style="display:inline-block; text-align: left; margin-top: 15px;">
+              <span style="color: #EE7">Supported by:</span><br />
+              <img src="/images/giz dkk.png" />
+            </div>
           </div>
         </div>
         <div id="copyright">Copyright &copy; 2016 by Universitas Sriwijaya</div>
