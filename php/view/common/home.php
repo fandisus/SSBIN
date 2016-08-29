@@ -23,7 +23,7 @@ function htmlHead() { ?>
 function mainContent() { global $login; ?>
 <div class="jumbotron">
     <h1>Welcome to</h1>
-    <h2><strong>South Sumatera Biodiversity Information System (SSBIN)</strong>.</h2>
+    <h2><strong>South Sumatera Biodiversity Information Network (SSBIN)</strong>.</h2>
     <?php if (!isset($login)) { ?>
     <p>You have not been logged in.</p>
     <a href="/login" class="btn btn-default">Login</a>
