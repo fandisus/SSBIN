@@ -19,8 +19,7 @@ function htmlHead() {
     ul#images { list-style: none; list-style-position: inside; margin-left: 0; padding-left: 0; text-align: center; }
     ul#images li { display: inline-block;}
     h2 { text-align: center; }
-    tr > td:nth-child(2) { text-align: left;}
-    tr > td:first-child { font-weight: bold; text-align: right;}
+    tr > td:first-child { font-weight: bold; }
   </style>
 <?php }
 
