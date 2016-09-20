@@ -91,8 +91,8 @@ class DB {
     $filesize = 0;
     array_unshift($out, $backupInfo);
 //    foreach ($out as $v) $filesize += strlen($v);
-//    $filesize += (count($out)) * strlen(PHP_EOL);
-    $out = gzencode(implode(PHP_EOL, $out),5);
+//    $filesize += (count($out)) * strlen("\r\n");
+    $out = gzencode(implode("\r\n", $out),5);
     $filesize = strlen($out);
     
 
@@ -101,7 +101,7 @@ class DB {
     header("Content-Length: " .$filesize);
     header("Connection: close");
     
-    //foreach ($out as $v) echo $v.PHP_EOL;
+    //foreach ($out as $v) echo $v."\r\n";
     echo $out;
   }
   public static function pgRestore($dbname, $file) {
@@ -112,7 +112,7 @@ class DB {
     $decoded = @gzdecode($isi);
     if (!$decoded) JSONResponse::Error('Fail to decode backup file');
     
-    $restore = explode(PHP_EOL,$decoded);
+    $restore = explode("\r\n",$decoded);
     $pop = array_shift($restore);
     $backupInfo = json_decode($pop);
     if ($backupInfo == null) JSONResponse::Error('Invalid backup file');
@@ -121,7 +121,7 @@ class DB {
     if ($backupInfo->ver != 1) JSONResponse::Error('Invalid backup file version');
     
     $fh = fopen($path, 'w');
-    fwrite($fh, implode(PHP_EOL, $restore));
+    fwrite($fh, implode("\r\n", $restore));
     fclose($fh);
     
     putenv('PGPASSWORD='.DB::$pass);
