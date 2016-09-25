@@ -158,7 +158,7 @@
       <div class="container">
         <div class="row" style="margin-bottom: 15px;">
           <div class="col-sm-6">
-            <h3>Terms And Conditions</h3>
+            <h3>Terms of use</h3>
             <ul>
               <li><a href="#">Privacy Statements and Disclaimer</a></li>
               <li><a href="#">Data sharing agreement</a></li>
