@@ -338,6 +338,7 @@ function sidebar_search() { ?>
 function side_menus() { ?>
   <li><a href="/admin"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
   <li><a href="/admin/users"><i class="fa fa-users fa-fw"></i> Users</a></li>
+  <li><a href="/admin/pages"><i class="fa fa-file-text-o fa-fw"></i> Pages</a></li>
   <li><a href="/admin/organizations"><i class="fa fa-users fa-fw"></i> Categories / Organizations</a></li>
   <li>
     <a href="#"><i class="fa fa-table fa-fw"></i> Taxonomies <span class="fa arrow"></span></a>
