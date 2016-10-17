@@ -12,6 +12,7 @@ foreach ($paths as $v) include $v;
 ini_set('memory_limit','256M');
 
 //seedOrganizations();
+//seedPages();
 //seedClasses();
 //seedFamilies();
 //seedGenus();
