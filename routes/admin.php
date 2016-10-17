@@ -4,6 +4,7 @@ if (!isset($login) || $login->level != \SSBIN\User::USER_ADMIN) { include "$ctrl
 $template = DIR."/php/view/admin/tulang.php";
 $services = [
     "users", //admins, experts, standard, validate,
+    "pages", //about, footer pages (Terms of use).
     "organizations", //categories, organizations
     "database", //backup, restore, export
     "visitors"
