@@ -1,4 +1,11 @@
-<?php use SSBIN\User; ?><!doctype html>
+<?php use SSBIN\User;
+$pages = \SSBIN\Pages::allWhere("ORDER BY order_no", [], "id, name, position, group_name, order_no");
+$footers = [];
+foreach ($pages as $k=>$v) {
+  if ($v->id == 1) { $about_page = $v;  unset ($pages[$k]); continue; }
+  $footers[$v->group_name][]=$v->name;
+}
+?><!doctype html>
 <html lang="en" ng-app="ssbin">
   <head>
     <title><?= (isset($GLOBALS['pageTitle'])) ? APPNAME."-".$GLOBALS['pageTitle'] : APPNAME  ?></title>
@@ -138,7 +145,7 @@
                 <li><a tabindex="-1" href="/indices"> Diversity Indices </a></li>
               </ul>
             </li>
-            <li><a href="/about">About SSBIN</a></li>
+            <li><a href="/pages/<?= $about_page->name?>"><?= $about_page->name ?></a></li>
             <li><a href="/contactus">Contact us</a></li>
           </ul>
         </div>
@@ -158,12 +165,15 @@
       <div class="container">
         <div class="row" style="margin-bottom: 15px;">
           <div class="col-sm-6">
-            <h3>Terms of use</h3>
-            <ul>
-              <li><a href="#">Privacy Statements and Disclaimer</a></li>
-              <li><a href="#">Data sharing agreement</a></li>
-              <li><a href="#">Data use agreement</a></li>
-            </ul>
+            <?php 
+            foreach ($footers as $group_name=>$arr) {
+              echo "<h3>$group_name</h3><ul>";
+              foreach ($arr as $p) {
+                echo "<li><a href='/pages/$p'>$p</a></li>";
+              }
+              echo "</ul>";
+            }
+            ?>
           </div>
           <div class="col-sm-6">
             <div style="display:inline-block; text-align: left; margin-top: 15px;">
