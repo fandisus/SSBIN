@@ -87,6 +87,7 @@ function saveOld() { global $login;
   $old = Finding::find($targetid);
   if (!$old) JSONResponse::Error("Record not found");
   if ($old->data_info->created_by != $login->username) JSONResponse::Error("Can not delete other people's data");
+  if ($old->validation->validated) JSONResponse::Error('Data already validated. Can not update from here.');
 
   unset ($o->validation, $o->pic);
   foreach ($o as $k=>$v) $old->$k = $v;
@@ -99,6 +100,7 @@ function delete() { global $login;
   $targetid = Forms::getPostObject('o');
   $f = Finding::find($targetid);
   if ($f->data_info->created_by != $login->username) JSONResponse::Error("Can not delete other people's data");
+  if ($f->validation->validated) JSONResponse::Error('Data already validated. Can not delete from here.');
   Finding::delete($targetid); //pics also get deleted here.
   JSONResponse::Success(["message"=>'Data deleted successfully']);
 }
