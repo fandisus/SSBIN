@@ -77,7 +77,7 @@ function saveNew() {
   JSONResponse::Success(['message'=>"Data successfully added", "new"=>$o]);
 }
 
-function saveOld() {
+function saveOld() { global $login;
   $o = Forms::getPostObject('o');
   $targetid = Forms::getPostObject('target');
   if (!is_numeric($targetid)) JSONResponse::Error('Invalid id');
@@ -86,6 +86,7 @@ function saveOld() {
 
   $old = Finding::find($targetid);
   if (!$old) JSONResponse::Error("Record not found");
+  if ($old->data_info->created_by != $login->username) JSONResponse::Error("Can not delete other people's data");
 
   unset ($o->validation, $o->pic);
   foreach ($o as $k=>$v) $old->$k = $v;
@@ -94,8 +95,10 @@ function saveOld() {
   JSONResponse::Success(['message'=>"Data successfully updated",'o'=>$o]);
 }
 
-function delete() {
+function delete() { global $login;
   $targetid = Forms::getPostObject('o');
+  $f = Finding::find($targetid);
+  if ($f->data_info->created_by != $login->username) JSONResponse::Error("Can not delete other people's data");
   Finding::delete($targetid); //pics also get deleted here.
   JSONResponse::Success(["message"=>'Data deleted successfully']);
 }
