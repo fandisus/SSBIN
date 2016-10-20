@@ -1,7 +1,7 @@
 app.controller('ctrlSpecies',['$scope',function($scope) {
   var init = JSON.parse($("#init").html());
   $scope.species = init.species;
-  var uri = "/admin/taxonomies/species";
+  var uri = "/expert/taxonomies/species";
   $scope.pager = {uri:uri, totalItems:init.totalItems}
   $scope.pager.filterOptions = [{key:'species',text:'Species'}];
   $scope.pager.orderOptions = [{key:'species',text:'Species'}];
