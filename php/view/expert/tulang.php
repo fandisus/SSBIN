@@ -145,7 +145,7 @@ function sidebar_search() { ?>
 function side_menus() { ?>
   <li><a href="/expert"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
   <li><a href="/expert/users"><i class="fa fa-users fa-fw"></i> Users</a></li>
-  <li><a href="/expert/findings"><i class="fa fa-file-text-o fa-fw"></i> Findings Validation</a></li>
+  <li><a href="/expert/input"><i class="fa fa-file-text-o fa-fw"></i> Findings Validation</a></li>
   <li>
     <a href="#"><i class="fa fa-table fa-fw"></i> Taxonomies <span class="fa arrow"></span></a>
     <ul class="nav nav-second-level">
