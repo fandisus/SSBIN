@@ -10,11 +10,15 @@ class DB {
   public static function init($force = true) {
     if (!$force && static::$initialized) return;
     $host = (PHP_OS == "Linux") ? "localhost" : "127.0.0.1";
-    $pdo = new \PDO(
+    try {
+      $pdo = new \PDO(
             "pgsql:host=$host;port=".static::$port.";dbname=".static::$db.";", static::$user, static::$pass, array(
               \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
               \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ
             ));
+    } catch (\Exception $ex) {
+      \Trust\JSONResponse::Error($ex->getMessage());
+    }
     DB::$pdo = $pdo;
     static::$initialized = true;
   }
