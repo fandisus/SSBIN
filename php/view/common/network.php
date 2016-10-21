@@ -30,10 +30,10 @@ function mainContent() { global $paths;
 ?>
 
   <div class='row'>
-    <h3>Category: <?= $cat; ?></h3>
+    <div class="col-md-offset-3 col-md-6">
+    <h3><?= ($org == null) ? $cat : $org ?></h3>
     <?php if ($org != null) { ?>
-    <h3>Organization: <?= $org; ?></h3>
-    <p style='max-width: 450px;'><?=$description ?></p>
+    <p style='text-align: justify;'><?=$description ?></p>
     <?php } ?>
     <h4>Data Contribution</h4>
     <?php
@@ -60,6 +60,7 @@ function mainContent() { global $paths;
       </table>
     </div>
     <?php } ?>
+    </div>
   </div>
 <?php
 }
