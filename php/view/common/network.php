@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Users list";
+$pageTitle = "Network";
 include DIR.'/php/view/tulang.php';
 
 function htmlHead() { ?>

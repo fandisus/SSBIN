@@ -124,10 +124,10 @@ foreach ($pages as $k=>$v) {
                       foreach ($cats as $cat=>$orgArr) { ?>
                         <ul class="col-sm-2 list-unstyled">
                           <li>
-                            <p><a href="/userslist/<?=$cat?>"><strong><?= $cat ?></strong></a></p>
+                            <p><a href="/network/<?=$cat?>"><strong><?= $cat ?></strong></a></p>
                           </li>
                           <?php foreach ($orgArr as $org) { ?>
-                          <li><a href="/userslist/<?= "$cat/$org->name" ?>"><?=$org->name?></a></li>
+                          <li><a href="/network/<?= "$cat/$org->name" ?>"><?=$org->name?></a></li>
                           <?php } ?>
                         </ul>
                       <?php } ?>
