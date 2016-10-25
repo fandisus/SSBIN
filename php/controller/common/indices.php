@@ -16,6 +16,7 @@ function calc() {
   $strFields = "SELECT taxonomy->>'family' AS family, taxonomy->>'genus' AS genus, taxonomy->>'species' AS species, "
     . "SUM(n) AS n FROM findings ";
   $rows = DB::get($strFields.$p->strWhere.$p->strGroup.$p->strOrder, []);
+  if (!count($rows))    JSONResponse::Error("No data found");
   $summ = calcIndices($rows);
   
   JSONResponse::Success([
